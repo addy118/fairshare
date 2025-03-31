@@ -72,13 +72,14 @@ This template provides a ready-to-use authentication system with Prisma and Node
 - In the **Headers** tab, add:
   ```
   Key: Cookie
-  Value: refreshCookie=<copied-value>
+  Value: <copied-value>
   ```
 
-### 5️⃣ **Test Auth Protection**  
+### 5️⃣ **Test Auth Protection**
+
 - **Endpoint:** `POST http://localhost:3000/user/:userId/protected`
-- Replace `:userId` with the actual user ID.  
-- Ensure the **Authorization Bearer Token** is included in the request.  
+- Replace `:userId` with the actual user ID.
+- Ensure the **Authorization Bearer Token** is included in the request.
 - If authentication works correctly, you should receive a **json containing user info**.
 
 ## 📌 Notes
