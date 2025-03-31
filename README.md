@@ -9,11 +9,17 @@ This template provides a ready-to-use authentication system with Prisma and Node
    git clone <repo-url>
    cd <repo-folder>
    ```
-2. Install dependencies:
+
+2. **Update the package name**:
+   - Open `package.json` and `package-lock.json`.
+   - Change the `"name"` field to your actual project name.
+
+3. Install dependencies:
    ```sh
    npm i
    ```
-3. Create a `.env` file in the root directory and add the following variables:
+
+4. Create a `.env` file in the root directory and add the following variables:
 
    ```env
    PORT=<server port address>
@@ -24,11 +30,12 @@ This template provides a ready-to-use authentication system with Prisma and Node
    REFRESH_TOKEN=<your refresh token secret>
    ```
 
-4. Modify database if needed then apply the migrations:
+5. Modify database if needed then apply the migrations:
    ```sh
    npx prisma migrate dev --name basic_auth_init
    ```
-5. Start the server:
+   
+6. Start the server:
    ```sh
    nodemon server.js
    ```
