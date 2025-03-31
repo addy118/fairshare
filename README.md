@@ -24,7 +24,7 @@ This template provides a ready-to-use authentication system with Prisma and Node
    REFRESH_TOKEN=<your refresh token secret>
    ```
 
-4. Apply database migrations:
+4. Modify database if needed then apply the migrations:
    ```sh
    npx prisma migrate dev --name basic_auth_init
    ```
@@ -38,7 +38,7 @@ This template provides a ready-to-use authentication system with Prisma and Node
 ### 1️⃣ **Signup**
 
 - **Endpoint:** `POST http://localhost:3000/auth/signup`
-- **Body (JSON):**
+- **Body Params Required:**
   ```json
   {
     "name": "John Doe",
@@ -51,7 +51,7 @@ This template provides a ready-to-use authentication system with Prisma and Node
 ### 2️⃣ **Login**
 
 - **Endpoint:** `POST http://localhost:3000/auth/login`
-- **Body (JSON):**
+- **Body Params Required:**
   ```json
   {
     "data": "johndoe or john@example.com",
@@ -74,6 +74,12 @@ This template provides a ready-to-use authentication system with Prisma and Node
   Key: Cookie
   Value: refreshCookie=<copied-value>
   ```
+
+### 5️⃣ **Test Auth Protection**  
+- **Endpoint:** `POST http://localhost:3000/user/:userId/protected`
+- Replace `:userId` with the actual user ID.  
+- Ensure the **Authorization Bearer Token** is included in the request.  
+- If authentication works correctly, you should receive a **json containing user info**.
 
 ## 📌 Notes
 
