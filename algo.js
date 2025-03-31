@@ -1,36 +1,37 @@
+// addy(id: 2), hermione(id: 3), harry(id: 4), ron(id: 5), draco(id: 6)
+// group: hogwarts (id: 1)
 const group = {
-  subTotal: [250, 50, 290, 60],
-  sub1: {
-    a: 200,   // 117
-    b: 0,     // -83 (A)
-    c: 50,    // -33 (A)
+  exp1: {
+    addy: 200, // 117
+    hermione: 0, // -83 (addy)
+    harry: 50, // -33 (addy)
   },
-  sub2: {
-    a: 0,     // -25 (B)
-    b: 50,    // 25
+  exp2: {
+    addy: 0, // -25 (hermione)
+    hermione: 50, // 25
   },
-  sub3: {
-    a: 10,    // -48 (C, D, E)
-    b: 40,    // -18 (C)
-    c: 80,    // 22
-    d: 100,   // 42
-    e: 60,    // 2
+  exp3: {
+    addy: 10, // -48 (harry, ron, draco)
+    hermione: 40, // -18 (harry)
+    harry: 80, // 22
+    ron: 100, // 42
+    draco: 60, // 2
   },
-  sub4: {
-    b: 30,    // 10
-    c: 20,    // 0
-    e: 10,    // -10 (B)
+  exp4: {
+    hermione: 30, // 10
+    harry: 20, // 0
+    draco: 10, // -10 (hermione)
   },
 };
 
-// a -> b (25), c (4), d (42), e (2)
-// b -> a (83), c (18)
-// c -> a (33)
-// d -> null
-// e -> b (10)
+// addy -> hermione (25), harry (4), ron (42), draco (2)
+// hermione -> addy (83), harry (18)
+// harry -> addy (33)
+// ron -> null
+// draco -> hermione (10)
 
 // minimize trans
-// a -> d (42), e (2)
-// b -> a (58), c (18)
-// c -> a (29)
-// e -> b (10)
+// addy -> ron (42), draco (2)
+// hermione -> addy (58), harry (18)
+// harry -> addy (29)
+// draco -> hermione (10)
