@@ -8,9 +8,89 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String @db.VarChar(255)
-  username String @db.VarChar(255)
-  email    String @unique
-  password String @db.VarChar(60)
+  id        Int         @id @default(autoincrement())
+  name      String      @db.VarChar(255)
+  username  String      @db.VarChar(255)
+  email     String      @unique
+  phone     String      @unique
+  password  String      @db.VarChar(60)
+  groups    UserGroup[]
+  subGroups UserSub[]
+  expenses  Expense[]
+  debtor    Split[]     @relation(name: "Debt")
+  creditor  Split[]     @relation(name: "Credit")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model UserGroup {
+  member   User     @relation(fields: [memberId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  memberId Int
+  group    Group    @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  groupId  Int
+  joinedAt DateTime @default(now())
+
+  @@id([memberId, groupId])
+}
+
+model UserSub {
+  member   User     @relation(fields: [memberId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  memberId Int
+  subGroup SubGroup @relation(fields: [subId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  subId    Int
+  joinedAt DateTime @default(now())
+
+  @@id([memberId, subId])
+}
+
+model Group {
+  id        Int         @id @default(autoincrement())
+  name      String      @db.VarChar(255)
+  members   UserGroup[]
+  subGroups SubGroup[]
+  splits    Split[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model SubGroup {
+  id        Int       @id @default(autoincrement())
+  name      String?   @db.VarChar(255)
+  MainGroup Group     @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  groupId   Int
+  members   UserSub[]
+  expenses  Expense[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Expense {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  subGroup  SubGroup @relation(fields: [subId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  subId     Int
+  payer     User     @relation(fields: [payerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  payerId   Int
+  paidAmt   Int
+  totalAmt  Int
+  splits    Split[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Split {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  mainGroup Group    @relation(fields: [groupId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  groupId   Int
+  expense   Expense  @relation(fields: [expenseId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  expenseId Int
+  payer     User     @relation(name: "Debt", fields: [payerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  payerId   Int
+  payee     User     @relation(name: "Credit", fields: [payeeId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  payeeId   Int
+  amount    Int
+  settled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
