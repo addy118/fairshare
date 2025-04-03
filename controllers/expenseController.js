@@ -15,9 +15,9 @@ exports.postExp = async (req, res) => {
   const splitsArr = splits.map((split) => {
     return {
       name: expense.name,
-      debitorId: split[0],
-      creditorId: split[1],
-      amount: split[2],
+      debitorId: Number(split[0]),
+      creditorId: Number(split[1]),
+      amount: Number(split[2]),
       groupId: expense.groupId,
     };
   });

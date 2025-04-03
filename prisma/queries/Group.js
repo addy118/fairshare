@@ -4,7 +4,18 @@ class Group {
   static async expenses(id) {
     const expenses = await db.group.findMany({
       where: { id: Number(id) },
-      select: { expenses: true, splits: true },
+      select: {
+        expenses: {
+          select: {
+            id: true,
+            name: true,
+            totalAmt: true,
+            payers: { omit: { expenseId: true } },
+            createdAt: true,
+          },
+        },
+        splits: true,
+      },
     });
 
     return expenses;

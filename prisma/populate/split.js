@@ -1,9 +1,13 @@
 const db = require("../../config/prismaClient");
 
 const main = async () => {
-  const res = await db.split.create({});
+  for (let i = 45; i <= 48; i++) {
+    await db.split.delete({
+      where: { id: i },
+    });
+  }
 
-  console.log(res);
+  // console.log(res);
 };
 
 main().catch((e) => console.error(e));

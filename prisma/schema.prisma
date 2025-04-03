@@ -69,8 +69,8 @@ model Split {
   name       String   @db.VarChar(255)
   mainGroup  Group    @relation(fields: [groupId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   groupId    Int
-  expense    Expense  @relation(fields: [expenseId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  expenseId  Int
+  expense    Expense?  @relation(fields: [expenseId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  expenseId  Int?
   debtor     User     @relation(name: "Debt", fields: [debtorId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   debtorId   Int
   creditor   User     @relation(name: "Credit", fields: [creditorId], references: [id], onDelete: Restrict, onUpdate: Cascade)

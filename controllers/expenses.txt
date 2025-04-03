@@ -1,0 +1,44 @@
+{
+  "name": "exp1",
+  "groupId": 1,
+  "totalAmt": 250,
+  "payers": [
+    { "payerId": 2, "amount": 200 },
+    { "payerId": 3, "amount": 0 },
+    { "payerId": 4, "amount": 50 }
+  ]
+}
+
+{
+  "name": "exp2",
+  "groupId": 1,
+  "totalAmt": 50,
+  "payers": [
+    { "payerId": 2, "amount": 0 },
+    { "payerId": 3, "amount": 50 }
+  ]
+}
+
+{
+  "name": "exp3",
+  "groupId": 1,
+  "totalAmt": 290,
+  "payers": [
+    { "payerId": 2, "amount": 10 },
+    { "payerId": 3, "amount": 40 },
+    { "payerId": 4, "amount": 80 },
+    { "payerId": 5, "amount": 100 },
+    { "payerId": 6, "amount": 60 }
+  ]
+}
+
+{
+  "name": "exp4",
+  "groupId": 1,
+  "totalAmt": 60,
+  "payers": [
+    { "payerId": 3, "amount": 30 },
+    { "payerId": 4, "amount": 20 },
+    { "payerId": 6, "amount": 10 }
+  ]
+}

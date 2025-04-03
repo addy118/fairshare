@@ -35,9 +35,9 @@ const expenses = [
     groupId: 1,
     totalAmt: 60,
     payers: [
-      { name: "B", payerId: 3, amount: 30 },
-      { name: "C", payerId: 4, amount: 20 },
-      { name: "E", payerId: 6, amount: 10 },
+      { payerId: 3, amount: 30 },
+      { payerId: 4, amount: 20 },
+      { payerId: 6, amount: 10 },
     ],
   },
 ];

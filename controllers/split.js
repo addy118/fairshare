@@ -1,48 +1,75 @@
 const { exp3, expenses, splits } = require("./expenses");
 
-function createBalance(expense) {
-  // creates a balance graph for a given raw expense (db data)
-  // expense = {
-  //   name: "expense",
-  //   groupId: 1,
-  //   totalAmt: 50,
-  //   payers: [
-  //     { name: "A", payerId: 2, amount: 0 },
-  //     { name: "B", payerId: 3, amount: 50 },
-  //   ],
-  // }
+function getExpBalance(expenses) {
+  // const expenses = [
+  //   {
+  //     id: 18,
+  //     name: "exp1",
+  //     totalAmt: 250,
+  //     payers: [
+  //       {
+  //         payerId: 4,
+  //         paidAmt: 50,
+  //       },
+  //       {
+  //         payerId: 3,
+  //         paidAmt: 0,
+  //       },
+  //     ],
+  //     createdAt: "2025-04-03T16:24:26.336Z",
+  //   },
+  // ];
 
-  const balance = {};
-  const share = Math.floor(expense.totalAmt / expense.payers.length);
+  const expBalance = {};
 
-  const balanceArr = expense.payers.map((payer) => ({
-    ...payer,
-    amount: payer.amount - share,
-  }));
+  expenses.forEach((expense) => {
+    let totalAmt = expense.totalAmt;
+    let payers = expense.payers;
+    let numPayers = payers.length;
+    let share = Math.floor(totalAmt / numPayers);
 
-  balanceArr.forEach((split) => (balance[split.payerId] = split.amount));
-  return balance;
+    payers.forEach((payer) => {
+      let payerId = payer.payerId;
+      let paidAmt = payer.paidAmt;
+
+      // initialize default key value
+      if (!(payerId in expBalance)) {
+        expBalance[payerId] = 0;
+      }
+
+      expBalance[payerId] -= share;
+      expBalance[payerId] += paidAmt;
+    });
+  });
+
+  return expBalance;
 }
 
-function getBalance(splits) {
+function getSplitBalance(splits) {
   // creates a balance graph for a given splits array
-  // splits = [["A", "C", 4], ["A", "E", 2]]
+  // splits = [
+  //   { debtorId: 3, creditorId: 2, amount: 43 },
+  //   { debtorId: 3, creditorId: 5, amount: 23 },
+  //   { debtorId: 4, creditorId: 5, amount: 11 },
+  //   { debtorId: 6, creditorId: 5, amount: 8 },
+  // ];
+
   const balance = {};
 
-  for (const [debtor, creditor, amount] of splits) {
-    if (!balance[debtor]) balance[debtor] = 0;
-    balance[debtor] -= amount;
+  splits.forEach((split) => {
+    if (!balance[split.debtorId]) balance[split.debtorId] = 0;
+    balance[split.debtorId] -= split.amount;
 
-    if (!balance[creditor]) balance[creditor] = 0;
-    balance[creditor] += amount;
-  }
+    if (!balance[split.creditorId]) balance[split.creditorId] = 0;
+    balance[split.creditorId] += split.amount;
+  });
 
   return balance;
 }
 
 function calculateSplits(balance) {
   // creates a minimal splits array from the given balance graph
-  // balance = { "A": -48, "B": 22, "C": -18, "D": 42, "E": 2 }
+  // balance = { "3": -48, "4": 22, "5": -18, "6": 42, "7": 2 }
 
   // Step 1: Separate positive (creditors) and negative (debtors) balances
   const creditors = [];
@@ -91,40 +118,7 @@ function calculateSplits(balance) {
     if (creditor.amount < 0.01) j++;
   }
 
-  const newBalance = getBalance(splits);
-  const tolerance = calcTolerance(balance, newBalance);
-  return { splits, tolerance };
-}
-
-function getAllSplits(expenses) {
-  // creates an overall redundant splits array from the array of all the raw expenses (db data)
-  // expense = {
-  //   name: "expense",
-  //   groupId: 1,
-  //   totalAmt: 50,
-  //   payers: [
-  //     { name: "A", payerId: 2, amount: 0 },
-  //     { name: "B", payerId: 3, amount: 50 },
-  //   ],
-  // }
-
-  let totalSplits = [];
-  let totalTolerance = {};
-  expenses.forEach((expense, i) => {
-    const balance = createBalance(expense);
-    // console.log("Expense", i + 1, "->", balance);
-    const { splits, tolerance } = calculateSplits(balance);
-
-    for (const [person, value] of Object.entries(tolerance)) {
-      if (!totalTolerance[person]) totalTolerance[person] = 0;
-      totalTolerance[person] += value;
-    }
-    // console.log("Tolerance after expense: ", i + 1, totalTolerance);
-
-    totalSplits = [...totalSplits, ...splits];
-  });
-
-  return { totalSplits, totalTolerance };
+  return splits;
 }
 
 function calcTolerance(before, after) {
@@ -144,26 +138,10 @@ function calcTolerance(before, after) {
   return tolerance;
 }
 
-function minimizeCashFlow(splits) {
-  // calculates the minimized splits array from the redundant splits array
-  // splits = [["A", "C", 4], ["A", "E", 2]]
-
-  // Step 1: Calculate net balances for each person
-  const overall = getBalance(splits);
-  const { splits: transactions, tolerance } = calculateSplits(overall);
-
-  return { transactions, tolerance };
-}
-
-// const { totalSplits, totalTolerance } = getAllSplits(expenses);
-// console.log(totalTolerance);
-// const { transactions, tolerance } = minimizeCashFlow(totalSplits);
-// console.log("Minimized Transactions: ", transactions);
 
 module.exports = {
-  createBalance,
   calculateSplits,
-  getAllSplits,
+  getExpBalance,
+  getSplitBalance,
   calcTolerance,
-  minimizeCashFlow,
 };
