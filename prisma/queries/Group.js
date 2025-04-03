@@ -20,7 +20,6 @@ class Group {
             debtorId: true,
             creditorId: true,
             amount: true,
-            settled: true,
           },
         },
       },
