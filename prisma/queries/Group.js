@@ -15,6 +15,7 @@ class Group {
       where: { id: Number(id) },
       select: {
         splits: {
+          where: { settled: false },
           select: {
             debtorId: true,
             creditorId: true,
