@@ -9,6 +9,7 @@ const main = async () => {
       payers: {
         create: [
           { payerId: 2, paidAmt: 200 },
+          { payerId: 3, paidAmt: 0 },
           { payerId: 4, paidAmt: 50 },
         ],
       },
@@ -27,7 +28,10 @@ const main = async () => {
       groupId: 1,
       totalAmt: 50,
       payers: {
-        create: [{ payerId: 3, paidAmt: 50 }],
+        create: [
+          { payerId: 2, paidAmt: 0 },
+          { payerId: 3, paidAmt: 50 },
+        ],
       },
       splits: {
         create: [

@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
+const expRouter = require("./routes/expenseRouter");
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -20,6 +21,7 @@ const { PORT } = process.env;
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/exp/", expRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.message);
