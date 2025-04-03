@@ -3,12 +3,13 @@ const {
   verifyToken,
   verifyOwnership,
 } = require("../controllers/authController");
-const { postExp } = require("../controllers/expenseController");
+const { postExp, getExp } = require("../controllers/expenseController");
 const expRouter = Router();
 
 // expRouter.use([verifyToken, verifyOwnership]);
 
 expRouter.post("/new", postExp);
+expRouter.get("/:expId", getExp);
 
 expRouter.use((err, req, res, next) => {
   console.error(err.message);

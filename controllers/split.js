@@ -20,7 +20,7 @@ function createBalance(expense) {
     amount: payer.amount - share,
   }));
 
-  balanceArr.forEach((split) => (balance[split.name] = split.amount));
+  balanceArr.forEach((split) => (balance[split.payerId] = split.amount));
   return balance;
 }
 
@@ -155,7 +155,15 @@ function minimizeCashFlow(splits) {
   return { transactions, tolerance };
 }
 
-const { totalSplits, totalTolerance } = getAllSplits(expenses);
-console.log(totalTolerance);
-const { transactions, tolerance } = minimizeCashFlow(totalSplits);
-console.log("Minimized Transactions: ", transactions);
+// const { totalSplits, totalTolerance } = getAllSplits(expenses);
+// console.log(totalTolerance);
+// const { transactions, tolerance } = minimizeCashFlow(totalSplits);
+// console.log("Minimized Transactions: ", transactions);
+
+module.exports = {
+  createBalance,
+  calculateSplits,
+  getAllSplits,
+  calcTolerance,
+  minimizeCashFlow,
+};
