@@ -6,23 +6,14 @@ class Expense {
       data: {
         name: exp.name,
         totalAmt: Number(exp.totalAmt),
-
         // connect to the existing Group by ID
-        mainGroup: {
-          connect: {
-            id: Number(exp.groupId),
-          },
-        },
+        mainGroup: { connect: { id: Number(exp.groupId) } },
 
         // create the payers relationships
         payers: {
           create: payersArr.map((payer) => ({
             paidAmt: Number(payer.paidAmt),
-            payer: {
-              connect: {
-                id: Number(payer.payerId),
-              },
-            },
+            payer: { connect: { id: Number(payer.payerId) } },
           })),
         },
 
@@ -31,27 +22,12 @@ class Expense {
           create: splitsArr.map((split) => ({
             name: exp.name,
             amount: Number(split.amount),
-
             // connect to mainGroup
-            mainGroup: {
-              connect: {
-                id: Number(exp.groupId),
-              },
-            },
-
+            mainGroup: { connect: { id: Number(exp.groupId) } },
             // connect to debtor
-            debtor: {
-              connect: {
-                id: Number(split.debitorId),
-              },
-            },
-
+            debtor: { connect: { id: Number(split.debitorId) } },
             // connect to creditor
-            creditor: {
-              connect: {
-                id: Number(split.creditorId),
-              },
-            },
+            creditor: { connect: { id: Number(split.creditorId) } },
           })),
         },
       },
@@ -62,18 +38,13 @@ class Expense {
 
   static async get(id) {
     const res = await db.expense.findFirst({
-      where: { id },
+      where: { id: Number(id) },
       select: {
         id: true,
         name: true,
         groupId: true,
         totalAmt: true,
-        payers: {
-          select: {
-            payerId: true,
-            paidAmt: true,
-          },
-        },
+        payers: { select: { payerId: true, paidAmt: true } },
         splits: {
           select: {
             debtorId: true,
@@ -82,12 +53,7 @@ class Expense {
             settled: true,
           },
         },
-        _count: {
-          select: {
-            payers: true,
-            splits: true,
-          },
-        },
+        _count: { select: { payers: true, splits: true } },
       },
     });
 

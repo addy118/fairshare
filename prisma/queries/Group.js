@@ -3,11 +3,8 @@ const db = require("../../config/prismaClient");
 class Group {
   static async expenses(id) {
     const expenses = await db.group.findMany({
-      where: { id },
-      select: {
-        expenses: true,
-        splits: true,
-      },
+      where: { id: Number(id) },
+      select: { expenses: true, splits: true },
     });
 
     return expenses;
@@ -15,7 +12,7 @@ class Group {
 
   static async splits(id) {
     const splits = await db.group.findMany({
-      where: { id },
+      where: { id: Number(id) },
       select: {
         splits: {
           select: {
