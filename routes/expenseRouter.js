@@ -3,13 +3,17 @@ const {
   verifyToken,
   verifyOwnership,
 } = require("../controllers/authController");
-const { postExp, getExp } = require("../controllers/expenseController");
+const {
+  postExp,
+  getExp,
+  settleSplit,
+} = require("../controllers/expenseController");
 const expRouter = Router();
 
 // expRouter.use([verifyToken, verifyOwnership]);
 
 expRouter.post("/new", postExp);
-expRouter.post("/:splitId/settle");
+expRouter.post("/:splitId/settle", settleSplit);
 expRouter.get("/:expId", getExp);
 
 expRouter.use((err, req, res, next) => {

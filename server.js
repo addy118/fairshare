@@ -23,7 +23,7 @@ const { PORT } = process.env;
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/grp", grpRouter);
-app.use("/exp/", expRouter);
+app.use("/exp", expRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.message);

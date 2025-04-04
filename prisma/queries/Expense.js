@@ -59,6 +59,13 @@ class Expense {
 
     return res;
   }
+
+  static async settle(id) {
+    await db.split.update({
+      where: { id: Number(id) },
+      data: { settled: true },
+    });
+  }
 }
 
 module.exports = Expense;

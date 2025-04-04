@@ -37,7 +37,12 @@ exports.getExp = async (req, res) => {
   res.json({ exp });
 };
 
-exports.settleSplit = async (req, res) => {};
+exports.settleSplit = async (req, res) => {
+  const { splitId } = req.params;
+
+  await Expense.settle(Number(splitId));
+  res.json({ msg: "success" });
+};
 
 const exp = {
   id: 14,

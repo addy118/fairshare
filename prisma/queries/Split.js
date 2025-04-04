@@ -27,7 +27,9 @@ class Split {
 
   static async deleteAll(grpId) {
     await db.split.deleteMany({
-      where: { groupId: Number(grpId) },
+      where: {
+        AND: [{ groupId: Number(grpId) }, { settled: false }],
+      },
     });
   }
 }

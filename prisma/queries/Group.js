@@ -28,6 +28,7 @@ class Group {
         splits: {
           where: { settled: false },
           select: {
+            id: true,
             debtorId: true,
             creditorId: true,
             amount: true,
