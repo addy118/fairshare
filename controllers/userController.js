@@ -34,6 +34,8 @@ exports.getUser = async (req, res) => {
   }
 };
 
+exports.getUserBal = async (req, res) => {};
+
 exports.putUserName = async (req, res) => {
   const { userId } = req.params;
   const { name } = req.body;

@@ -37,6 +37,8 @@ exports.getExp = async (req, res) => {
   res.json({ exp });
 };
 
+exports.settleSplit = async (req, res) => {};
+
 const exp = {
   id: 14,
   name: "exp3",

@@ -3,12 +3,16 @@ const {
   getAllExpenses,
   getMinSplits,
   getGrpBalance,
+  getSplits,
+  getGrpHistory,
 } = require("../controllers/grpController");
 const grpRouter = new Router();
 
 grpRouter.get("/:grpId", getAllExpenses);
 grpRouter.get("/:grpId/balance", getGrpBalance);
 grpRouter.get("/:grpId/splits/min", getMinSplits);
+grpRouter.get("/:grpId/splits", getSplits);
+grpRouter.get("/:groupId/history", getGrpHistory);
 
 grpRouter.use((err, req, res, next) => {
   console.error(err.message);

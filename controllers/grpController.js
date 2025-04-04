@@ -65,3 +65,14 @@ exports.getMinSplits = async (req, res) => {
 
   res.json(minSplits);
 };
+
+exports.getSplits = async (req, res) => {
+  const { grpId } = req.params;
+
+  let splits = await Group.splits(Number(grpId));
+  splits = splits[0].splits;
+
+  return res.json(splits);
+};
+
+exports.getGrpHistory = async (req, res) => {};

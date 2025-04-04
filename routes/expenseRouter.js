@@ -9,6 +9,7 @@ const expRouter = Router();
 // expRouter.use([verifyToken, verifyOwnership]);
 
 expRouter.post("/new", postExp);
+expRouter.post("/:splitId/settle");
 expRouter.get("/:expId", getExp);
 
 expRouter.use((err, req, res, next) => {
