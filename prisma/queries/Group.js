@@ -38,6 +38,23 @@ class Group {
 
     return splits;
   }
+
+  static async join(memberId, groupId) {
+    await db.member.create({
+      data: { memberId: Number(memberId), groupId: Number(groupId) },
+    });
+  }
+
+  static async leave(memberId, groupId) {
+    await db.member.delete({
+      where: {
+        groupId_memberId: {
+          groupId: Number(groupId),
+          memberId: Number(memberId),
+        },
+      },
+    });
+  }
 }
 
 module.exports = Group;
