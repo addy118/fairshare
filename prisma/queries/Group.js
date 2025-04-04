@@ -56,6 +56,20 @@ class Group {
       },
     });
   }
+
+  static async isMember(memberId, groupId) {
+    const isMember = await prisma.member.findUnique({
+      where: {
+        groupId_memberId: {
+          groupId: Number(groupId),
+          memberId: Number(memberId),
+        },
+      },
+    });
+
+    // returns null if not a member
+    return isMember;
+  }
 }
 
 module.exports = Group;

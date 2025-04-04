@@ -76,3 +76,8 @@ exports.getSplits = async (req, res) => {
 };
 
 exports.getGrpHistory = async (req, res) => {};
+
+exports.isMember = (groupId, userId) => {
+  // check if there is a row with composite id groupId_userId in member table
+  
+}

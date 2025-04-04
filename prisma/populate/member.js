@@ -1,19 +1,16 @@
 const prisma = require("../../config/prismaClient");
 
 const main = async () => {
-  // await prisma.member.create({
-  //   data: { memberId: 8, groupId: 1 },
-  // });
-  await prisma.member.delete({
+  const isMember = await prisma.member.findUnique({
     where: {
       groupId_memberId: {
         groupId: Number(1),
-        memberId: Number(8),
+        memberId: Number(6),
       },
     },
   });
 
-  console.log("User added to group 1 successfully");
+  console.log(isMember);
 };
 
 main()

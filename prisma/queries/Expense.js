@@ -1,7 +1,22 @@
 const db = require("../../config/prismaClient");
+const Group = require("./Group");
 
 class Expense {
   static async create(exp, payersArr, splitsArr) {
+    // checks whether the user present in the expense is part of the group or not
+    for (const payer of payersArr) {
+      const isMember = await Group.isMember(
+        Number(payer.payerId),
+        Number(exp.groupId)
+      );
+
+      if (!isMember) {
+        throw new Error(
+          `User with ID ${payer.payerId} is not a member of the group with ID ${exp.groupId}`
+        );
+      }
+    }
+
     const res = await db.expense.create({
       data: {
         name: exp.name,
