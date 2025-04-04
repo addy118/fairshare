@@ -1,3 +1,4 @@
+const { split } = require("../config/prismaClient");
 const Group = require("../prisma/queries/Group");
 const Split = require("../prisma/queries/Split");
 const {
@@ -47,7 +48,6 @@ exports.getGrpBalance = async (req, res) => {
   const { grpId } = req.params;
 
   const group = await Group.expenses(Number(grpId));
-  const expenses = group[0].expenses;
   const splits = group[0].splits;
   const cleanSplits = splits.map((split) => {
     return {
@@ -56,14 +56,15 @@ exports.getGrpBalance = async (req, res) => {
       amount: Number(split.amount),
     };
   });
-  console.log(splits);
+  // console.log(splits);
 
-  const expBalance = getExpBalance(expenses);
   const splitBalance = getSplitBalance(cleanSplits);
-  const tolerance = calcTolerance(expBalance, splitBalance);
-  console.log(tolerance);
+  const balance = Object.entries(splitBalance).map(([userId, amount]) => ({
+    userId: Number(userId),
+    amount: Number(amount),
+  }));
 
-  res.json({ splitBalance, tolerance });
+  res.json(balance);
 };
 
 exports.getMinSplits = async (req, res) => {
