@@ -1,5 +1,30 @@
 const { exp3, expenses, splits } = require("./expenses");
 
+function createBalance(expense) {
+  // creates a balance graph for a given raw expense (db data)
+  // expense = {
+  //   name: "expense",
+  //   groupId: 1,
+  //   totalAmt: 50,
+  //   payers: [
+  //     { name: "A", payerId: 2, amount: 0 },
+  //     { name: "B", payerId: 3, amount: 50 },
+  //   ],
+  // }
+
+  const balance = {};
+  const share = Math.floor(expense.totalAmt / expense.payers.length);
+
+  const balanceArr = expense.payers.map((payer) => ({
+    ...payer,
+    amount: payer.amount - share,
+  }));
+
+  balanceArr.forEach((split) => (balance[split.name] = split.amount));
+  balanceArr.forEach((split) => (balance[split.payerId] = split.amount));
+  return balance;
+}
+
 function getExpBalance(expenses) {
   // const expenses = [
   //   {
@@ -138,8 +163,8 @@ function calcTolerance(before, after) {
   return tolerance;
 }
 
-
 module.exports = {
+  createBalance,
   calculateSplits,
   getExpBalance,
   getSplitBalance,

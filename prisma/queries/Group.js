@@ -1,6 +1,18 @@
 const db = require("../../config/prismaClient");
 
 class Group {
+  static async create(name) {
+    return await db.group.create({
+      data: { name },
+    });
+  }
+
+  static async delete(groupId) {
+    await db.group.delete({
+      where: { id: Number(groupId) },
+    });
+  }
+
   static async expenses(id) {
     const expenses = await db.group.findMany({
       where: { id: Number(id) },
@@ -58,7 +70,7 @@ class Group {
   }
 
   static async isMember(memberId, groupId) {
-    const isMember = await prisma.member.findUnique({
+    const isMember = await db.member.findUnique({
       where: {
         groupId_memberId: {
           groupId: Number(groupId),

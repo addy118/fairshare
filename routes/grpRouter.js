@@ -5,6 +5,10 @@ const {
   getGrpBalance,
   getSplits,
   getGrpHistory,
+  postGrp,
+  postDelGrp,
+  postMember,
+  deleteMember,
 } = require("../controllers/grpController");
 const grpRouter = new Router();
 
@@ -13,6 +17,12 @@ grpRouter.get("/:grpId/balance", getGrpBalance);
 grpRouter.get("/:grpId/splits/min", getMinSplits);
 grpRouter.get("/:grpId/splits", getSplits);
 grpRouter.get("/:groupId/history", getGrpHistory);
+
+grpRouter.post("/new", postGrp);
+grpRouter.post("/:groupId/member/:memberId", postMember);
+
+grpRouter.delete("/:groupId/member/:memberId", deleteMember);
+grpRouter.delete("/:groupId/delete", postDelGrp);
 
 grpRouter.use((err, req, res, next) => {
   console.error(err.message);

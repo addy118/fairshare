@@ -7,6 +7,34 @@ const {
   calcTolerance,
 } = require("./split");
 
+exports.postGrp = async (req, res) => {
+  const { name } = req.body;
+
+  const group = await Group.create(name);
+  res.json({ msg: "success", group });
+};
+
+exports.postDelGrp = async (req, res) => {
+  const { groupId } = req.params;
+
+  await Group.delete(Number(groupId));
+  res.json({ msg: "success" });
+};
+
+exports.postMember = async (req, res) => {
+  const { groupId, memberId } = req.params;
+
+  await Group.join(Number(memberId), Number(groupId));
+  res.json({ msg: "success" });
+};
+
+exports.deleteMember = async (req, res) => {
+  const { groupId, memberId } = req.params;
+
+  await Group.leave(Number(memberId), Number(groupId));
+  res.json({ msg: "success" });
+};
+
 exports.getAllExpenses = async (req, res) => {
   const { grpId } = req.params;
 
@@ -79,5 +107,4 @@ exports.getGrpHistory = async (req, res) => {};
 
 exports.isMember = (groupId, userId) => {
   // check if there is a row with composite id groupId_userId in member table
-  
-}
+};
