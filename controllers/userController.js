@@ -34,7 +34,12 @@ exports.getUser = async (req, res) => {
   }
 };
 
-exports.getUserBal = async (req, res) => {};
+exports.getUserBal = async (req, res) => {
+  const { userId } = req.body;
+
+  const balance = await User.balance(Number(userId));
+  res.json(balance);
+};
 
 exports.putUserName = async (req, res) => {
   const { userId } = req.params;

@@ -76,6 +76,24 @@ class User {
     }
   }
 
+  static async balance(id) {
+    const balance = await db.user.findFirst({
+      where: { id: 3 },
+      select: {
+        // amount to be debited
+        debtor: {
+          select: { creditorId: true, amount: true },
+        },
+        // amount to get credited
+        creditor: {
+          select: { debtorId: true, amount: true },
+        },
+      },
+    });
+
+    return balance;
+  }
+
   // static async getByEmail(email) {
   //   try {
   //     const user = await db.user.findUnique({
