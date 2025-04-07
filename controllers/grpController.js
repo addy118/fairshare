@@ -1,12 +1,7 @@
 const { split } = require("../config/prismaClient");
 const Group = require("../prisma/queries/Group");
 const Split = require("../prisma/queries/Split");
-const {
-  calculateSplits,
-  getExpBalance,
-  getSplitBalance,
-  calcTolerance,
-} = require("./split");
+const { calculateSplits, getSplitBalance, mergeChrono } = require("./util");
 
 exports.postGrp = async (req, res) => {
   const { name } = req.body;
@@ -104,7 +99,40 @@ exports.getSplits = async (req, res) => {
   return res.json(splits);
 };
 
-exports.getGrpHistory = async (req, res) => {};
+exports.getGrpHistory = async (req, res) => {
+  const { groupId } = req.params;
+
+  const members = await Group.members(Number(groupId));
+  const expenses = await Group.expenseHistory(Number(groupId));
+  const splits = await Group.splitsHistory(Number(groupId));
+
+  // merge chronologicall all the expenses and splits
+  const timeline = mergeChrono(expenses, splits);
+  console.log(timeline);
+
+  const balance = {};
+  members.forEach((member) => (balance[member.memberId] = 0));
+  console.log(balance);
+
+  for (const entry of timeline) {
+    if (entry.type == "expense") {
+      const totalPeople = entry.payers.length;
+      const share = Math.floor(entry.totalAmt / totalPeople);
+
+      entry.payers.forEach(({ payerId, paidAmt }) => {
+        balance[payerId] += paidAmt - share;
+      });
+    } else if (entry.type == "split") {
+      // amounts are always positive
+      balance[entry.debtorId] += entry.amount;
+      balance[entry.creditorId] -= entry.amount;
+    }
+    entry.balance = { ...balance };
+    console.log(balance);
+  }
+
+  res.json(timeline);
+};
 
 exports.isMember = (groupId, userId) => {
   // check if there is a row with composite id groupId_userId in member table

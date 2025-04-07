@@ -1,5 +1,5 @@
 const Expense = require("../prisma/queries/Expense");
-const { createBalance, calculateSplits } = require("./split");
+const { createBalance, calculateSplits } = require("./util");
 
 exports.postExp = async (req, res) => {
   const expense = req.body;

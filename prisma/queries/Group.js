@@ -82,6 +82,42 @@ class Group {
     // returns null if not a member
     return isMember;
   }
+
+  static async members(groupId) {
+    return await db.member.findMany({
+      where: { groupId: Number(groupId) },
+      select: { memberId: true },
+    });
+  }
+
+  static async expenseHistory(groupId) {
+    return await db.expense.findMany({
+      where: { groupId: Number(groupId) },
+      select: {
+        name: true,
+        totalAmt: true,
+        createdAt: true,
+        payers: {
+          select: { payerId: true, paidAmt: true },
+        },
+      },
+      orderBy: { createdAt: "asc" },
+    });
+  }
+
+  static async splitsHistory(groupId) {
+    return await db.split.findMany({
+      where: { groupId: Number(groupId), settled: true },
+      select: {
+        debtorId: true,
+        creditorId: true,
+        amount: true,
+        updatedAt: true,
+        name: true,
+      },
+      orderBy: { updatedAt: "asc" },
+    });
+  }
 }
 
 module.exports = Group;

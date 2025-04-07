@@ -10,7 +10,7 @@ const {
 } = require("../controllers/expenseController");
 const expRouter = Router();
 
-expRouter.use(verifyToken);
+// expRouter.use(verifyToken);
 
 expRouter.post("/new", postExp);
 expRouter.post("/:splitId/settle", settleSplit);

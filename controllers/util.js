@@ -21,30 +21,12 @@ function createBalance(expense) {
   }));
 
   balanceArr.forEach((split) => {
-    if (split.name) {
-      balance[split.payerId] = split.amount;
-    }
-  });
-  balanceArr.forEach((split) => {
     if (split.payerId) {
       balance[split.payerId] = split.amount;
     }
   });
   return balance;
 }
-
-// console.log(
-//   createBalance({
-//     name: "exp1",
-//     groupId: 1,
-//     totalAmt: 250,
-//     payers: [
-//       { payerId: 2, amount: 200 },
-//       { payerId: 3, amount: 0 },
-//       { payerId: 4, amount: 50 },
-//     ],
-//   })
-// );
 
 function getExpBalance(expenses) {
   // const expenses = [
@@ -184,10 +166,164 @@ function calcTolerance(before, after) {
   return tolerance;
 }
 
+function mergeChrono(expenses, splits) {
+  const expEntries = expenses.map((expense) => ({
+    ...expense,
+    type: "expense",
+    timestamp: expense.createdAt,
+  }));
+
+  const splitEntries = splits.map((split) => ({
+    ...split,
+    type: "split",
+    timestamp: split.updatedAt,
+  }));
+
+  return [...expEntries, ...splitEntries].sort(
+    (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+  );
+}
+
 module.exports = {
   createBalance,
   calculateSplits,
   getExpBalance,
   getSplitBalance,
   calcTolerance,
+  mergeChrono,
 };
+
+// const timeline = [
+//   {
+//     name: "exp3",
+//     totalAmt: 290,
+//     createdAt: "2025-04-04T17:17:05.369Z",
+//     payers: [
+//       {
+//         payerId: 6,
+//         paidAmt: 60,
+//       },
+//       {
+//         payerId: 5,
+//         paidAmt: 100,
+//       },
+//       {
+//         payerId: 4,
+//         paidAmt: 80,
+//       },
+//       {
+//         payerId: 3,
+//         paidAmt: 40,
+//       },
+//       {
+//         payerId: 2,
+//         paidAmt: 10,
+//       },
+//     ],
+//     type: "expense",
+//     timestamp: "2025-04-04T17:17:05.369Z",
+//     balance: {
+//       2: -48,
+//       3: -18,
+//       4: 22,
+//       5: 42,
+//       6: 2,
+//     },
+//   },
+//   {
+//     name: "exp1",
+//     totalAmt: 250,
+//     createdAt: "2025-04-07T10:45:50.295Z",
+//     payers: [
+//       {
+//         payerId: 4,
+//         paidAmt: 50,
+//       },
+//       {
+//         payerId: 3,
+//         paidAmt: 0,
+//       },
+//       {
+//         payerId: 2,
+//         paidAmt: 200,
+//       },
+//     ],
+//     type: "expense",
+//     timestamp: "2025-04-07T10:45:50.295Z",
+//     balance: {
+//       2: 69,
+//       3: -101,
+//       4: -11,
+//       5: 42,
+//       6: 2,
+//     },
+//   },
+//   {
+//     name: "exp2",
+//     totalAmt: 50,
+//     createdAt: "2025-04-07T10:46:14.075Z",
+//     payers: [
+//       {
+//         payerId: 3,
+//         paidAmt: 50,
+//       },
+//       {
+//         payerId: 2,
+//         paidAmt: 0,
+//       },
+//     ],
+//     type: "expense",
+//     timestamp: "2025-04-07T10:46:14.075Z",
+//     balance: {
+//       2: 44,
+//       3: -76,
+//       4: -11,
+//       5: 42,
+//       6: 2,
+//     },
+//   },
+//   {
+//     name: "exp4",
+//     totalAmt: 60,
+//     createdAt: "2025-04-07T10:46:23.475Z",
+//     payers: [
+//       {
+//         payerId: 6,
+//         paidAmt: 10,
+//       },
+//       {
+//         payerId: 4,
+//         paidAmt: 20,
+//       },
+//       {
+//         payerId: 3,
+//         paidAmt: 30,
+//       },
+//     ],
+//     type: "expense",
+//     timestamp: "2025-04-07T10:46:23.475Z",
+//     balance: {
+//       2: 44,
+//       3: -66,
+//       4: -11,
+//       5: 42,
+//       6: -8,
+//     },
+//   },
+//   {
+//     debtorId: 6,
+//     creditorId: 5,
+//     amount: 8,
+//     updatedAt: "2025-04-07T13:54:19.103Z",
+//     name: "Optimized Split",
+//     type: "split",
+//     timestamp: "2025-04-07T13:54:19.103Z",
+//     balance: {
+//       2: 44,
+//       3: -66,
+//       4: -11,
+//       5: 34,
+//       6: 0,
+//     },
+//   },
+// ];
