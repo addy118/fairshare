@@ -6,6 +6,7 @@ exports.postExp = async (req, res) => {
 
   const balance = createBalance(req.body);
   const splits = calculateSplits(balance);
+  console.log(splits);
 
   // to send it to db query postExpense()
   const payers = expense.payers.map((payer) => {

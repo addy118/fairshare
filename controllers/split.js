@@ -20,10 +20,31 @@ function createBalance(expense) {
     amount: payer.amount - share,
   }));
 
-  balanceArr.forEach((split) => (balance[split.name] = split.amount));
-  balanceArr.forEach((split) => (balance[split.payerId] = split.amount));
+  balanceArr.forEach((split) => {
+    if (split.name) {
+      balance[split.payerId] = split.amount;
+    }
+  });
+  balanceArr.forEach((split) => {
+    if (split.payerId) {
+      balance[split.payerId] = split.amount;
+    }
+  });
   return balance;
 }
+
+// console.log(
+//   createBalance({
+//     name: "exp1",
+//     groupId: 1,
+//     totalAmt: 250,
+//     payers: [
+//       { payerId: 2, amount: 200 },
+//       { payerId: 3, amount: 0 },
+//       { payerId: 4, amount: 50 },
+//     ],
+//   })
+// );
 
 function getExpBalance(expenses) {
   // const expenses = [
@@ -101,13 +122,13 @@ function calculateSplits(balance) {
   const debtors = [];
 
   for (const [person, amount] of Object.entries(balance)) {
-    // Handle floating point precision
+    // Handle floating point precision8999
     const roundedAmount = Math.round(amount * 100) / 100;
 
     if (amount > 0) {
-      creditors.push({ name: person, amount });
+      creditors.push({ name: person, amount: roundedAmount });
     } else if (amount < 0) {
-      debtors.push({ name: person, amount: -amount }); // Convert to positive for ease of calculation
+      debtors.push({ name: person, amount: -roundedAmount }); // Convert to positive for ease of calculation
     }
   }
 
