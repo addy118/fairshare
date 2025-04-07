@@ -9,6 +9,10 @@ import Layout from "./components/Layout";
 import Profile from "./pages/Profile";
 import SignupPage from "./pages/SignUp";
 import ErrorPage from "./pages/ErrorPage";
+import NewExpense from "./pages/NewExpense";
+import GroupsPage from "./pages/Groups";
+import GroupPage from "./pages/Group";
+import ProfilePage from "./pages/UserHome";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +37,22 @@ const router = createBrowserRouter([
           {
             path: "user/:userId/profile",
             element: <Profile />,
+          },
+          {
+            path: "expense/new",
+            element: <NewExpense />,
+          },
+          {
+            path: "groups",
+            element: <GroupsPage />,
+          },
+          {
+            path: "groups/:id",
+            element: <GroupPage />,
+          },
+          {
+            path: "user",
+            element: <ProfilePage />,
           },
         ],
       },
