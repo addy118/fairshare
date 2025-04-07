@@ -4,7 +4,7 @@ class User {
   static async create(name, username, email, password) {
     try {
       const user = await db.user.create({
-        data: { name, username, email, password },
+        data: { name, username, phone, email, password },
       });
       return user;
     } catch (error) {

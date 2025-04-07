@@ -1,8 +1,5 @@
 const { Router } = require("express");
-const {
-  verifyToken,
-  verifyOwnership,
-} = require("../controllers/authController");
+const { verifyToken } = require("../controllers/authController");
 const {
   postExp,
   getExp,
@@ -10,7 +7,7 @@ const {
 } = require("../controllers/expenseController");
 const expRouter = Router();
 
-// expRouter.use(verifyToken);
+expRouter.use(verifyToken);
 
 expRouter.post("/new", postExp);
 expRouter.post("/:splitId/settle", settleSplit);

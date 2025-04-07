@@ -5,17 +5,19 @@ const User = require("../prisma/queries/User");
 const { ACCESS_TOKEN, REFRESH_TOKEN } = process.env;
 
 exports.postSignup = async (req, res) => {
-  const { name, username, email, password } = req.body;
+  const { name, username, phone, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await User.create(name, username, email, hashedPassword);
+  const user = await User.create(name, username, phone, email, hashedPassword);
 
   res.status(200).json({ user });
 };
 
 exports.postLogin = async (req, res) => {
   const { data, password } = req.body;
+  console.log(data, password);
   const user = await User.get(data);
+  console.log(user);
 
   if (!user) return res.status(404).send("User not found!");
 

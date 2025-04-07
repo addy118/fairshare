@@ -10,7 +10,10 @@ const {
   postMember,
   deleteMember,
 } = require("../controllers/grpController");
+const { verifyToken } = require("../controllers/authController");
 const grpRouter = new Router();
+
+grpRouter.use(verifyToken);
 
 grpRouter.get("/:grpId", getAllExpenses);
 grpRouter.get("/:grpId/balance", getGrpBalance);
