@@ -15,9 +15,9 @@ exports.postSignup = async (req, res) => {
 
 exports.postLogin = async (req, res) => {
   const { data, password } = req.body;
-  console.log(data, password);
+  // console.log(data, password);
   const user = await User.get(data);
-  console.log(user);
+  // console.log(user);
 
   if (!user) return res.status(404).send("User not found!");
 
@@ -136,6 +136,7 @@ const generateTokens = (user) => {
       name: user.name,
       username: user.username,
       email: user.email,
+      phone: user.phone,
     },
     ACCESS_TOKEN,
     { expiresIn: "10m" }

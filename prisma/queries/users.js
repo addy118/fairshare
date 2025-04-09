@@ -72,16 +72,18 @@ const users = [
   },
 ];
 
-users.forEach(async (user, i) => {
-  const res = await db.user.create({
-    data: {
-      name: user.name,
-      username: user.username,
-      email: user.email,
-      phone: user.phone,
-      password: user.password,
-    },
-  });
+// users.forEach(async (user, i) => {
+//   const res = await db.user.create({
+//     data: {
+//       name: user.name,
+//       username: user.username,
+//       email: user.email,
+//       phone: user.phone,
+//       password: user.password,
+//     },
+//   });
 
-  console.log(res);
-});
+//   console.log(res);
+// });
+
+module.exports = users;
