@@ -46,7 +46,7 @@ exports.postLogin = async (req, res) => {
 exports.postLogout = async (req, res) => {
   res.clearCookie("refreshCookie", {
     httpOnly: true,
-    secure: false,
+    secure: true,
     samesite: "None",
   });
   res.status(200).json({ msg: "Logged out successfully" });
@@ -110,7 +110,7 @@ exports.refresh = async (req, res) => {
     res.cookie("refreshCookie", refreshToken, {
       httpOnly: true,
       // true in prod (only send over https)
-      secure: false,
+      secure: true,
       samesite: "None",
     });
 
