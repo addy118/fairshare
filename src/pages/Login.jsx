@@ -64,7 +64,9 @@ export default function LoginPage() {
 
               {loginErrors.data &&
                 loginErrors.data.map((err, i) => (
-                  <p key={i} className="text-red-400">{err}</p>
+                  <p key={i} className="text-red-400">
+                    {err}
+                  </p>
                 ))}
             </div>
 
@@ -89,7 +91,9 @@ export default function LoginPage() {
 
               {loginErrors.password &&
                 loginErrors.password.map((err, i) => (
-                  <p key={i} className="text-red-400">{err}</p>
+                  <p key={i} className="text-red-400">
+                    {err}
+                  </p>
                 ))}
             </div>
 

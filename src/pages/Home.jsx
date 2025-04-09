@@ -8,50 +8,44 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PlusCircle, Users } from "lucide-react";
+
 import { useAuth } from "@/authProvider";
-import { userBal } from "@/mockData/userMock";
+import UserPic from "@/components/UserPic";
+import api from "@/axiosInstance";
 
 export default function Home() {
-  const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isAuth } = useAuth();
 
   const [balances, setBalances] = useState({ owed: [], owes: [] });
   const [isLoading, setIsLoading] = useState(true);
-  const [newGroupName, setNewGroupName] = useState("");
-  const [newGroupOpen, setNewGroupOpen] = useState(false);
 
+  // fetch user balance
   useEffect(() => {
-    setIsLoading(false);
-  }, []);
+    if (!isAuth) return;
 
-  const handleCreateGroup = (e) => {
-    e.preventDefault();
-    if (!newGroupName.trim()) return;
+    const fetchBalances = async () => {
+      try {
+        const response = await api.get(`user/${user.id}/balance`);
+        // console.log(response.data);
+        setBalances(response.data);
+      } catch (err) {
+        console.error("Failed to fetch balances:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    console.log(`Creating group: ${newGroupName}`);
-    setNewGroupOpen(false);
-    setNewGroupName("");
-    navigate("/groups");
-  };
+    fetchBalances();
+  }, [user]);
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        Loading profile...
+      <div className="screen flex flex-col items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-black"></div>
+
+        <div>Loading profile...</div>
       </div>
     );
   }
@@ -64,60 +58,13 @@ export default function Home() {
             {/* user profile */}
             <div className="mb-4 flex items-center gap-4 md:mb-0">
               <Avatar className="h-16 w-16">
-                <AvatarFallback>
-                  {user.name
-                    ?.split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </AvatarFallback>
+                <UserPic name={user.name} />
               </Avatar>
 
               <div>
                 <h1 className="text-2xl font-bold">{user.name}</h1>
                 <p className="text-muted-foreground">{user.email}</p>
               </div>
-            </div>
-
-            <div className="flex gap-4">
-              {/* my groups */}
-              <Button onClick={() => navigate("/groups")}>
-                <Users className="mr-2 h-4 w-4" />
-                My Groups
-              </Button>
-
-              {/* create group dialog box */}
-              <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
-                <DialogTrigger asChild>
-                  <Button>
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Create Group
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create New Group</DialogTitle>
-                    <DialogDescription>
-                      Enter a name for your new expense sharing group.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <form onSubmit={handleCreateGroup}>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid gap-2">
-                        <Label htmlFor="name">Group Name</Label>
-                        <Input
-                          id="name"
-                          value={newGroupName}
-                          onChange={(e) => setNewGroupName(e.target.value)}
-                          placeholder="e.g., Roommates, Trip to Paris"
-                        />
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <Button type="submit">Create Group</Button>
-                    </DialogFooter>
-                  </form>
-                </DialogContent>
-              </Dialog>
             </div>
           </div>
 
@@ -129,13 +76,13 @@ export default function Home() {
                 <CardDescription>People who owe you money</CardDescription>
               </CardHeader>
               <CardContent>
-                {userBal.creditor.length === 0 ? (
+                {balances.creditor.length === 0 ? (
                   <p className="text-muted-foreground">
                     No one owes you money right now.
                   </p>
                 ) : (
                   <ul className="space-y-4">
-                    {userBal.creditor.map((balance) => (
+                    {balances.creditor.map((balance) => (
                       <li
                         key={balance.debtor.id}
                         className="flex items-center justify-between"
@@ -165,7 +112,7 @@ export default function Home() {
                   <span className="font-bold">Total</span>
                   <span className="font-bold text-green-600">
                     +$
-                    {userBal.creditor
+                    {balances.creditor
                       .reduce((sum, item) => sum + item.amount, 0)
                       .toFixed(2)}
                   </span>
@@ -180,13 +127,13 @@ export default function Home() {
                 <CardDescription>People you need to pay back</CardDescription>
               </CardHeader>
               <CardContent>
-                {userBal.debtor.length === 0 ? (
+                {balances.debtor.length === 0 ? (
                   <p className="text-muted-foreground">
                     You don't owe anyone money right now.
                   </p>
                 ) : (
                   <ul className="space-y-4">
-                    {userBal.debtor.map((balance) => (
+                    {balances.debtor.map((balance) => (
                       <li
                         key={balance.creditor.id}
                         className="flex items-center justify-between"
@@ -216,7 +163,7 @@ export default function Home() {
                   <span className="font-bold">Total</span>
                   <span className="font-bold text-red-600">
                     -$
-                    {userBal.debtor
+                    {balances.debtor
                       .reduce((sum, item) => sum + item.amount, 0)
                       .toFixed(2)}
                   </span>
