@@ -22,22 +22,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlusCircle, Users } from "lucide-react";
+import { useAuth } from "@/authProvider";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
+  // const [user, setUser] = useState(null);
   const [balances, setBalances] = useState({ owed: [], owes: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [newGroupName, setNewGroupName] = useState("");
   const [newGroupOpen, setNewGroupOpen] = useState(false);
 
   useEffect(() => {
-    const dummyUser = {
-      name: "John Doe",
-      email: "john.doe@example.com",
-      avatar: "/placeholder.svg?height=128&width=128",
-    };
-
     const dummyBalances = {
       owed: [
         {
@@ -69,7 +65,6 @@ export default function ProfilePage() {
       ],
     };
 
-    setUser(dummyUser);
     setBalances(dummyBalances);
     setIsLoading(false);
   }, []);
@@ -97,23 +92,30 @@ export default function ProfilePage() {
       {user && (
         <>
           <div className="mb-8 flex flex-col items-start justify-between md:flex-row md:items-center">
+            {/* user profile */}
             <div className="mb-4 flex items-center gap-4 md:mb-0">
               <Avatar className="h-16 w-16">
-                <AvatarImage src={user.avatar || ""} alt={user.name} />
                 <AvatarFallback>
-                  {user.name?.substring(0, 2).toUpperCase()}
+                  {user.name
+                    ?.split(" ")
+                    .map((n) => n[0])
+                    .join("")}
                 </AvatarFallback>
               </Avatar>
+
               <div>
                 <h1 className="text-2xl font-bold">{user.name}</h1>
                 <p className="text-muted-foreground">{user.email}</p>
               </div>
             </div>
+
             <div className="flex gap-4">
               <Button onClick={() => navigate("/groups")}>
                 <Users className="mr-2 h-4 w-4" />
                 My Groups
               </Button>
+
+              {/* create group dialog box */}
               <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
                 <DialogTrigger asChild>
                   <Button>
@@ -150,6 +152,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
+            {/* money you are owed */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-green-600">
@@ -202,6 +205,7 @@ export default function ProfilePage() {
               </CardFooter>
             </Card>
 
+            {/* money you owe */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-red-600">Money You Owe</CardTitle>

@@ -30,9 +30,13 @@ const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
+          // {
+          //   path: "home",
+          //   element: <Home />,
+          // },
           {
             path: "home",
-            element: <Home />,
+            element: <ProfilePage />,
           },
           {
             path: "user/:userId/profile",
@@ -49,10 +53,6 @@ const router = createBrowserRouter([
           {
             path: "groups/:id",
             element: <GroupPage />,
-          },
-          {
-            path: "user",
-            element: <ProfilePage />,
           },
         ],
       },
