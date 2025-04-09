@@ -21,6 +21,7 @@ import { ArrowLeft, Plus, DollarSign, Check } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/authProvider";
+import Loading from "@/components/Loading";
 
 export default function GroupPage({ params }) {
   const navigate = useNavigate();
@@ -286,15 +287,7 @@ export default function GroupPage({ params }) {
     setDetailsOpen(true);
   };
 
-  if (isLoading) {
-    return (
-      <div className="screen flex flex-col items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-black"></div>
-
-        <div>Loading group...</div>
-      </div>
-    );
-  }
+  if (isLoading) return <Loading item="group" />;
 
   return (
     <div className="mx-auto max-w-4xl px-4">

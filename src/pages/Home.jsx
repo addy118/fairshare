@@ -4,6 +4,7 @@ import { useAuth } from "@/authProvider";
 import UserPic from "@/components/UserPic";
 import api from "@/axiosInstance";
 import UserBalance from "@/components/UserBalance";
+import Loading from "@/components/Loading";
 
 export default function Home() {
   const { user, isAuth } = useAuth();
@@ -29,15 +30,7 @@ export default function Home() {
     fetchBalances();
   }, [user]);
 
-  if (isLoading) {
-    return (
-      <div className="screen flex flex-col items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-black"></div>
-
-        <div>Loading profile...</div>
-      </div>
-    );
-  }
+  if (isLoading) return <Loading item="profile" />;
 
   return (
     <div className="mx-auto max-w-4xl px-4">

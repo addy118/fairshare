@@ -22,6 +22,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlusCircle, Users, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Loading from "@/components/Loading";
 
 export default function GroupsPage() {
   const navigate = useNavigate();
@@ -61,75 +62,11 @@ export default function GroupsPage() {
     setIsLoading(false);
   }, []);
 
-  const handleCreateGroup = (e) => {
-    e.preventDefault();
-    if (!newGroupName.trim()) return;
-
-    const newGroup = {
-      id: `new-${Date.now()}`,
-      name: newGroupName,
-      memberCount: 1,
-      userBalance: 0,
-      members: [{ name: "John Doe", avatar: "/placeholder.svg" }],
-    };
-
-    setNewGroupOpen(false);
-    setNewGroupName("");
-    setGroups((prevGroups) => [...prevGroups, newGroup]);
-  };
-
-  const goBack = () => {
-    window.history.back();
-  };
-
-  if (isLoading) {
-    return (
-      <div className="screen flex flex-col items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-black"></div>
-
-        <div>Loading groups...</div>
-      </div>
-    );
-  }
+  if (isLoading) return <Loading item="groups" />;
 
   return (
     <div className="mx-auto max-w-4xl px-4">
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">My Groups</h1>
-
-        <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Create Group
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New Group</DialogTitle>
-              <DialogDescription>
-                Enter a name for your new expense sharing group.
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleCreateGroup}>
-              <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="name">Group Name</Label>
-                  <Input
-                    id="name"
-                    value={newGroupName}
-                    onChange={(e) => setNewGroupName(e.target.value)}
-                    placeholder="e.g., Roommates, Trip to Paris"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">Create Group</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+      <h1 className="mb-8 text-2xl font-bold">My Groups</h1>
 
       {groups.length === 0 ? (
         <div className="py-12 text-center">
