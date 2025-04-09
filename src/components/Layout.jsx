@@ -1,8 +1,8 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { User } from "lucide-react";
+import { User, Users, PlusCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
@@ -13,10 +13,33 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/authProvider";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 export default function Layout() {
-  const user = { id: 1 };
-  const { isAuth, signup, login, logout } = useAuth();
+  const navigate = useNavigate();
+  const { isAuth, logout } = useAuth();
+
+  const [newGroupName, setNewGroupName] = useState("");
+  const [newGroupOpen, setNewGroupOpen] = useState(false);
+
+  const handleCreateGroup = (e) => {
+    e.preventDefault();
+    if (!newGroupName.trim()) return;
+
+    console.log(`Creating group: ${newGroupName}`);
+    setNewGroupOpen(false);
+    setNewGroupName("");
+    navigate("/groups");
+  };
 
   return (
     <>
@@ -26,10 +49,55 @@ export default function Layout() {
             <a href="/" className="text-2xl font-bold">
               Fair Share
             </a>
+
             <div className="flex items-center space-x-4">
+              {/* my groups tab */}
+              <Button onClick={() => navigate("groups")} variant="ghost">
+                <Users className="mr-2 h-4 w-4" />
+                My Groups
+              </Button>
+
+              {/* create group dialog box */}
+              <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="ghost">
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Create Group
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Create New Group</DialogTitle>
+                    <DialogDescription>
+                      Enter a name for your new expense sharing group.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form onSubmit={handleCreateGroup}>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid gap-2">
+                        <Label htmlFor="name">Group Name</Label>
+                        <Input
+                          id="name"
+                          value={newGroupName}
+                          onChange={(e) => setNewGroupName(e.target.value)}
+                          placeholder="e.g., Roommates, Trip to Paris"
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button type="submit">Create Group</Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
+
+              {/* user button */}
               <DropdownMenu>
                 <DropdownMenuTrigger className="cursor-pointer">
-                  <User className="h-5 w-5" />
+                  <Button variant="ghost">
+                    <User className="h-5 w-5" />
+                    Account
+                  </Button>
                 </DropdownMenuTrigger>
                 {isAuth ? (
                   <DropdownMenuContent
