@@ -22,15 +22,31 @@ class Group {
             id: true,
             name: true,
             totalAmt: true,
-            payers: { omit: { expenseId: true } },
+            payers: {
+              select: {
+                payer: { select: { id: true, name: true } },
+                paidAmt: true,
+              },
+            },
             createdAt: true,
           },
         },
-        splits: true,
+        splits: {
+          select: {
+            id: true,
+            mainGroup: { select: { id: true, name: true } },
+            debtor: { select: { id: true, name: true } },
+            creditor: { select: { id: true, name: true } },
+            amount: true,
+            settled: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
       },
     });
 
-    return expenses;
+    return expenses[0];
   }
 
   static async splits(id) {
@@ -41,15 +57,15 @@ class Group {
           where: { settled: false },
           select: {
             id: true,
-            debtorId: true,
-            creditorId: true,
+            debtor: { select: { id: true, name: true } },
+            creditor: { select: { id: true, name: true } },
             amount: true,
           },
         },
       },
     });
 
-    return splits;
+    return splits[0];
   }
 
   static async join(memberId, groupId) {
@@ -94,11 +110,15 @@ class Group {
     return await db.expense.findMany({
       where: { groupId: Number(groupId) },
       select: {
+        id: true,
         name: true,
         totalAmt: true,
         createdAt: true,
         payers: {
-          select: { payerId: true, paidAmt: true },
+          select: {
+            payer: { select: { id: true, name: true } },
+            paidAmt: true,
+          },
         },
       },
       orderBy: { createdAt: "asc" },
@@ -107,13 +127,13 @@ class Group {
 
   static async splitsHistory(groupId) {
     return await db.split.findMany({
-      where: { groupId: Number(groupId), settled: true },
+      where: { groupId: Number(groupId), settled: false },
       select: {
-        debtorId: true,
-        creditorId: true,
+        id: true,
+        debtor: { select: { id: true, name: true } },
+        creditor: { select: { id: true, name: true } },
         amount: true,
         updatedAt: true,
-        name: true,
       },
       orderBy: { updatedAt: "asc" },
     });

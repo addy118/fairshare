@@ -1,19 +1,13 @@
 const prisma = require("../../config/prismaClient");
+const Group = require("./Group");
+const User = require("./User");
 const users = require("./users");
 
 async function main() {
-  await prisma.member.createMany({
-    data: [
-      { memberId: 1, groupId: 1 },
-      { memberId: 2, groupId: 1 },
-      { memberId: 3, groupId: 1 },
-      { memberId: 4, groupId: 1 },
-      { memberId: 5, groupId: 1 },
-    ],
-    skipDuplicates: true, // avoids error if already added
-  });
+  const res = await Group.splitsHistory(1);
+  console.log(res);
 
-  console.log("Database populated successfully!");
+  console.log("Successful!");
 }
 
 main()

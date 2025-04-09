@@ -57,13 +57,18 @@ class Expense {
       select: {
         id: true,
         name: true,
-        groupId: true,
+        mainGroup: { select: { id: true, name: true } },
         totalAmt: true,
-        payers: { select: { payerId: true, paidAmt: true } },
+        payers: {
+          select: {
+            payer: { select: { id: true, name: true } },
+            paidAmt: true,
+          },
+        },
         splits: {
           select: {
-            debtorId: true,
-            creditorId: true,
+            debtor: { select: { id: true, name: true } },
+            creditor: { select: { id: true, name: true } },
             amount: true,
             settled: true,
           },
