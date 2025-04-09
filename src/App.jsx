@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "./authProvider";
 import { useNavigate } from "react-router-dom";
 
+// landing page
 export default function App() {
   const { isAuth } = useAuth();
   const navigate = useNavigate();

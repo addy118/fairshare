@@ -40,7 +40,7 @@ export default function Layout() {
                   >
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <Link to={`/user/${user.id}/profile`}>
+                    <Link to={"/home"}>
                       <DropdownMenuItem className="cursor-pointer">
                         Profile
                       </DropdownMenuItem>

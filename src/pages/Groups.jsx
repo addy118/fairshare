@@ -21,8 +21,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlusCircle, Users, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function GroupsPage() {
+  const navigate = useNavigate();
   const [groups, setGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [newGroupName, setNewGroupName] = useState("");
@@ -89,15 +91,10 @@ export default function GroupsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="mx-auto max-w-4xl px-4">
       <div className="mb-8 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" onClick={goBack}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Profile
-          </Button>
-          <h1 className="text-2xl font-bold">My Groups</h1>
-        </div>
+        <h1 className="text-2xl font-bold">My Groups</h1>
+
         <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -150,7 +147,7 @@ export default function GroupsPage() {
             <Card
               key={group.id}
               className="cursor-pointer transition-shadow hover:shadow-md"
-              onClick={() => alert(`Go to /groups/${group.id}`)}
+              onClick={() => navigate(group.id)}
             >
               <CardHeader>
                 <CardTitle>{group.name}</CardTitle>

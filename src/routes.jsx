@@ -4,15 +4,13 @@ import AuthProvider from "@/authProvider";
 import ProtectedRoute from "@/ProtectedRoute";
 import App from "@/App";
 import LoginPage from "@/pages/Login";
-import Home from "@/pages/Home";
 import Layout from "./components/Layout";
-import Profile from "./pages/Profile";
 import SignupPage from "./pages/SignUp";
 import ErrorPage from "./pages/ErrorPage";
-import NewExpense from "./pages/NewExpense";
 import GroupsPage from "./pages/Groups";
 import GroupPage from "./pages/Group";
-import ProfilePage from "./pages/UserHome";
+import Home from "./pages/Home";
+import ExpenseForm from "./pages/ExpenseForm";
 
 const router = createBrowserRouter([
   {
@@ -30,21 +28,13 @@ const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
-          // {
-          //   path: "home",
-          //   element: <Home />,
-          // },
           {
             path: "home",
-            element: <ProfilePage />,
+            element: <Home />,
           },
           {
-            path: "user/:userId/profile",
-            element: <Profile />,
-          },
-          {
-            path: "expense/new",
-            element: <NewExpense />,
+            path: "groups/:groupId/expense/new",
+            element: <ExpenseForm />,
           },
           {
             path: "groups",

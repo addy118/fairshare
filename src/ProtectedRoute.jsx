@@ -7,7 +7,11 @@ const ProtectedRoute = () => {
   const location = useLocation();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="screen flex items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-black"></div>
+      </div>
+    );
   }
 
   return isAuth ? (

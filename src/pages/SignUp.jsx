@@ -19,6 +19,7 @@ export default function SignupPage() {
     name: "",
     username: "",
     email: "",
+    phone: "",
     password: "",
   });
 
@@ -44,6 +45,7 @@ export default function SignupPage() {
 
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* name */}
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
 
@@ -63,6 +65,7 @@ export default function SignupPage() {
                 ))}
             </div>
 
+            {/* username */}
             <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
 
@@ -82,6 +85,27 @@ export default function SignupPage() {
                 ))}
             </div>
 
+            {/* phone */}
+            <div className="space-y-2">
+              <Label htmlFor="name">Phone</Label>
+
+              <Input
+                id="phone"
+                placeholder="John Doe"
+                required
+                value={formData.phone}
+                onChange={handleChange}
+              />
+
+              {signupErrors.phone &&
+                signupErrors.name.map((err, i) => (
+                  <p key={i} className="text-red-400">
+                    {err}
+                  </p>
+                ))}
+            </div>
+
+            {/* email */}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
 
@@ -102,6 +126,7 @@ export default function SignupPage() {
                 ))}
             </div>
 
+            {/* password */}
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
 
