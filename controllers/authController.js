@@ -31,7 +31,7 @@ exports.postLogin = async (req, res) => {
     httpOnly: true,
     // true in prod (only send over https)
     secure: true,
-    samesite: "None",
+    sameSite: "None",
   });
 
   try {
@@ -47,7 +47,7 @@ exports.postLogout = async (req, res) => {
   res.clearCookie("refreshCookie", {
     httpOnly: true,
     secure: true,
-    samesite: "None",
+    sameSite: "None",
   });
   res.status(200).json({ msg: "Logged out successfully" });
 };
@@ -111,7 +111,7 @@ exports.refresh = async (req, res) => {
       httpOnly: true,
       // true in prod (only send over https)
       secure: true,
-      samesite: "None",
+      sameSite: "None",
     });
 
     res.json({ msg: "Tokens Regenerated", accessToken });
