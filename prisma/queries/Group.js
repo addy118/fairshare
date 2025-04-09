@@ -65,7 +65,7 @@ class Group {
       },
     });
 
-    return splits[0];
+    return splits[0].splits;
   }
 
   static async join(memberId, groupId) {
@@ -102,7 +102,7 @@ class Group {
   static async members(groupId) {
     return await db.member.findMany({
       where: { groupId: Number(groupId) },
-      select: { memberId: true },
+      include: { member: { select: { id: true, name: true } } },
     });
   }
 
@@ -127,7 +127,7 @@ class Group {
 
   static async splitsHistory(groupId) {
     return await db.split.findMany({
-      where: { groupId: Number(groupId), settled: false },
+      where: { groupId: Number(groupId), settled: true },
       select: {
         id: true,
         debtor: { select: { id: true, name: true } },

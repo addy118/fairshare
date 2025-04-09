@@ -76,20 +76,17 @@ function getExpBalance(expenses) {
 function getSplitBalance(splits) {
   // creates a balance graph for a given splits array
   // splits = [
-  //   { debtorId: 3, creditorId: 2, amount: 43 },
-  //   { debtorId: 3, creditorId: 5, amount: 23 },
-  //   { debtorId: 4, creditorId: 5, amount: 11 },
-  //   { debtorId: 6, creditorId: 5, amount: 8 },
+  //   { debtor: { id: 3, name: "" }, creditorId: { id: 2, name: "" }, amount: 43 },
   // ];
 
   const balance = {};
 
   splits.forEach((split) => {
-    if (!balance[split.debtorId]) balance[split.debtorId] = 0;
-    balance[split.debtorId] -= split.amount;
+    if (!balance[split.debtor.id]) balance[split.debtor.id] = 0;
+    balance[split.debtor.id] -= split.amount;
 
-    if (!balance[split.creditorId]) balance[split.creditorId] = 0;
-    balance[split.creditorId] += split.amount;
+    if (!balance[split.creditor.id]) balance[split.creditor.id] = 0;
+    balance[split.creditor.id] += split.amount;
   });
 
   return balance;
@@ -168,15 +165,15 @@ function calcTolerance(before, after) {
 
 function mergeChrono(expenses, splits) {
   const expEntries = expenses.map((expense) => ({
-    ...expense,
     type: "expense",
     timestamp: expense.createdAt,
+    ...expense,
   }));
 
   const splitEntries = splits.map((split) => ({
-    ...split,
     type: "split",
     timestamp: split.updatedAt,
+    ...split,
   }));
 
   return [...expEntries, ...splitEntries].sort(

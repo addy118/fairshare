@@ -1,6 +1,7 @@
 const { split } = require("../config/prismaClient");
 const Group = require("../prisma/queries/Group");
 const Split = require("../prisma/queries/Split");
+const User = require("../prisma/queries/User");
 const { calculateSplits, getSplitBalance, mergeChrono } = require("./util");
 
 exports.postGrp = async (req, res) => {
@@ -34,8 +35,7 @@ exports.deleteMember = async (req, res) => {
 exports.getAllExpenses = async (req, res) => {
   const { grpId } = req.params;
 
-  let group = await Group.expenses(Number(grpId));
-  group = { expenses: group[0].expenses, splits: group[0].splits };
+  const group = await Group.expenses(Number(grpId));
   res.json(group);
 };
 
@@ -43,30 +43,50 @@ exports.getGrpBalance = async (req, res) => {
   const { grpId } = req.params;
 
   const group = await Group.expenses(Number(grpId));
-  const splits = group[0].splits;
+  const splits = group.splits;
   const cleanSplits = splits.map((split) => {
     return {
-      debtorId: Number(split.debtorId),
-      creditorId: Number(split.creditorId),
+      debtor: {
+        id: Number(split.debtor.id),
+        name: split.debtor.name,
+      },
+      creditor: {
+        id: Number(split.creditor.id),
+        name: split.creditor.name,
+      },
       amount: Number(split.amount),
     };
   });
-  // console.log(splits);
 
   const splitBalance = getSplitBalance(cleanSplits);
-  const balance = Object.entries(splitBalance).map(([userId, amount]) => ({
-    userId: Number(userId),
-    amount: Number(amount),
-  }));
+  // console.log(splitBalance);
+
+  const balance = await Promise.all(
+    Object.entries(splitBalance).map(async ([userId, amount]) => ({
+      user: {
+        id: Number(userId),
+        name: await User.getNameById(Number(userId)),
+      },
+      amount: Number(amount),
+    }))
+  );
+
+  // console.log(balance);
 
   res.json(balance);
+};
+
+exports.getSplits = async (req, res) => {
+  const { grpId } = req.params;
+
+  const splits = await Group.splits(Number(grpId));
+  res.json(splits);
 };
 
 exports.getMinSplits = async (req, res) => {
   const { grpId } = req.params;
 
-  let splits = await Group.splits(Number(grpId));
-  splits = splits[0].splits;
+  const splits = await Group.splits(Number(grpId));
 
   const oldBalance = getSplitBalance(splits);
   const newSplits = calculateSplits(oldBalance);
@@ -83,20 +103,10 @@ exports.getMinSplits = async (req, res) => {
   });
 
   await Split.deleteAll(Number(grpId));
-  const minSplits = await Split.createMany(splitsArr);
-  console.log(splitsArr);
-  console.log(minSplits);
+  await Split.createMany(splitsArr);
+  const minSplits = await Group.splits(Number(grpId));
 
   res.json(minSplits);
-};
-
-exports.getSplits = async (req, res) => {
-  const { grpId } = req.params;
-
-  let splits = await Group.splits(Number(grpId));
-  splits = splits[0].splits;
-
-  return res.json(splits);
 };
 
 exports.getGrpHistory = async (req, res) => {
@@ -106,34 +116,43 @@ exports.getGrpHistory = async (req, res) => {
   const expenses = await Group.expenseHistory(Number(groupId));
   const splits = await Group.splitsHistory(Number(groupId));
 
-  // merge chronologicall all the expenses and splits
+  // merge chronologically all the expenses and splits
   const timeline = mergeChrono(expenses, splits);
-  console.log(timeline);
 
+  // initialize balance as 0 for all members
   const balance = {};
-  members.forEach((member) => (balance[member.memberId] = 0));
-  console.log(balance);
+  members.forEach((mem) => (balance[mem.member.id] = 0));
 
+  // update balance after each payment
   for (const entry of timeline) {
+    // past expense
     if (entry.type == "expense") {
       const totalPeople = entry.payers.length;
       const share = Math.floor(entry.totalAmt / totalPeople);
 
-      entry.payers.forEach(({ payerId, paidAmt }) => {
-        balance[payerId] += paidAmt - share;
+      entry.payers.forEach(({ payer, paidAmt }) => {
+        balance[payer.id] += paidAmt - share;
       });
-    } else if (entry.type == "split") {
-      // amounts are always positive
-      balance[entry.debtorId] += entry.amount;
-      balance[entry.creditorId] -= entry.amount;
     }
-    entry.balance = { ...balance };
-    console.log(balance);
+
+    // past split
+    else if (entry.type == "split") {
+      // amounts are always positive
+      balance[entry.debtor.id] += entry.amount;
+      balance[entry.creditor.id] -= entry.amount;
+    }
+
+    // accumulate balance and convert to array of objects
+    entry.balance = await Promise.all(
+      Object.entries(balance).map(async ([userId, amount]) => ({
+        user: {
+          id: Number(userId),
+          name: await User.getNameById(Number(userId)),
+        },
+        amount: Number(amount),
+      }))
+    );
   }
 
   res.json(timeline);
-};
-
-exports.isMember = (groupId, userId) => {
-  // check if there is a row with composite id groupId_userId in member table
 };

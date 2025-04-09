@@ -63,6 +63,19 @@ class User {
     }
   }
 
+  static async getNameById(id) {
+    try {
+      const user = await db.user.findUnique({
+        where: { id },
+        select: { name: true },
+      });
+      return user.name;
+    } catch (error) {
+      console.error("Error fetching name by ID:  ", error.stack);
+      throw new Error("Failed to fetch name by ID.");
+    }
+  }
+
   static async getById(id) {
     try {
       const user = await db.user.findUnique({
