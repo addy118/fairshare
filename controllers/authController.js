@@ -30,7 +30,7 @@ exports.postLogin = async (req, res) => {
   res.cookie("refreshCookie", refreshToken, {
     httpOnly: true,
     // true in prod (only send over https)
-    secure: false,
+    secure: true,
     samesite: "None",
   });
 
