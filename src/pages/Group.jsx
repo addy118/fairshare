@@ -1,43 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Plus, DollarSign, Check } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { useAuth } from "@/authProvider";
+import { Plus, IndianRupee } from "lucide-react";
 import Loading from "@/components/Loading";
+import Settlements from "@/components/Settlements";
+import GrpBalances from "@/components/GrpBalances";
+import GrpHistory from "@/components/GrpHistory";
+
+export const GroupContext = createContext({
+  group: null,
+  expenses: [],
+  settlments: [],
+  balances: [],
+  selectedItem: null,
+  detailsOpen: false,
+  setSettlements: () => {},
+  setSelectedItem: () => {},
+  setDetailsOpen: () => {},
+});
 
 export default function GroupPage({ params }) {
   const navigate = useNavigate();
-  // const { id: groupId } = params;
   const { id: groupId } = useParams();
-  const { user } = useAuth();
 
   const [group, setGroup] = useState(null);
   const [balances, setBalances] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [settlements, setSettlements] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("balances");
-  const [showSettlements, setShowSettlements] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
+
+  const [showSettlements, setShowSettlements] = useState(false);
+  const [activeTab, setActiveTab] = useState("balances");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Use dummy data instead of fetching from API
@@ -49,6 +45,9 @@ export default function GroupPage({ params }) {
       totalExpenses: groupId === "1" ? 250.75 : 180.5,
     };
 
+    // append isCurrUser prop in api fetch of
+    // split created at, keep date as it is, convert time to local
+    // grp/:grpId/balance
     const dummyBalances = [
       {
         userId: "current",
@@ -98,6 +97,9 @@ export default function GroupPage({ params }) {
         : []),
     ];
 
+    // append isCurrUser prop to res[i].expense.payers[i]
+    // append splits array indicating equal share of amount paid
+    // grp/:grpId/expenses
     const dummyExpenses = [
       {
         id: "e1",
@@ -233,9 +235,7 @@ export default function GroupPage({ params }) {
     setGroup(dummyGroup);
     setBalances(dummyBalances);
     setExpenses(dummyExpenses);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+    setIsLoading(false);
   }, [groupId]);
 
   const handleSettleDebts = async () => {
@@ -269,318 +269,68 @@ export default function GroupPage({ params }) {
     setShowSettlements(true);
   };
 
-  const handleSettleTransaction = async (settlementId) => {
-    // Mark the settlement as settled
-    setSettlements((prevSettlements) =>
-      prevSettlements.map((settlement) =>
-        settlement.id === settlementId
-          ? { ...settlement, settled: true }
-          : settlement
-      )
-    );
-
-    // No need to refresh balances since we're using dummy data
-  };
-
-  const showDetails = (item, type) => {
-    setSelectedItem({ ...item, type });
-    setDetailsOpen(true);
-  };
-
   if (isLoading) return <Loading item="group" />;
 
   return (
-    <div className="mx-auto max-w-4xl px-4">
-      {group && (
-        <>
-          <div className="mb-8 flex flex-col items-start justify-between md:flex-row md:items-center">
-            <h1 className="text-2xl font-bold">{group.name}</h1>
+    <GroupContext.Provider
+      value={{
+        settlements,
+        setSettlements,
+        balances,
+        group,
+        expenses,
+        selectedItem,
+        setSelectedItem,
+        detailsOpen,
+        setDetailsOpen,
+      }}
+    >
+      <div className="mx-auto max-w-4xl px-4">
+        {group && (
+          <>
+            {/* group header */}
+            <div className="mb-8 flex flex-col items-start justify-between md:flex-row md:items-center">
+              <h1 className="text-2xl font-bold">{group.name}</h1>
 
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                onClick={() => navigate(`/groups/${groupId}/expense/new`)}
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Add Expense
-              </Button>
-              <Button onClick={handleSettleDebts}>
-                <DollarSign className="mr-2 h-4 w-4" />
-                Settle Debts
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => navigate(`/groups/${groupId}/expense/new`)}
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Expense
+                </Button>
+
+                <Button onClick={handleSettleDebts}>
+                  <IndianRupee className="mr-2 h-4 w-4" />
+                  Settle Debts
+                </Button>
+              </div>
             </div>
-          </div>
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="balances">Balances</TabsTrigger>
-              <TabsTrigger value="history">Expense History</TabsTrigger>
-            </TabsList>
 
-            {/* group balances tab */}
-            <TabsContent value="balances" className="mt-6">
-              {showSettlements ? (
-                // settlements tab
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-semibold">
-                      Settlements Required
-                    </h2>
-                    <Button
-                      variant="ghost"
-                      onClick={() => setShowSettlements(false)}
-                    >
-                      Back to Balances
-                    </Button>
-                  </div>
+            <Tabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="w-full"
+            >
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="balances">Balances</TabsTrigger>
+                <TabsTrigger value="history">Payments History</TabsTrigger>
+              </TabsList>
 
-                  {settlements.length === 0 ? (
-                    <Card>
-                      <CardContent className="pt-6">
-                        <p className="text-center">
-                          No settlements needed. All balances are settled!
-                        </p>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    <div className="space-y-4">
-                      {settlements.map((settlement) => (
-                        <Card
-                          key={settlement.id}
-                          className={settlement.settled ? "opacity-50" : ""}
-                        >
-                          <CardContent>
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-4">
-                                {/* source */}
-                                <Avatar>
-                                  <AvatarImage
-                                    src={settlement.from.avatar || ""}
-                                    alt={settlement.from.name}
-                                  />
-                                  <AvatarFallback>
-                                    {settlement.from.name
-                                      ?.split(" ")
-                                      .map((n) => n[0])
-                                      .join("")}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <div className="flex flex-col">
-                                  <span className="font-medium">
-                                    {settlement.from.name}
-                                  </span>
-                                </div>
+              {/* group balances tab */}
+              <TabsContent value="balances" className="mt-6">
+                {showSettlements ? <Settlements /> : <GrpBalances />}
+              </TabsContent>
 
-                                <span className="text-muted-foreground text-sm">
-                                  owes
-                                </span>
-
-                                {/* destination */}
-                                <Avatar>
-                                  <AvatarFallback>
-                                    {settlement.to.name
-                                      ?.split(" ")
-                                      .map((n) => n[0])
-                                      .join("")}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <div className="flex flex-col">
-                                  <span className="font-medium">
-                                    {settlement.to.name}
-                                  </span>
-                                </div>
-                              </div>
-
-                              <div className="flex items-center gap-4">
-                                <span className="font-bold">
-                                  ${settlement.amount.toFixed(2)}
-                                </span>
-
-                                {settlement.settled ? (
-                                  <span className="flex items-center text-green-600">
-                                    <Check className="mr-1 h-4 w-4" />
-                                    Settled
-                                  </span>
-                                ) : user.id == settlement.from.id ? (
-                                  <Button
-                                    size="sm"
-                                    onClick={() =>
-                                      handleSettleTransaction(settlement.id)
-                                    }
-                                  >
-                                    Settle
-                                  </Button>
-                                ) : (
-                                  " "
-                                )}
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                // balances tab
-                <div className="grid gap-6 md:grid-cols-2">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Group Balances</CardTitle>
-                      <CardDescription>
-                        Current balance for each member
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-4">
-                        {balances.map((balance) => (
-                          <li
-                            key={balance.userId}
-                            className="flex items-center justify-between"
-                          >
-                            <div className="flex items-center gap-2">
-                              <Avatar className="h-8 w-8">
-                                <AvatarImage
-                                  src={balance.avatar || ""}
-                                  alt={balance.name}
-                                />
-                                <AvatarFallback>
-                                  {balance.name?.substring(0, 2).toUpperCase()}
-                                </AvatarFallback>
-                              </Avatar>
-                              <span>{balance.name}</span>
-                              {balance.isCurrentUser && (
-                                <span className="bg-muted rounded-full px-2 py-0.5 text-xs">
-                                  You
-                                </span>
-                              )}
-                            </div>
-                            {balance.balance > 0 ? (
-                              <span className="font-medium text-green-600">
-                                +${balance.balance.toFixed(2)}
-                              </span>
-                            ) : balance.balance < 0 ? (
-                              <span className="font-medium text-red-600">
-                                -${Math.abs(balance.balance).toFixed(2)}
-                              </span>
-                            ) : (
-                              <span className="font-medium">$0.00</span>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Group Summary</CardTitle>
-                      <CardDescription>
-                        Overview of group expenses
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div className="flex justify-between">
-                          <span>Total Group Expenses</span>
-                          <span className="font-bold">
-                            ${group.totalExpenses?.toFixed(2) || "0.00"}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Number of Expenses</span>
-                          <span className="font-bold">{expenses.length}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Group Members</span>
-                          <span className="font-bold">{group.memberCount}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Your Balance</span>
-                          {group.userBalance > 0 ? (
-                            <span className="font-bold text-green-600">
-                              +${group.userBalance.toFixed(2)}
-                            </span>
-                          ) : group.userBalance < 0 ? (
-                            <span className="font-bold text-red-600">
-                              -${Math.abs(group.userBalance).toFixed(2)}
-                            </span>
-                          ) : (
-                            <span className="font-bold">$0.00</span>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
-            </TabsContent>
-
-            {/* payments history tab */}
-            <TabsContent value="history" className="mt-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Payments History</CardTitle>
-                  <CardDescription>All payments in this group</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {expenses.length === 0 ? (
-                    <p className="py-4 text-center">
-                      No payments yet. Add your first expense!
-                    </p>
-                  ) : (
-                    <ScrollArea className="max-h-[70vh] overflow-auto">
-                      <div className="space-y-4">
-                        {expenses.map((expense, i) => (
-                          <div
-                            key={expense.id}
-                            onClick={() => showDetails(expense, "expense")}
-                            className="cursor-pointer"
-                          >
-                            <div className="flex items-center justify-between py-2">
-                              <div className="flex items-center gap-3">
-                                <Avatar className="h-8 w-8">
-                                  <AvatarImage
-                                    src={expense.paidBy.avatar || ""}
-                                    alt={expense.paidBy.name}
-                                  />
-                                  <AvatarFallback>
-                                    {expense.paidBy.name
-                                      ?.split(" ")
-                                      .map((n) => n[0])
-                                      .join("")}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <div>
-                                  <div className="font-medium">
-                                    {expense.description}
-                                  </div>
-                                  <div className="text-muted-foreground text-sm">
-                                    Paid by {expense.paidBy.name} •{" "}
-                                    {new Date(
-                                      expense.date
-                                    ).toLocaleDateString()}
-                                  </div>
-                                </div>
-                              </div>
-                              <span className="font-bold">
-                                ${expense.amount.toFixed(2)}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </>
-      )}
-    </div>
+              {/* payments history tab */}
+              <TabsContent value="history" className="mt-6">
+                <GrpHistory />
+              </TabsContent>
+            </Tabs>
+          </>
+        )}
+      </div>
+    </GroupContext.Provider>
   );
 }
