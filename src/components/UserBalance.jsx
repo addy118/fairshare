@@ -42,16 +42,12 @@ export default function UserBalance({ balances, isCreditor }) {
                   <Avatar className="h-8 w-8">
                     <UserPic
                       name={
-                        isCreditor
-                          ? balance.debtor.name
-                          : balance.creditor.name
+                        isCreditor ? balance.debtor.name : balance.creditor.name
                       }
                     />
                   </Avatar>
                   <span>
-                    {isCreditor
-                      ? balance.debtor.name
-                      : balance.creditor.name}
+                    {isCreditor ? balance.debtor.name : balance.creditor.name}
                   </span>
                 </div>
                 <span
@@ -59,7 +55,7 @@ export default function UserBalance({ balances, isCreditor }) {
                     isCreditor ? "text-green-600" : "text-red-600"
                   }`}
                 >
-                  {isCreditor ? "+" : "-"}${balance.amount.toFixed(2)}
+                  {isCreditor ? "+" : "-"}₹{balance.amount.toFixed(2)}
                 </span>
               </li>
             ))}
@@ -74,7 +70,7 @@ export default function UserBalance({ balances, isCreditor }) {
               isCreditor ? "text-green-600" : "text-red-600"
             }`}
           >
-            {isCreditor ? "+" : "-"}$
+            {isCreditor ? "+" : "-"}₹
             {list.reduce((sum, item) => sum + item.amount, 0).toFixed(2)}
           </span>
         </div>

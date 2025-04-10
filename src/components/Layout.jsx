@@ -52,44 +52,48 @@ export default function Layout() {
 
             <div className="flex items-center space-x-4">
               {/* my groups tab */}
-              <Button onClick={() => navigate("groups")} variant="ghost">
-                <Users className="mr-2 h-4 w-4" />
-                My Groups
-              </Button>
+              {isAuth && (
+                <Button onClick={() => navigate("groups")} variant="ghost">
+                  <Users className="mr-2 h-4 w-4" />
+                  My Groups
+                </Button>
+              )}
 
-              {/* create group dialog box */}
-              <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="ghost">
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Create Group
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create New Group</DialogTitle>
-                    <DialogDescription>
-                      Enter a name for your new expense sharing group.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <form onSubmit={handleCreateGroup}>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid gap-2">
-                        <Label htmlFor="name">Group Name</Label>
-                        <Input
-                          id="name"
-                          value={newGroupName}
-                          onChange={(e) => setNewGroupName(e.target.value)}
-                          placeholder="e.g., Roommates, Trip to Paris"
-                        />
+              {/* new group button */}
+              {isAuth && (
+                <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="ghost">
+                      <PlusCircle className="mr-2 h-4 w-4" />
+                      Create Group
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Create New Group</DialogTitle>
+                      <DialogDescription>
+                        Enter a name for your new expense sharing group.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleCreateGroup}>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                          <Label htmlFor="name">Group Name</Label>
+                          <Input
+                            id="name"
+                            value={newGroupName}
+                            onChange={(e) => setNewGroupName(e.target.value)}
+                            placeholder="e.g., Roommates, Trip to Paris"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <DialogFooter>
-                      <Button type="submit">Create Group</Button>
-                    </DialogFooter>
-                  </form>
-                </DialogContent>
-              </Dialog>
+                      <DialogFooter>
+                        <Button type="submit">Create Group</Button>
+                      </DialogFooter>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              )}
 
               {/* user button */}
               <DropdownMenu>
