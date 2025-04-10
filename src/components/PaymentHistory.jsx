@@ -6,33 +6,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { ChevronDown, ChevronUp, Clock } from "lucide-react";
 import { GroupContext } from "@/pages/Group";
 import ExpDialog from "./ExpDialog";
 import UserPic from "./UserPic";
+import formatDate from "@/utils/formatDate";
 
 export default function PaymentHistory() {
-  const { history, setSelectedItem, setDetailsOpen } = useContext(GroupContext);
-  const [expandedItems, setExpandedItems] = useState({});
+  const { history } = useContext(GroupContext);
+  console.log(history);
+  const [expandedItems, setExpandedItems] = useState({ 1: true });
 
   const toggleExpand = (id) => {
     setExpandedItems((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return (
-      date.toLocaleDateString() +
-      " " +
-      date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    );
   };
 
   if (!history || history.length === 0) {
@@ -47,7 +39,7 @@ export default function PaymentHistory() {
 
   return (
     <>
-      <Card className="mb-20">
+      <Card className="mx-auto mb-20 max-w-3xl px-4">
         <CardHeader>
           <CardTitle>Payments History</CardTitle>
           <CardDescription>All payments in this group</CardDescription>
@@ -90,22 +82,24 @@ export default function PaymentHistory() {
 
                   {expandedItems[item.id] && (
                     <CardContent>
-                      <div className="flex items-start space-x-4">
+                      <div className="flex items-start space-x-12">
                         {/* payers */}
                         <div className="flex-1">
-                          <h4 className="mb-2 text-sm font-medium">Payers</h4>
-                          <div className="space-y-2">
+                          <h4 className="mb-3 font-medium">Payers</h4>
+                          <div className="space-y-3">
                             {item.payers.map((payer, index) => (
                               <div
                                 key={index}
-                                className="flex items-center justify-between"
+                                className="flex items-center justify-between text-sm"
                               >
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-4">
                                   <Avatar className="h-6 w-6">
                                     <UserPic name={payer.payer.name} />
                                   </Avatar>
+
                                   <span>{payer.payer.name}</span>
                                 </div>
+
                                 <span className="font-medium">
                                   ₹{payer.paidAmt.toFixed(2)}
                                 </span>
@@ -116,16 +110,16 @@ export default function PaymentHistory() {
 
                         {/* balance post pay */}
                         <div className="flex-1">
-                          <h4 className="mb-2 text-sm font-medium">
+                          <h4 className="mb-3 font-medium">
                             Balance After This Transaction
                           </h4>
-                          <div className="space-y-2">
+                          <div className="space-y-3">
                             {item.balance.map((balance, index) => (
                               <div
                                 key={index}
-                                className="flex items-center justify-between"
+                                className="flex items-center justify-between text-sm"
                               >
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-3">
                                   <Avatar className="h-6 w-6">
                                     <UserPic name={balance.user.name} />
                                   </Avatar>
