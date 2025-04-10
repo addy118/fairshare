@@ -31,7 +31,7 @@ export default function GrpSummary() {
           {/* number of expenses */}
           <div className="flex justify-between">
             <span>Number of Expenses</span>
-            <span className="font-bold">{group.expenses.length}</span>
+            <span className="font-bold">{group.expenses?.length}</span>
           </div>
 
           {/* group members */}

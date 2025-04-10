@@ -31,5 +31,19 @@ const settlementsData = (data) => {
   }));
 };
 
-const format = { groupData, balanceData, settlementsData };
+const groups = (groups) => {
+  return groups.map(({ group }) => ({
+    id: group.id,
+    name: group.name,
+    memberCount: group.members.length,
+    createdAt: group.createdAt,
+    members: group.members.map(({ member }) => ({
+      id: member.id,
+      name: member.name,
+      username: member.username,
+    })),
+  }));
+};
+
+const format = { groupData, balanceData, settlementsData, groups };
 export default format;

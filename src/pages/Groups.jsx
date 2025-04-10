@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -20,49 +20,30 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PlusCircle, Users, ArrowLeft } from "lucide-react";
+import { PlusCircle, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Loading from "@/components/Loading";
+import { useAuth } from "@/authProvider";
+import format from "@/utils/formatGroup";
+import formatDate from "@/utils/formatDate";
 
 export default function GroupsPage() {
   const navigate = useNavigate();
-  const [groups, setGroups] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [newGroupName, setNewGroupName] = useState("");
   const [newGroupOpen, setNewGroupOpen] = useState(false);
 
-  useEffect(() => {
-    const dummyGroups = [
-      {
-        id: "1",
-        name: "Roommates",
-        memberCount: 4,
-        userBalance: 35.5,
-        members: [
-          { name: "John Doe", avatar: "/placeholder.svg" },
-          { name: "Alice Smith", avatar: "/placeholder.svg" },
-          { name: "Bob Johnson", avatar: "/placeholder.svg" },
-          { name: "Carol Williams", avatar: "/placeholder.svg" },
-        ],
-      },
-      {
-        id: "2",
-        name: "Trip to Paris",
-        memberCount: 3,
-        userBalance: -15.25,
-        members: [
-          { name: "John Doe", avatar: "/placeholder.svg" },
-          { name: "Dave Brown", avatar: "/placeholder.svg" },
-          { name: "Eve Taylor", avatar: "/placeholder.svg" },
-        ],
-      },
-    ];
+  const { user } = useAuth();
+  const groups = format.groups(user.groups);
+  console.log(groups[0]);
 
-    setGroups(dummyGroups);
-    setIsLoading(false);
-  }, []);
+  const handleCreateGroup = (e) => {
+    e.preventDefault();
+    if (!newGroupName.trim()) return;
 
-  if (isLoading) return <Loading item="groups" />;
+    console.log(`Creating group: ${newGroupName}`);
+    setNewGroupOpen(false);
+    setNewGroupName("");
+    navigate("/groups");
+  };
 
   return (
     <div className="mx-auto max-w-4xl px-4">
@@ -75,10 +56,38 @@ export default function GroupsPage() {
           <p className="text-muted-foreground mt-2">
             Create a group to start splitting expenses with friends.
           </p>
-          <Button className="mt-4" onClick={() => setNewGroupOpen(true)}>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Create Your First Group
-          </Button>
+          <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
+            <DialogTrigger asChild>
+              <Button className="mt-4" onClick={() => setNewGroupOpen(true)}>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Create Your First Group
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create New Group</DialogTitle>
+                <DialogDescription>
+                  Enter a name for your new expense sharing group.
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleCreateGroup}>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="name">Group Name</Label>
+                    <Input
+                      id="name"
+                      value={newGroupName}
+                      onChange={(e) => setNewGroupName(e.target.value)}
+                      placeholder="e.g., Roommates, Trip to Paris"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="submit">Create Group</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -86,7 +95,10 @@ export default function GroupsPage() {
             <Card
               key={group.id}
               className="cursor-pointer transition-shadow hover:shadow-md"
-              onClick={() => navigate(group.id)}
+              onClick={() => {
+                navigate(`${group.id}`);
+                console.log(group.id);
+              }}
             >
               <CardHeader>
                 <CardTitle>{group.name}</CardTitle>
@@ -113,19 +125,9 @@ export default function GroupsPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <div className="flex w-full justify-between text-sm">
-                  <span>Your balance:</span>
-                  {group.userBalance > 0 ? (
-                    <span className="font-medium text-green-600">
-                      +${group.userBalance.toFixed(2)}
-                    </span>
-                  ) : group.userBalance < 0 ? (
-                    <span className="font-medium text-red-600">
-                      -${Math.abs(group.userBalance).toFixed(2)}
-                    </span>
-                  ) : (
-                    <span className="font-medium">$0.00</span>
-                  )}
+                <div className="flex w-full items-center justify-between text-sm">
+                  <span>Created on: </span>
+                  <span className="text-xs">{formatDate(group.createdAt)}</span>
                 </div>
               </CardFooter>
             </Card>
