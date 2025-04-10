@@ -14,7 +14,7 @@ import { useAuth } from "@/authProvider";
 import { Link } from "react-router-dom";
 
 export default function SignupPage() {
-  const { signupErrors, signup } = useAuth();
+  const { signupErrors, signup, loading } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     username: "",
@@ -55,6 +55,7 @@ export default function SignupPage() {
                 required
                 value={formData.name}
                 onChange={handleChange}
+                disabled={loading}
               />
 
               {signupErrors.name &&
@@ -75,6 +76,7 @@ export default function SignupPage() {
                 required
                 value={formData.username}
                 onChange={handleChange}
+                disabled={loading}
               />
 
               {signupErrors.username &&
@@ -95,10 +97,11 @@ export default function SignupPage() {
                 required
                 value={formData.phone}
                 onChange={handleChange}
+                disabled={loading}
               />
 
               {signupErrors.phone &&
-                signupErrors.name.map((err, i) => (
+                signupErrors.phone.map((err, i) => (
                   <p key={i} className="text-red-400">
                     {err}
                   </p>
@@ -116,6 +119,7 @@ export default function SignupPage() {
                 required
                 value={formData.email}
                 onChange={handleChange}
+                disabled={loading}
               />
 
               {signupErrors.email &&
@@ -136,6 +140,7 @@ export default function SignupPage() {
                 required
                 value={formData.password}
                 onChange={handleChange}
+                disabled={loading}
               />
 
               {signupErrors.password &&
@@ -149,8 +154,16 @@ export default function SignupPage() {
             <Button
               type="submit"
               className="w-full cursor-pointer border border-zinc-200 bg-zinc-200 text-black transition-colors duration-300 hover:border-zinc-800 hover:bg-zinc-800 hover:text-white active:border-zinc-200 active:bg-zinc-200 active:text-black"
+              disabled={loading}
             >
-              Create Account
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <span className="mr-2">Creating account</span>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-800 border-t-transparent"></span>
+                </div>
+              ) : (
+                "Create Account"
+              )}
             </Button>
           </form>
         </CardContent>

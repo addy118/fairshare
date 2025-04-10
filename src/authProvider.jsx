@@ -112,6 +112,7 @@ const AuthProvider = ({ children }) => {
   // credentials = { name, username, email, password }
   const signup = async (credentials) => {
     try {
+      setLoading(true);
       setSignupErrors({});
       await api.post("auth/signup", credentials);
       alert("User created successfully!");
@@ -127,12 +128,15 @@ const AuthProvider = ({ children }) => {
         });
         setSignupErrors(serverErrors);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   // credentials = { data, password }
   const login = async (credentials) => {
     try {
+      setLoading(true);
       const response = await api.post("auth/login", credentials);
       setToken(response.data.accessToken);
       setUser(response.data.user);
@@ -152,6 +156,8 @@ const AuthProvider = ({ children }) => {
         setLoginErrors(serverErrors);
         // console.log(serverErrors);
       }
+    } finally {
+      setLoading(false);
     }
   };
 

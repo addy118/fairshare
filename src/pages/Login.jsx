@@ -13,9 +13,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/authProvider";
 import { Link, useNavigate } from "react-router-dom";
+import Loading from "@/components/Loading";
 
 export default function LoginPage() {
-  const { isAuth, login, loginErrors } = useAuth();
+  const { isAuth, login, loginErrors, loading } = useAuth();
   const [formData, setFormData] = useState({
     data: "",
     password: "",
@@ -60,6 +61,7 @@ export default function LoginPage() {
                 required
                 value={formData.data}
                 onChange={handleChange}
+                disabled={loading}
               />
 
               {loginErrors.data &&
@@ -87,6 +89,7 @@ export default function LoginPage() {
                 required
                 value={formData.password}
                 onChange={handleChange}
+                disabled={loading}
               />
 
               {loginErrors.password &&
@@ -100,8 +103,16 @@ export default function LoginPage() {
             <Button
               type="submit"
               className="w-full cursor-pointer border border-zinc-200 bg-zinc-200 text-black transition-colors duration-300 hover:border-zinc-800 hover:bg-zinc-800 hover:text-white active:border-zinc-200 active:bg-zinc-200 active:text-black"
+              disabled={loading}
             >
-              Log In
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <span className="mr-2">Logging in</span>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-800 border-t-transparent"></span>
+                </div>
+              ) : (
+                "Log In"
+              )}
             </Button>
           </form>
         </CardContent>
