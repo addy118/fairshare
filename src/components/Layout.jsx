@@ -23,6 +23,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import api from "@/axiosInstance";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -31,14 +32,19 @@ export default function Layout() {
   const [newGroupName, setNewGroupName] = useState("");
   const [newGroupOpen, setNewGroupOpen] = useState(false);
 
-  const handleCreateGroup = (e) => {
+  const handleCreateGroup = async (e) => {
     e.preventDefault();
     if (!newGroupName.trim()) return;
 
-    console.log(`Creating group: ${newGroupName}`);
-    setNewGroupOpen(false);
-    setNewGroupName("");
-    navigate("/groups");
+    try {
+      await api.post("/grp/new", { name: newGroupName });
+      console.log(`Creating group: ${newGroupName}`);
+      setNewGroupOpen(false);
+      setNewGroupName("");
+      navigate("/groups");
+    } catch (err) {
+      console.error("Failed to create a group: ", err);
+    }
   };
 
   return (

@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/authProvider";
 import format from "@/utils/formatGroup";
 import formatDate from "@/utils/formatDate";
+import api from "@/axiosInstance";
 
 export default function GroupsPage() {
   const navigate = useNavigate();
@@ -33,16 +34,20 @@ export default function GroupsPage() {
 
   const { user } = useAuth();
   const groups = format.groups(user.groups);
-  console.log(groups[0]);
 
-  const handleCreateGroup = (e) => {
+  const handleCreateGroup = async (e) => {
     e.preventDefault();
     if (!newGroupName.trim()) return;
 
-    console.log(`Creating group: ${newGroupName}`);
-    setNewGroupOpen(false);
-    setNewGroupName("");
-    navigate("/groups");
+    try {
+      await api.post("/grp/new", { name: newGroupName });
+      console.log(`Creating group: ${newGroupName}`);
+      setNewGroupOpen(false);
+      setNewGroupName("");
+      navigate("/groups");
+    } catch (err) {
+      console.error("Failed to create a group: ", err);
+    }
   };
 
   return (

@@ -20,6 +20,7 @@ import {
 import { Trash, Plus } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import useGroupData from "@/utils/useGroup";
+import api from "@/axiosInstance";
 
 export default function ExpenseForm() {
   const navigate = useNavigate();
@@ -60,10 +61,20 @@ export default function ExpenseForm() {
     );
   };
 
-  const handleCreateExpense = (expense) => {
+  const handleCreateExpense = async (expense) => {
     // in a real app, you would send this to your api
-    console.log("Creating expense:", expense);
-    alert("Expense submitted successfully!");
+    try {
+      await api.post("/exp/new", expense, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Creating expense:", expense);
+      alert("Expense submitted successfully!");
+      navigate(`/groups/${Number(groupId)}`);
+    } catch (err) {
+      console.error("Failed to create an expense: ", err);
+    }
 
     // Navigate back to group page after successful submission
     // navigate(`/groups/${groupId}`);
@@ -103,7 +114,7 @@ export default function ExpenseForm() {
 
     const expense = {
       name: expenseName,
-      totalAmount: Number.parseFloat(totalAmount),
+      totalAmt: Number.parseFloat(totalAmount),
       payers: payers.map(({ payerId, amount }) => ({
         payerId: Number(payerId),
         amount: Number.parseFloat(amount),
