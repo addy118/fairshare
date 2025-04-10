@@ -2,6 +2,7 @@ import api from "@/axiosInstance";
 import React, { useEffect, useState } from "react";
 import format from "./formatGroup";
 import { useAuth } from "@/authProvider";
+import { fetchGroupData } from "./fetchGroupData";
 
 export default function useGroupData(groupId) {
   const { user } = useAuth();
@@ -19,25 +20,8 @@ export default function useGroupData(groupId) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [groupRes, balancesRes, expensesRes, historyRes] =
-          await Promise.all([
-            api.get(`/grp/${groupId}/info`),
-            api.get(`/grp/${groupId}/balance`),
-            api.get(`/grp/${groupId}/expenses`),
-            api.get(`/grp/${groupId}/history`),
-          ]);
-
-        const groupData = format.groupData(groupRes.data);
-        const balanceData = format.balanceData(balancesRes.data, user.id);
-        const settlementsData = format.settlementsData(expensesRes.data.splits);
-
-        setData({
-          group: groupData,
-          balances: balanceData,
-          expenses: expensesRes.data,
-          settlements: settlementsData,
-          history: historyRes.data,
-        });
+        const groupInfo = await fetchGroupData(groupId, user.id);
+        setData(groupInfo);
       } catch (err) {
         if (err.response) {
           console.log(`HTTP Error: ${err.response.status}`);

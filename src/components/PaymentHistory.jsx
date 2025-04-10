@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -14,13 +14,27 @@ import { GroupContext } from "@/pages/Group";
 import ExpDialog from "./ExpDialog";
 import UserPic from "./UserPic";
 import formatDate from "@/utils/formatDate";
+import { fetchHistory } from "@/utils/fetchGroupData";
+import { useParams } from "react-router-dom";
 
 export default function PaymentHistory() {
-  const { history } = useContext(GroupContext);
-  // set all items of history tabs expanded
-  const [expandedItems, setExpandedItems] = useState(
-    history.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
-  );
+  const { id: groupId } = useParams();
+  const [expandedItems, setExpandedItems] = useState();
+  const { history, setHistory } = useContext(GroupContext);
+
+  // refresh history
+  useEffect(() => {
+    const refreshHistory = async () => {
+      const newHistory = await fetchHistory(groupId);
+      setHistory(newHistory);
+      console.log(newHistory);
+
+      setExpandedItems(
+        newHistory.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
+      );
+    };
+    refreshHistory();
+  }, [groupId]);
 
   const toggleExpand = (id) => {
     setExpandedItems((prev) => ({
@@ -50,12 +64,14 @@ export default function PaymentHistory() {
         <CardContent>
           <ScrollArea className="pr-4">
             <div className="space-y-4">
-              {history.map((item) => (
+              {history?.map((item) => (
                 <Card key={item.id} className="overflow-hidden">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div>
-                        <CardTitle className="text-lg">{item.name}</CardTitle>
+                        <CardTitle className="text-lg">
+                          {item.name || "Settlement"}
+                        </CardTitle>
                         <CardDescription className="mt-1 flex items-center">
                           <Clock className="mr-1 h-3 w-3" />
                           {formatDate(item.timestamp)}
@@ -64,7 +80,8 @@ export default function PaymentHistory() {
 
                       <div className="flex items-center">
                         <span className="mr-2 font-bold">
-                          ₹{item.totalAmt.toFixed(2)}
+                          ₹
+                          {item.totalAmt?.toFixed(2) || item.amount?.toFixed(2)}
                         </span>
                         <Button
                           variant="ghost"
@@ -72,7 +89,7 @@ export default function PaymentHistory() {
                           className="h-8 w-8 p-0"
                           onClick={() => toggleExpand(item.id)}
                         >
-                          {expandedItems[item.id] ? (
+                          {expandedItems?.[item.id] ? (
                             <ChevronUp className="h-4 w-4" />
                           ) : (
                             <ChevronDown className="h-4 w-4" />
@@ -82,33 +99,73 @@ export default function PaymentHistory() {
                     </div>
                   </CardHeader>
 
-                  {expandedItems[item.id] && (
+                  {/* payment details ( expense / split ) */}
+                  {expandedItems?.[item.id] && (
                     <CardContent>
                       <div className="flex items-start space-x-12">
-                        {/* payers */}
-                        <div className="flex-1">
-                          <h4 className="mb-3 font-medium">Payers</h4>
-                          <div className="space-y-3">
-                            {item.payers.map((payer, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center justify-between text-sm"
-                              >
+                        {item.type == "expense" ? (
+                          // type expense
+                          <div className="flex-1">
+                            <h4 className="mb-3 font-medium">Payers</h4>
+                            <div className="space-y-3">
+                              {item.payers?.map((payer, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-center justify-between text-sm"
+                                >
+                                  <div className="flex items-center gap-4">
+                                    <Avatar className="h-6 w-6">
+                                      <UserPic name={payer.payer.name} />
+                                    </Avatar>
+
+                                    <span>{payer.payer.name}</span>
+                                  </div>
+
+                                  <span
+                                    className={`font-medium ${payer.paidAmt == 0 ? "" : "text-red-600"}`}
+                                  >
+                                    ₹{payer.paidAmt.toFixed(2)}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          // type split
+                          <div className="flex-1 space-y-6">
+                            {/* debitor */}
+                            <div>
+                              <h4 className="mb-3 font-medium">Debitor</h4>
+                              <div className="flex items-center justify-between text-sm">
                                 <div className="flex items-center gap-4">
                                   <Avatar className="h-6 w-6">
-                                    <UserPic name={payer.payer.name} />
+                                    <UserPic name={item.debtor.name} />
                                   </Avatar>
-
-                                  <span>{payer.payer.name}</span>
+                                  <span>{item.debtor.name}</span>
                                 </div>
-
-                                <span className="font-medium">
-                                  ₹{payer.paidAmt.toFixed(2)}
+                                <span className="font-medium text-red-600">
+                                  ₹{item.amount?.toFixed(2)}
                                 </span>
                               </div>
-                            ))}
+                            </div>
+
+                            {/* creditor */}
+                            <div>
+                              <h4 className="mb-3 font-medium">Creditor</h4>
+                              <div className="flex items-center justify-between text-sm">
+                                <div className="flex items-center gap-4">
+                                  <Avatar className="h-6 w-6">
+                                    <UserPic name={item.creditor.name} />
+                                  </Avatar>
+                                  <span>{item.creditor.name}</span>
+                                </div>
+                                <span className="font-medium text-green-600">
+                                  ₹{item.amount?.toFixed(2)}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
+                        )}
 
                         {/* balance post pay */}
                         <div className="flex-1">
@@ -116,7 +173,7 @@ export default function PaymentHistory() {
                             Balance After This Transaction
                           </h4>
                           <div className="space-y-3">
-                            {item.balance.map((balance, index) => (
+                            {item.balance?.map((balance, index) => (
                               <div
                                 key={index}
                                 className="flex items-center justify-between text-sm"
@@ -129,11 +186,11 @@ export default function PaymentHistory() {
                                 </div>
                                 {balance.amount > 0 ? (
                                   <span className="font-medium text-green-600">
-                                    +₹{balance.amount.toFixed(2)}
+                                    ₹{balance.amount.toFixed(2)}
                                   </span>
                                 ) : balance.amount < 0 ? (
                                   <span className="font-medium text-red-600">
-                                    -₹{Math.abs(balance.amount).toFixed(2)}
+                                    ₹{Math.abs(balance.amount).toFixed(2)}
                                   </span>
                                 ) : (
                                   <span className="font-medium">₹0.00</span>

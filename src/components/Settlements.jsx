@@ -5,23 +5,34 @@ import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { useAuth } from "@/authProvider";
 import { GroupContext } from "@/pages/Group";
+import { Check } from "lucide-react";
+import api from "@/axiosInstance";
+import {
+  fetchBalances,
+  fetchExpensesAndSettlments,
+} from "@/utils/fetchGroupData";
+import { useParams } from "react-router-dom";
+import format from "@/utils/formatGroup";
 
 export default function Settlements() {
+  const { id: groupId } = useParams();
   const { user } = useAuth();
-  const { settlements, setSettlements, setShowSettlements } =
-    useContext(GroupContext);
+  const { settlements, setSettlements, setBalances } = useContext(GroupContext);
 
   const handleSettleTransaction = async (settlementId) => {
-    // Mark the settlement as settled
-    setSettlements((prevSettlements) =>
-      prevSettlements.map((settlement) =>
-        settlement.id === settlementId
-          ? { ...settlement, settled: true }
-          : settlement
-      )
-    );
+    try {
+      console.log(settlementId);
+      await api.post(`/exp/${settlementId}/settle`);
+      const { settlementsData } = fetchExpensesAndSettlments(groupId);
+      // update settlements
+      setSettlements(settlementsData);
 
-    // No need to refresh balances since we're using dummy data
+      // refresh balances after settlement
+      const balanceData = await fetchBalances(groupId, user.id);
+      setBalances(balanceData);
+    } catch (error) {
+      console.error("Failed to settle transaction:", error);
+    }
   };
 
   return (
