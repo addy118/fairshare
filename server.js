@@ -25,6 +25,10 @@ app.use("/user", userRouter);
 app.use("/grp", grpRouter);
 app.use("/exp", expRouter);
 
+app.get("/", (req, res) => {
+  res.json("Welcome to our app Fair Share!");
+});
+
 app.use((err, req, res, next) => {
   console.error(err.message);
   console.error(err.stack);
