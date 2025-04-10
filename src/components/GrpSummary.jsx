@@ -20,21 +20,28 @@ export default function GrpSummary() {
 
       <CardContent>
         <div className="space-y-4">
+          {/* total of group expenses */}
           <div className="flex justify-between">
             <span>Total Group Expenses</span>
             <span className="font-bold">
               ₹{group.totalExpenses?.toFixed(2) || "0.00"}
             </span>
           </div>
+
+          {/* number of expenses */}
           <div className="flex justify-between">
             <span>Number of Expenses</span>
-            <span className="font-bold">{expenses.length}</span>
+            <span className="font-bold">{group.expenses.length}</span>
           </div>
+
+          {/* group members */}
           <div className="flex justify-between">
             <span>Group Members</span>
             <span className="font-bold">{group.memberCount}</span>
           </div>
-          <div className="flex justify-between">
+
+          {/* user balance */}
+          {/* <div className="flex justify-between">
             <span>Your Balance</span>
             {group.userBalance > 0 ? (
               <span className="font-bold text-green-600">
@@ -47,7 +54,7 @@ export default function GrpSummary() {
             ) : (
               <span className="font-bold">₹0.00</span>
             )}
-          </div>
+          </div> */}
         </div>
       </CardContent>
     </Card>

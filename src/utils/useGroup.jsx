@@ -1,7 +1,10 @@
 import api from "@/axiosInstance";
 import React, { useEffect, useState } from "react";
+import format from "./formatGroup";
+import { useAuth } from "@/authProvider";
 
 export default function useGroupData(groupId) {
+  const { user } = useAuth();
   const [data, setData] = useState({
     group: null,
     balances: [],
@@ -23,14 +26,15 @@ export default function useGroupData(groupId) {
             api.get(`/grp/${groupId}/history`),
           ]);
 
-        console.log(groupRes.data);
-        console.log(balancesRes.data);
-        console.log(expensesRes.data);
-        console.log(historyRes.data);
+        const groupData = format.groupData(groupRes.data);
+        const balanceData = format.balanceData(balancesRes.data, user.id);
+        // console.log(balanceData);
+        // console.log(expensesRes.data);
+        // console.log(historyRes.data);
 
         setData({
-          group: groupRes.data,
-          balances: balancesRes.data,
+          group: groupData,
+          balances: balanceData,
           expenses: expensesRes.data,
           history: historyRes.data,
         });

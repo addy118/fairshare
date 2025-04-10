@@ -39,7 +39,7 @@ export default function PaymentHistory() {
 
   return (
     <>
-      <Card className="mx-auto mb-20 max-w-3xl px-4">
+      <Card className="mx-auto mb-20 max-w-4xl px-4">
         <CardHeader>
           <CardTitle>Payments History</CardTitle>
           <CardDescription>All payments in this group</CardDescription>
