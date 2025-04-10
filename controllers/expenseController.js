@@ -2,33 +2,35 @@ const Expense = require("../prisma/queries/Expense");
 const { createBalance, calculateSplits } = require("./util");
 
 exports.postExp = async (req, res) => {
-  const expense = req.body;
+  try {
+    console.log("Hit /exp/new");
 
-  const balance = createBalance(req.body);
-  const splits = calculateSplits(balance);
-  console.log(splits);
+    const expense = req.body;
+    console.log("Request body:", expense);
 
-  // to send it to db query postExpense()
-  const payers = expense.payers.map((payer) => {
-    return { payerId: payer.payerId, paidAmt: payer.amount };
-  });
+    const balance = createBalance(expense);
+    const splits = calculateSplits(balance);
 
-  const splitsArr = splits.map((split) => {
-    return {
+    const payers = expense.payers.map((payer) => ({
+      payerId: payer.payerId,
+      paidAmt: payer.amount,
+    }));
+
+    const splitsArr = splits.map((split) => ({
       name: expense.name,
       debitorId: Number(split[0]),
       creditorId: Number(split[1]),
       amount: Number(split[2]),
       groupId: expense.groupId,
-    };
-  });
+    }));
 
-  // console.log("Expense: ", expense);
-  // console.log("Payers: ", payers);
-  // console.log("Splits: ", splitsArr);
-  const exp = await Expense.create(expense, payers, splitsArr);
+    const exp = await Expense.create(expense, payers, splitsArr);
 
-  res.json({ exp });
+    res.json({ exp });
+  } catch (err) {
+    console.error("🔥 ERROR in /exp/new:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 exports.getExp = async (req, res) => {
