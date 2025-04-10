@@ -23,5 +23,13 @@ const balanceData = (data, userId) => {
   }));
 };
 
-const format = { groupData, balanceData };
+const settlementsData = (data) => {
+  return data.map((split) => ({
+    ...split,
+    from: split.debtor,
+    to: split.creditor,
+  }));
+};
+
+const format = { groupData, balanceData, settlementsData };
 export default format;

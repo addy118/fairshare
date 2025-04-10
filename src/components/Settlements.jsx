@@ -8,7 +8,8 @@ import { GroupContext } from "@/pages/Group";
 
 export default function Settlements() {
   const { user } = useAuth();
-  const { settlements, setSettlements } = useContext(GroupContext);
+  const { settlements, setSettlements, setShowSettlements } =
+    useContext(GroupContext);
 
   const handleSettleTransaction = async (settlementId) => {
     // Mark the settlement as settled
@@ -25,13 +26,6 @@ export default function Settlements() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Settlements Required</h2>
-        <Button variant="ghost" onClick={() => setShowSettlements(false)}>
-          Back to Balances
-        </Button>
-      </div>
-
       {settlements.length === 0 ? (
         <Card>
           <CardContent className="pt-6">
@@ -41,7 +35,7 @@ export default function Settlements() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-4">
+        <div className="mb-20 space-y-4">
           {settlements.map((settlement) => (
             <Card
               key={settlement.id}

@@ -17,7 +17,6 @@ import formatDate from "@/utils/formatDate";
 
 export default function PaymentHistory() {
   const { history } = useContext(GroupContext);
-  console.log(history);
   const [expandedItems, setExpandedItems] = useState({ 1: true });
 
   const toggleExpand = (id) => {

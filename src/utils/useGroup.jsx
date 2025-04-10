@@ -9,6 +9,7 @@ export default function useGroupData(groupId) {
     group: null,
     balances: [],
     expenses: [],
+    settlements: [],
     history: [],
   });
   const [loading, setLoading] = useState(true);
@@ -28,14 +29,13 @@ export default function useGroupData(groupId) {
 
         const groupData = format.groupData(groupRes.data);
         const balanceData = format.balanceData(balancesRes.data, user.id);
-        // console.log(balanceData);
-        // console.log(expensesRes.data);
-        // console.log(historyRes.data);
-
+        const settlementsData = format.settlementsData(expensesRes.data.splits);
+        
         setData({
           group: groupData,
           balances: balanceData,
           expenses: expensesRes.data,
+          settlements: settlementsData,
           history: historyRes.data,
         });
       } catch (err) {
