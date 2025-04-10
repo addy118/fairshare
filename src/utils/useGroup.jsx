@@ -1,56 +1,58 @@
-import { useEffect, useState } from "react";
+import api from "@/axiosInstance";
+import React, { useEffect, useState } from "react";
 
-const useGroup = (url) => {
-  const [productData, setProductData] = useState("");
-  const [error, setError] = useState("");
+export default function useGroupData(groupId) {
+  const [data, setData] = useState({
+    group: null,
+    balances: [],
+    expenses: [],
+    history: [],
+  });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const controller = new AbortController();
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [groupRes, balancesRes, expensesRes, historyRes] =
+          await Promise.all([
+            api.get(`/grp/${groupId}/info`),
+            api.get(`/grp/${groupId}/balance`),
+            api.get(`/grp/${groupId}/expenses`),
+            api.get(`/grp/${groupId}/history`),
+          ]);
 
-    fetch(url, { mode: "cors" })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.status);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const { products } = data;
-        const cleanProducts = products.map((product) => {
-          return {
-            // id, title, image, price, description, category, discount
-            id: product.id,
-            image: product.image,
-            title: product.title,
-            desc: product.description,
-            price: product.price,
-            category: product.category,
-            discount: product.discount,
-          };
+        console.log(groupRes.data);
+        console.log(balancesRes.data);
+        console.log(expensesRes.data);
+        console.log(historyRes.data);
+
+        setData({
+          group: groupRes.data,
+          balances: balancesRes.data,
+          expenses: expensesRes.data,
+          history: historyRes.data,
         });
-
-        setProductData(cleanProducts);
-        // console.log(cleanProducts);
-      })
-      .catch((err) => {
-        if (err.name === "AbortError") {
-          console.log("Fetch request was canceled");
+      } catch (err) {
+        if (err.response) {
+          console.log(`HTTP Error: ${err.response.status}`);
+          setError(err.response);
+        } else if (err.request) {
+          console.log("Request Error: No response received");
+          setError(err.request);
         } else {
+          console.log(`Error: ${err.message}`);
           setError(err.message);
         }
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
-
-    // clean-up function
-    return () => {
-      controller.abort();
+        console.log("loading set to false");
+      }
     };
-  }, [url]);
 
-  return { productData, error, loading };
-};
+    fetchData();
+  }, [groupId]);
 
-export default useProduct;
+  return { ...data, loading, error };
+}

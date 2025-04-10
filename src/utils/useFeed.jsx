@@ -1,22 +1,23 @@
-import axios from "axios";
+import api from "@/axiosInstance";
 import { useEffect, useState } from "react";
 
-// http://localhost:3000/posts
-const useFeed = (url) => {
-  const [feedData, setFeedData] = useState("");
+const useGroup = (url) => {
+  const [groupData, setGroupData] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // step 1 - initialize controller and config it
     const controller = new AbortController();
+    const config = { signal: controller.signal };
 
-    axios
-      .get(url, { signal: controller.signal })
-      .then((res) => {
-        console.log(res.data);
-        setFeedData(res.data);
-      })
-      .catch((err) => {
+    const fetchGroup = async () => {
+      try {
+        // step 2 - add controller config
+        const response = await api.get(url, config);
+        console.log(response.data);
+        setGroupData(response.data);
+      } catch (err) {
         if (err.response) {
           console.log(`HTTP Error: ${err.response.status}`);
           setError(err.response);
@@ -27,14 +28,18 @@ const useFeed = (url) => {
           console.log(`Error: ${err.message}`);
           setError(err.message);
         }
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // clean-up function
+    fetchGroup();
+
+    // step 3 - clean-up function
     return () => controller.abort();
   }, [url]);
 
-  return { feedData, error, loading };
+  return { groupData, error, loading };
 };
 
-export default useFeed;
+export default useGroup;
