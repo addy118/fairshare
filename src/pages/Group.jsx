@@ -11,7 +11,7 @@ import useGroupData from "@/utils/useGroup";
 import GrpSummary from "@/components/GrpSummary";
 
 export const GroupContext = createContext({
-  group: null,
+  group: {},
   expenses: [],
   settlments: [],
   balances: [],
@@ -19,12 +19,11 @@ export const GroupContext = createContext({
   selectedItem: null,
   detailsOpen: false,
   setSettlements: () => {},
-  setShowSettlements: () => {},
   setSelectedItem: () => {},
   setDetailsOpen: () => {},
 });
 
-export default function GroupPage({ params }) {
+export default function GroupPage() {
   const navigate = useNavigate();
   const { id: groupId } = useParams();
 
@@ -35,13 +34,7 @@ export default function GroupPage({ params }) {
   const [settlements, setSettlements] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [showSettlements, setShowSettlements] = useState(false);
-
   const [activeTab, setActiveTab] = useState("balances");
-
-  const handleSettleDebts = async () => {
-    setShowSettlements(true);
-  };
 
   // fetch group related data from api
   const {
@@ -52,7 +45,7 @@ export default function GroupPage({ params }) {
     history: hist,
     loading,
     error,
-  } = useGroupData(1);
+  } = useGroupData(Number(groupId));
 
   useEffect(() => {
     setGroup(grp);
@@ -78,7 +71,6 @@ export default function GroupPage({ params }) {
         setSelectedItem,
         detailsOpen,
         setDetailsOpen,
-        setShowSettlements,
       }}
     >
       <div className="mx-auto max-w-4xl px-4">

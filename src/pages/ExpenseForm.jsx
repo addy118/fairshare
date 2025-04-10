@@ -19,20 +19,14 @@ import {
 } from "@/components/ui/select";
 import { Trash, Plus } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import useGroupData from "@/utils/useGroup";
 
 export default function ExpenseForm() {
   const navigate = useNavigate();
   const { groupId } = useParams();
+  const { group } = useGroupData(Number(groupId));
+  const users = group?.members || [];
 
-  // mock users data - replace with actual data from your api
-  const [users, setUsers] = useState([
-    { id: "user1", name: "John Doe" },
-    { id: "user2", name: "Alice Smith" },
-    { id: "user3", name: "Bob Johnson" },
-    { id: "user4", name: "Carol Williams" },
-  ]);
-
-  // form state
   const [expenseName, setExpenseName] = useState("");
   const [totalAmount, setTotalAmount] = useState("");
   const [payers, setPayers] = useState([
@@ -69,11 +63,10 @@ export default function ExpenseForm() {
   const handleCreateExpense = (expense) => {
     // in a real app, you would send this to your api
     console.log("Creating expense:", expense);
+    alert("Expense submitted successfully!");
 
-    // navigate to the groups page
-    navigate(`/groups/${groupId}`);
-
-    console.log("Expense submitted");
+    // Navigate back to group page after successful submission
+    // navigate(`/groups/${groupId}`);
   };
 
   const handleSubmit = (e) => {
@@ -84,7 +77,7 @@ export default function ExpenseForm() {
       return;
     }
 
-    if (!totalAmount || Number.parseFloat(totalAmount) <= 0) {
+    if (!totalAmount || Number.parseFloat(totalAmount) < 0) {
       alert("Please enter a valid total amount");
       return;
     }
@@ -112,21 +105,17 @@ export default function ExpenseForm() {
       name: expenseName,
       totalAmount: Number.parseFloat(totalAmount),
       payers: payers.map(({ payerId, amount }) => ({
-        payerId,
+        payerId: Number(payerId),
         amount: Number.parseFloat(amount),
       })),
       groupId,
     };
 
     handleCreateExpense(expense);
-
-    setExpenseName("");
-    setTotalAmount("");
-    setPayers([{ id: Date.now(), payerId: "", amount: "" }]);
   };
 
   return (
-    <div className="mx-auto max-w-xl px-4">
+    <div className="mx-auto mb-20 max-w-xl px-4">
       <h1 className="mb-4 text-2xl font-bold">Create Expense</h1>
 
       <Card>
@@ -136,7 +125,7 @@ export default function ExpenseForm() {
             Add a new expense with multiple payers
           </CardDescription>
         </CardHeader>
-        
+
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-6">
             {/* expense name */}
@@ -157,10 +146,11 @@ export default function ExpenseForm() {
               <Input
                 id="total-amount"
                 type="number"
-                step="0.01"
-                min="0.01"
-                placeholder="0.00"
+                step="1"
+                min="0"
+                placeholder="0"
                 value={totalAmount}
+                className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 onChange={(e) => setTotalAmount(e.target.value)}
                 required
               />
@@ -181,42 +171,48 @@ export default function ExpenseForm() {
               </div>
 
               {payers.map((payer) => (
-                <div key={payer.id} className="flex items-end gap-2">
-                  <div className="flex-1 space-y-2">
+                <div key={payer.id} className="flex items-center gap-2">
+                  <div className="flex-1">
                     <Label htmlFor={`payer-${payer.id}`}>Payer</Label>
-                    <Select
-                      value={payer.payerId}
-                      onValueChange={(value) =>
-                        updatePayer(payer.id, "payerId", value)
-                      }
-                      required
-                    >
-                      <SelectTrigger id={`payer-${payer.id}`}>
-                        <SelectValue placeholder="Select a payer" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {users.map((user) => (
-                          <SelectItem key={user.id} value={user.id}>
-                            {user.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="mt-1">
+                      <Select
+                        value={payer.payerId}
+                        onValueChange={(value) =>
+                          updatePayer(payer.id, "payerId", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger id={`payer-${payer.id}`}>
+                          <SelectValue placeholder="Select a payer" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {users.map((user) => (
+                            <SelectItem
+                              key={user.id}
+                              value={user.id.toString()}
+                            >
+                              {user.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
 
-                  <div className="flex-1 space-y-2">
+                  <div className="flex-1">
                     <Label htmlFor={`amount-${payer.id}`}>Amount</Label>
                     <Input
                       id={`amount-${payer.id}`}
                       type="number"
-                      step="0.01"
-                      min="0.01"
-                      placeholder="0.00"
+                      step="1"
+                      min="0"
+                      placeholder="0"
                       value={payer.amount}
                       onChange={(e) =>
                         updatePayer(payer.id, "amount", e.target.value)
                       }
                       required
+                      className="mt-1 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     />
                   </div>
 
@@ -226,9 +222,9 @@ export default function ExpenseForm() {
                     size="icon"
                     onClick={() => removePayer(payer.id)}
                     disabled={payers.length === 1}
-                    className="mb-0.5"
+                    className="mt-6"
                   >
-                    <Trash className="h-4 w-4 text-red-500" />
+                    <Trash className="h-4 w-4 text-red-600" />
                   </Button>
                 </div>
               ))}

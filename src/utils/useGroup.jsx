@@ -6,7 +6,7 @@ import { useAuth } from "@/authProvider";
 export default function useGroupData(groupId) {
   const { user } = useAuth();
   const [data, setData] = useState({
-    group: null,
+    group: {},
     balances: [],
     expenses: [],
     settlements: [],
@@ -30,7 +30,7 @@ export default function useGroupData(groupId) {
         const groupData = format.groupData(groupRes.data);
         const balanceData = format.balanceData(balancesRes.data, user.id);
         const settlementsData = format.settlementsData(expensesRes.data.splits);
-        
+
         setData({
           group: groupData,
           balances: balanceData,
@@ -51,7 +51,6 @@ export default function useGroupData(groupId) {
         }
       } finally {
         setLoading(false);
-        console.log("loading set to false");
       }
     };
 
