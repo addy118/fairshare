@@ -14,7 +14,7 @@ const {
 const { verifyToken } = require("../controllers/authController");
 const grpRouter = new Router();
 
-// grpRouter.use(verifyToken);
+grpRouter.use(verifyToken);
 
 grpRouter.get("/:grpId/info", getGrpInfo);
 grpRouter.get("/:grpId/expenses", getAllExpenses);
