@@ -135,8 +135,10 @@ const generateTokens = (user) => {
       id: user.id,
       name: user.name,
       username: user.username,
-      email: user.email,
       phone: user.phone,
+      email: user.email,
+      groups: user.groups,
+      createdAt: user.createdAt,
     },
     ACCESS_TOKEN,
     { expiresIn: "10m" }

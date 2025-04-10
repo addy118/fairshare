@@ -55,6 +55,33 @@ class User {
         where: {
           OR: [{ username: data }, { email: data }],
         },
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          phone: true,
+          email: true,
+          password: true,
+          groups: {
+            select: {
+              group: {
+                select: {
+                  id: true,
+                  name: true,
+                  members: {
+                    select: {
+                      member: {
+                        select: { id: true, name: true, username: true },
+                      },
+                    },
+                  },
+                  createdAt: true,
+                },
+              },
+            },
+          },
+          createdAt: true,
+        },
       });
       return user;
     } catch (error) {
@@ -80,7 +107,32 @@ class User {
     try {
       const user = await db.user.findUnique({
         where: { id },
-        omit: { password: true },
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          phone: true,
+          email: true,
+          groups: {
+            select: {
+              group: {
+                select: {
+                  id: true,
+                  name: true,
+                  members: {
+                    select: {
+                      member: {
+                        select: { id: true, name: true, username: true },
+                      },
+                    },
+                  },
+                  createdAt: true,
+                },
+              },
+            },
+          },
+          createdAt: true,
+        },
       });
       return user;
     } catch (error) {

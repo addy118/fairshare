@@ -32,6 +32,13 @@ exports.deleteMember = async (req, res) => {
   res.json({ msg: "success" });
 };
 
+exports.getGrpInfo = async (req, res) => {
+  const { grpId } = req.params;
+
+  const group = await Group.getById(Number(grpId));
+  res.json(group);
+};
+
 exports.getAllExpenses = async (req, res) => {
   const { grpId } = req.params;
 

@@ -9,13 +9,15 @@ const {
   postDelGrp,
   postMember,
   deleteMember,
+  getGrpInfo,
 } = require("../controllers/grpController");
 const { verifyToken } = require("../controllers/authController");
 const grpRouter = new Router();
 
-grpRouter.use(verifyToken);
+// grpRouter.use(verifyToken);
 
-grpRouter.get("/:grpId", getAllExpenses);
+grpRouter.get("/:grpId/info", getGrpInfo);
+grpRouter.get("/:grpId/expenses", getAllExpenses);
 grpRouter.get("/:grpId/balance", getGrpBalance);
 grpRouter.get("/:grpId/splits/min", getMinSplits);
 grpRouter.get("/:grpId/splits", getSplits);

@@ -13,6 +13,23 @@ class Group {
     });
   }
 
+  static async getById(groupId) {
+    return await db.group.findFirst({
+      where: { id: Number(groupId) },
+      select: {
+        id: true,
+        name: true,
+        members: {
+          select: {
+            member: { select: { id: true, name: true, username: true } },
+          },
+        },
+        expenses: { select: { id: true, name: true, totalAmt: true } },
+        createdAt: true,
+      },
+    });
+  }
+
   static async expenses(id) {
     const expenses = await db.group.findMany({
       where: { id: Number(id) },

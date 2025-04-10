@@ -4,10 +4,10 @@ const User = require("./User");
 const users = require("./users");
 
 async function main() {
-  const res = await Group.members(1);
+  const res = await Group.getById(1);
   console.log(res);
 
-  console.log("Successful!");
+  console.log("Query successful!");
 }
 
 main()
