@@ -17,7 +17,10 @@ import formatDate from "@/utils/formatDate";
 
 export default function PaymentHistory() {
   const { history } = useContext(GroupContext);
-  const [expandedItems, setExpandedItems] = useState({ 1: true });
+  // set all items of history tabs expanded
+  const [expandedItems, setExpandedItems] = useState(
+    history.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
+  );
 
   const toggleExpand = (id) => {
     setExpandedItems((prev) => ({
