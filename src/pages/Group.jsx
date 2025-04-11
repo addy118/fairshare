@@ -38,7 +38,7 @@ export default function GroupPage() {
   const [settlements, setSettlements] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("balances");
+  const [activeTab, setActiveTab] = useState("settlements");
 
   // fetch group related data from api
   const {
