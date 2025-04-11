@@ -19,9 +19,12 @@ exports.postDelGrp = async (req, res) => {
 };
 
 exports.postMember = async (req, res) => {
-  const { groupId, memberId } = req.params;
+  const { groupId } = req.params;
+  const { username } = req.body;
 
-  await Group.join(Number(memberId), Number(groupId));
+  const userId = await User.getIdbyUserName(username);
+
+  await Group.join(Number(userId), Number(groupId));
   res.json({ msg: "success" });
 };
 

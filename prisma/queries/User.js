@@ -103,6 +103,19 @@ class User {
     }
   }
 
+  static async getIdbyUserName(username) {
+    try {
+      const userId = await db.user.findFirst({
+        where: { username },
+        select: { id: true },
+      });
+      return Number(userId.id);
+    } catch (error) {
+      console.error("Error fetching ID by username:  ", error.stack);
+      throw new Error("Failed to fetch ID by username.");
+    }
+  }
+
   static async getById(id) {
     try {
       const user = await db.user.findUnique({

@@ -24,7 +24,7 @@ grpRouter.get("/:grpId/splits", getSplits);
 grpRouter.get("/:groupId/history", getGrpHistory);
 
 grpRouter.post("/new", postGrp);
-grpRouter.post("/:groupId/member/:memberId", postMember);
+grpRouter.post("/:groupId/member/new", postMember);
 
 grpRouter.delete("/:groupId/member/:memberId", deleteMember);
 grpRouter.delete("/:groupId/delete", postDelGrp);
