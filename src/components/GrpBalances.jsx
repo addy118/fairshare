@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -9,9 +9,21 @@ import {
 import { GroupContext } from "@/pages/Group";
 import UserPic from "./UserPic";
 import { Avatar } from "./ui/avatar";
+import { fetchBalances } from "@/utils/fetchGroupData";
+import { useParams } from "react-router-dom";
 
 export default function GrpBalances() {
-  const { balances } = useContext(GroupContext);
+  const { id: groupId } = useParams();
+  const { balances, setBalances } = useContext(GroupContext);
+
+  // refresh balance
+  useEffect(() => {
+    const refreshBalances = async () => {
+      const newBalance = await fetchBalances(groupId);
+      setBalances(newBalance);
+    };
+    refreshBalances();
+  }, [groupId]);
 
   return (
     <Card>

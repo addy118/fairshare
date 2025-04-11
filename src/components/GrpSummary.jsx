@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -7,9 +7,21 @@ import {
   CardTitle,
 } from "./ui/card";
 import { GroupContext } from "@/pages/Group";
+import { fetchGroup } from "@/utils/fetchGroupData";
+import { useParams } from "react-router-dom";
 
 export default function GrpSummary() {
-  const { group, expenses } = useContext(GroupContext);
+  const { id: groupId } = useParams();
+  const { group, setGroup } = useContext(GroupContext);
+
+  // refresh group
+  useEffect(() => {
+    const refreshGroup = async () => {
+      const newGroup = await fetchGroup(groupId);
+      setGroup(newGroup);
+    };
+    refreshGroup();
+  }, [groupId]);
 
   return (
     <Card>
