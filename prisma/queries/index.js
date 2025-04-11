@@ -4,7 +4,13 @@ const User = require("./User");
 const users = require("./users");
 
 async function main() {
-  const res = await User.create("Jetha ka baap", "bapuji", "bapuji@gada.com", );
+  const res = await User.create(
+    "Jetha ka baap",
+    "bapuji",
+    "9382492398",
+    "bapuji@gada.com",
+    "M@dhuri123"
+  );
   console.log(res);
 
   console.log("Query successful!");
