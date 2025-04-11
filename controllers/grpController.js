@@ -50,7 +50,13 @@ exports.getGrpBalance = async (req, res) => {
   const { grpId } = req.params;
 
   const group = await Group.expenses(Number(grpId));
-  const splits = group.splits;
+  let splits = group.splits;
+
+  // get only unsettled splits for calculating balances
+  splits = splits.filter((split) => split.settled == false);
+
+  if (splits.length == 0) return res.json("All balances settled");
+
   const cleanSplits = splits.map((split) => {
     return {
       debtor: {
@@ -77,8 +83,6 @@ exports.getGrpBalance = async (req, res) => {
       amount: Number(amount),
     }))
   );
-
-  // console.log(balance);
 
   res.json(balance);
 };
