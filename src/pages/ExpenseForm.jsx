@@ -21,6 +21,7 @@ import { Trash, Plus } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import useGroupData from "@/utils/useGroup";
 import api from "@/axiosInstance";
+import Loading from "@/components/Loading";
 
 export default function ExpenseForm() {
   const navigate = useNavigate();
@@ -34,6 +35,8 @@ export default function ExpenseForm() {
     { id: Date.now(), payerId: "", amount: "" },
   ]);
   const [payersTotal, setPayersTotal] = useState(0);
+
+  const [loading, setLoading] = useState(false);
 
   // calculate total whenever payers change
   useEffect(() => {
@@ -64,12 +67,14 @@ export default function ExpenseForm() {
   const handleCreateExpense = async (expense) => {
     // in a real app, you would send this to your api
     try {
+      setLoading(true);
       await api.post("/exp/new", expense, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log("Creating expense:", expense);
+      // console.log("Creating expense:", expense);
+      setLoading(false);
       alert("Expense submitted successfully!");
       navigate(`/groups/${Number(groupId)}`);
     } catch (err) {
@@ -261,7 +266,11 @@ export default function ExpenseForm() {
 
           <CardFooter>
             <Button type="submit" className="mt-4 w-full">
-              Create Expense
+              {loading ? (
+                <Loading action="Creating" item="expense" />
+              ) : (
+                "Create Expense"
+              )}
             </Button>
           </CardFooter>
         </form>
