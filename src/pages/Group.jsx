@@ -2,13 +2,25 @@ import React, { useState, useEffect, createContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, IndianRupee } from "lucide-react";
+import { Plus, IndianRupee, Trash } from "lucide-react";
 import Loading from "@/components/Loading";
 import Settlements from "@/components/Settlements";
 import GrpBalances from "@/components/GrpBalances";
 import PaymentHistory from "@/components/PaymentHistory";
 import useGroupData from "@/utils/useGroup";
 import GrpSummary from "@/components/GrpSummary";
+import {
+  DialogHeader,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { CardContent, CardFooter } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import api from "@/axiosInstance";
 
 export const GroupContext = createContext({
   group: {},
@@ -40,6 +52,62 @@ export default function GroupPage() {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("settlements");
 
+  const [newMembers, setNewMembers] = useState([]);
+  const [newGroupOpen, setNewGroupOpen] = useState(false);
+
+  const handleCreateGroup = async (e) => {
+    e.preventDefault();
+
+    if (newMembers.length === 0) {
+      alert("Please add at least one member to the group.");
+      return;
+    }
+
+    try {
+      // console.log(newMembers); // [{ id, username }, {...}, ...]
+      console.log("adding members to new group...");
+      console.log(newMembers);
+      for (const user of newMembers) {
+        // console.log("adding user ", user.username);
+
+        await api.post(`/grp/${groupId}/member/new`, {
+          username: user.username,
+        });
+
+        // console.log("added user ", user.username);
+      }
+
+      console.log("members added successfully!");
+
+      setNewGroupOpen(false);
+      setNewMembers([]);
+      navigate(`/groups/${groupId}`);
+    } catch (err) {
+      console.error("Failed to create a group: ", err);
+    }
+  };
+
+  // create empty member field with empty username
+  const addMemberField = () => {
+    const newId = newMembers?.length
+      ? Math.max(...newMembers.map((m) => m.id)) + 1
+      : 1;
+    setNewMembers([...newMembers, { id: newId, username: "" }]);
+  };
+
+  const removeMemberField = (id) => {
+    setNewMembers((prev) => prev.filter((member) => member.id !== id));
+  };
+
+  // fill the empty username
+  const updateMemberUsername = (id, value) => {
+    setNewMembers((prev) =>
+      prev.map((member) =>
+        member.id === id ? { ...member, username: value } : member
+      )
+    );
+  };
+
   // fetch group related data from api
   const {
     group: grp,
@@ -51,6 +119,7 @@ export default function GroupPage() {
     error,
   } = useGroupData(Number(groupId));
 
+  // update states on change of any data
   useEffect(() => {
     setGroup(grp);
     setBalances(bal);
@@ -96,6 +165,83 @@ export default function GroupPage() {
                   <Plus className="mr-2 h-4 w-4" />
                   Add Expense
                 </Button>
+
+                <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add New Member
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Add new group members</DialogTitle>
+                      <DialogDescription>
+                        Enter username for new members you wish to add in this
+                        group.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleCreateGroup}>
+                      <CardContent className="space-y-6">
+                        {/* dynamic new member */}
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <Label>Group members</Label>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={addMemberField}
+                            >
+                              <Plus className="mr-1 h-4 w-4" /> Add Member
+                            </Button>
+                          </div>
+
+                          {newMembers?.map((member, index) => (
+                            <div
+                              key={member.id}
+                              className="flex items-center gap-2"
+                            >
+                              <div className="flex-1">
+                                <Label htmlFor={`member-${member.id}`}>
+                                  Username
+                                </Label>
+                                <Input
+                                  id={`member-${member.id}`}
+                                  placeholder="Enter username"
+                                  // value={member.username}
+                                  onChange={(e) =>
+                                    updateMemberUsername(
+                                      member.id,
+                                      e.target.value
+                                    )
+                                  }
+                                  required
+                                />
+                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => removeMemberField(member.id)}
+                                disabled={newMembers.length === 1}
+                                className="mt-6"
+                              >
+                                <Trash className="h-4 w-4 text-red-600" />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+
+                      <CardFooter>
+                        <Button type="submit" className="mt-4 w-full">
+                          Add Member(s)
+                        </Button>
+                      </CardFooter>
+                    </form>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
 
