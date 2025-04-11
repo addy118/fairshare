@@ -55,7 +55,7 @@ exports.getGrpBalance = async (req, res) => {
   // get only unsettled splits for calculating balances
   splits = splits.filter((split) => split.settled == false);
 
-  if (splits.length == 0) return res.json("All balances settled");
+  if (splits.length == 0) return res.json([]);
 
   const cleanSplits = splits.map((split) => {
     return {
