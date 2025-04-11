@@ -1,7 +1,7 @@
 const db = require("../../config/prismaClient");
 
 class User {
-  static async create(name, username, email, password) {
+  static async create(name, username, phone, email, password) {
     try {
       const user = await db.user.create({
         data: { name, username, phone, email, password },
