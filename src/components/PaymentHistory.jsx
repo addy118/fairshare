@@ -19,8 +19,23 @@ import { useParams } from "react-router-dom";
 
 export default function PaymentHistory() {
   const { id: groupId } = useParams();
-  const [expandedItems, setExpandedItems] = useState();
+  const [expandedItems, setExpandedItems] = useState({});
   const { history, setHistory } = useContext(GroupContext);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleAll = () => {
+    console.log("clicked toggle all");
+
+    // toggle the deciding flag
+    const newState = !isExpanded;
+    setIsExpanded(newState);
+
+    setExpandedItems(
+      newState
+        ? history.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
+        : {}
+    );
+  };
 
   // refresh history
   useEffect(() => {
@@ -28,9 +43,7 @@ export default function PaymentHistory() {
       const newHistory = await fetchHistory(groupId);
       setHistory(newHistory);
 
-      setExpandedItems(
-        newHistory.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
-      );
+      // setExpandedItems(expandAll(newHistory));
     };
     refreshHistory();
   }, [groupId]);
@@ -55,13 +68,19 @@ export default function PaymentHistory() {
   return (
     <>
       <Card className="mx-auto mb-20 max-w-4xl px-4">
-        <CardHeader>
-          <CardTitle>Payments History</CardTitle>
-          <CardDescription>All payments in this group</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Payments History</CardTitle>
+            <CardDescription>All payments in this group</CardDescription>
+          </div>
+
+          <Button variant="outline" onClick={toggleAll}>
+            Toggle All
+          </Button>
         </CardHeader>
 
         <CardContent>
-          <ScrollArea className="pr-4">
+          <ScrollArea className="">
             <div className="space-y-4">
               {history?.map((item) => (
                 <Card key={item.id} className="overflow-hidden">
