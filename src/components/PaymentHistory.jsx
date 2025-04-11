@@ -27,7 +27,6 @@ export default function PaymentHistory() {
     const refreshHistory = async () => {
       const newHistory = await fetchHistory(groupId);
       setHistory(newHistory);
-      console.log(newHistory);
 
       setExpandedItems(
         newHistory.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})

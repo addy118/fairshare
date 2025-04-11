@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { User, Users, PlusCircle } from "lucide-react";
+import { User, Users, PlusCircle, Trash, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
@@ -24,12 +24,14 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import api from "@/axiosInstance";
+import { CardContent, CardFooter } from "./ui/card";
 
 export default function Layout() {
   const navigate = useNavigate();
   const { isAuth, logout } = useAuth();
 
   const [newGroupName, setNewGroupName] = useState("");
+  const [members, setMembers] = useState([]);
   const [newGroupOpen, setNewGroupOpen] = useState(false);
 
   const handleCreateGroup = async (e) => {
@@ -37,14 +39,34 @@ export default function Layout() {
     if (!newGroupName.trim()) return;
 
     try {
-      await api.post("/grp/new", { name: newGroupName });
+      // await api.post("/grp/new", { name: newGroupName });
       console.log(`Creating group: ${newGroupName}`);
+      console.log(members); // [{ id, username }]
       setNewGroupOpen(false);
       setNewGroupName("");
       navigate("/groups");
     } catch (err) {
       console.error("Failed to create a group: ", err);
     }
+  };
+
+  const addMemberField = () => {
+    const newId = members?.length
+      ? Math.max(...members.map((m) => m.id)) + 1
+      : 1;
+    setMembers([...members, { id: newId, username: "" }]);
+  };
+
+  const removeMemberField = (id) => {
+    setMembers((prev) => prev.filter((member) => member.id !== id));
+  };
+
+  const updateMemberUsername = (id, value) => {
+    setMembers((prev) =>
+      prev.map((member) =>
+        member.id === id ? { ...member, username: value } : member
+      )
+    );
   };
 
   return (
@@ -82,6 +104,78 @@ export default function Layout() {
                       </DialogDescription>
                     </DialogHeader>
                     <form onSubmit={handleCreateGroup}>
+                      <CardContent className="space-y-6">
+                        {/* group name */}
+                        <div className="space-y-2">
+                          <Label htmlFor="group-name">Group Name</Label>
+                          <Input
+                            id="group-name"
+                            placeholder="Roommates, Goa Trip, etc."
+                            value={newGroupName}
+                            onChange={(e) => setNewGroupName(e.target.value)}
+                            required
+                          />
+                        </div>
+
+                        {/* dynamic members */}
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <Label>Group Members</Label>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={addMemberField}
+                            >
+                              <Plus className="mr-1 h-4 w-4" /> Add Member
+                            </Button>
+                          </div>
+
+                          {members?.map((member, index) => (
+                            <div
+                              key={member.id}
+                              className="flex items-center gap-2"
+                            >
+                              <div className="flex-1">
+                                <Label htmlFor={`member-${member.id}`}>
+                                  Username
+                                </Label>
+                                <Input
+                                  id={`member-${member.id}`}
+                                  placeholder="Enter username"
+                                  value={member.username}
+                                  onChange={(e) =>
+                                    updateMemberUsername(
+                                      member.id,
+                                      e.target.value
+                                    )
+                                  }
+                                  required
+                                />
+                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => removeMemberField(member.id)}
+                                disabled={members.length === 1}
+                                className="mt-6"
+                              >
+                                <Trash className="h-4 w-4 text-red-600" />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+
+                      <CardFooter>
+                        <Button type="submit" className="mt-4 w-full">
+                          Create Group
+                        </Button>
+                      </CardFooter>
+                    </form>
+
+                    {/* <form onSubmit={handleCreateGroup}>
                       <div className="grid gap-4 py-4">
                         <div className="grid gap-2">
                           <Label htmlFor="name">Group Name</Label>
@@ -96,7 +190,7 @@ export default function Layout() {
                       <DialogFooter>
                         <Button type="submit">Create Group</Button>
                       </DialogFooter>
-                    </form>
+                    </form> */}
                   </DialogContent>
                 </Dialog>
               )}

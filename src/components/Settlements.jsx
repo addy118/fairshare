@@ -21,9 +21,11 @@ export default function Settlements() {
 
   const handleSettleTransaction = async (settlementId) => {
     try {
-      console.log(settlementId);
+      console.log("handler triggered");
+
       await api.post(`/exp/${settlementId}/settle`);
-      const { settlementsData } = fetchExpensesAndSettlments(groupId);
+
+      const { settlementsData } = await fetchExpensesAndSettlments(groupId);
       // update settlements
       setSettlements(settlementsData);
 
@@ -37,7 +39,7 @@ export default function Settlements() {
 
   return (
     <div className="space-y-6">
-      {settlements.length === 0 ? (
+      {settlements?.length === 0 ? (
         <Card>
           <CardContent className="pt-6">
             <p className="text-center">
@@ -47,7 +49,7 @@ export default function Settlements() {
         </Card>
       ) : (
         <div className="mb-20 space-y-4">
-          {settlements.map((settlement) => (
+          {settlements?.map((settlement) => (
             <Card
               key={settlement.id}
               className={settlement.settled ? "opacity-50" : ""}

@@ -2,7 +2,7 @@ const groupData = (data) => {
   return {
     id: data.id,
     name: data.name,
-    memberCount: data.members.length,
+    memberCount: data.members?.length,
     expenses: data.expenses,
     totalExpenses: data.expenses.reduce((sum, exp) => sum + exp.totalAmt, 0),
     members: data.members.map(({ member }) => ({
