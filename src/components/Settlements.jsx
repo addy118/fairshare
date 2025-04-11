@@ -26,7 +26,7 @@ export default function Settlements() {
       console.log("optimizing splits...");
 
       setLoading(true);
-      await api.post(`grp/${groupId}/splits/min`);
+      await api.get(`grp/${groupId}/splits/min`);
       setLoading(false);
 
       // fetch new optimized splits
