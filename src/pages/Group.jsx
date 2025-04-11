@@ -21,6 +21,7 @@ import { CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import api from "@/axiosInstance";
+import { useAuth } from "@/authProvider";
 
 export const GroupContext = createContext({
   group: {},
@@ -41,6 +42,7 @@ export const GroupContext = createContext({
 
 export default function GroupPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { id: groupId } = useParams();
 
   const [group, setGroup] = useState(null);
@@ -54,6 +56,8 @@ export default function GroupPage() {
 
   const [newMembers, setNewMembers] = useState([]);
   const [newGroupOpen, setNewGroupOpen] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCreateGroup = async (e) => {
     e.preventDefault();
@@ -70,9 +74,11 @@ export default function GroupPage() {
       for (const user of newMembers) {
         // console.log("adding user ", user.username);
 
+        setIsLoading(true);
         await api.post(`/grp/${groupId}/member/new`, {
           username: user.username,
         });
+        setIsLoading(false);
 
         // console.log("added user ", user.username);
       }
@@ -106,6 +112,22 @@ export default function GroupPage() {
         member.id === id ? { ...member, username: value } : member
       )
     );
+  };
+
+  const handleLeaveGroup = async () => {
+    try {
+      console.log(`user ${user.id} leaving the group ${groupId}...`);
+
+      setIsLoading(true);
+      await api.delete(`/grp/${groupId}/member/${user.id}`);
+      setIsLoading(false);
+
+      console.log(`user ${user.id} left the group ${groupId}`);
+      navigate("/groups");
+    } catch (err) {
+      console.error("Error leaving group: ", error);
+      alert("Error leaving the group ", err);
+    }
   };
 
   // fetch group related data from api
@@ -236,12 +258,25 @@ export default function GroupPage() {
 
                       <CardFooter>
                         <Button type="submit" className="mt-4 w-full">
-                          Add Member(s)
+                          {isLoading ? (
+                            <Loading action="Adding" item="member(s)" />
+                          ) : (
+                            "Add member(s)"
+                          )}
                         </Button>
                       </CardFooter>
                     </form>
                   </DialogContent>
                 </Dialog>
+
+                <Button variant="destructive" onClick={handleLeaveGroup}>
+                  <Trash className="mr-2 h-4 w-4" />
+                  {isLoading ? (
+                    <Loading action="Leaving" item="group" />
+                  ) : (
+                    "Leave Group"
+                  )}
+                </Button>
               </div>
             </div>
 

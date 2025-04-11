@@ -25,6 +25,7 @@ import {
 import { Label } from "@/components/ui/label";
 import api from "@/axiosInstance";
 import { CardContent, CardFooter } from "./ui/card";
+import Loading from "./Loading";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -33,6 +34,8 @@ export default function Layout() {
   const [newGroupName, setNewGroupName] = useState("");
   const [newMembers, setNewMembers] = useState([]);
   const [newGroupOpen, setNewGroupOpen] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   const handleCreateGroup = async (e) => {
     e.preventDefault();
@@ -53,6 +56,7 @@ export default function Layout() {
 
     try {
       console.log(`creating group ${newGroupName}...`);
+      setLoading(true);
       const groupRes = await api.post(`/grp/new`, { name: newGroupName });
       console.log(groupRes.data.group.id);
 
@@ -64,6 +68,7 @@ export default function Layout() {
         });
       }
 
+      setLoading(false);
       setNewGroupOpen(false);
       setNewGroupName("");
       setNewMembers([]);
@@ -195,7 +200,11 @@ export default function Layout() {
 
                       <CardFooter>
                         <Button type="submit" className="mt-4 w-full">
-                          Create Group
+                          {loading ? (
+                            <Loading action="Creating" item="group" />
+                          ) : (
+                            "Create Group"
+                          )}
                         </Button>
                       </CardFooter>
                     </form>

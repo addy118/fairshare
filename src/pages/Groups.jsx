@@ -61,38 +61,6 @@ export default function GroupsPage() {
           <p className="text-muted-foreground mt-2">
             Create a group to start splitting expenses with friends.
           </p>
-          <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
-            <DialogTrigger asChild>
-              <Button className="mt-4" onClick={() => setNewGroupOpen(true)}>
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Create Your First Group
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Create New Group</DialogTitle>
-                <DialogDescription>
-                  Enter a name for your new expense sharing group.
-                </DialogDescription>
-              </DialogHeader>
-              <form onSubmit={handleCreateGroup}>
-                <div className="grid gap-4 py-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="name">Group Name</Label>
-                    <Input
-                      id="name"
-                      value={newGroupName}
-                      onChange={(e) => setNewGroupName(e.target.value)}
-                      placeholder="e.g., Roommates, Trip to Paris"
-                    />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button type="submit">Create Group</Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

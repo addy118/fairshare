@@ -18,7 +18,7 @@ export default function GrpBalances() {
   const { user } = useAuth();
   const { group, balances, setBalances } = useContext(GroupContext);
   const members = group?.members;
-  console.log(members);
+  // console.log(members);
 
   // refresh balance
   useEffect(() => {
