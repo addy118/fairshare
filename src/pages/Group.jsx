@@ -22,6 +22,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import api from "@/axiosInstance";
 import { useAuth } from "@/authProvider";
+import PaymentHistoryExport from "@/components/PaymentHistoryExport";
 
 export const GroupContext = createContext({
   group: {},
@@ -306,7 +307,8 @@ export default function GroupPage() {
 
               {/* payments history tab */}
               <TabsContent value="history" className="mt-6">
-                <PaymentHistory />
+                {/* <PaymentHistory /> */}
+                <PaymentHistoryExport history={history} groupName={group?.name} />
               </TabsContent>
             </Tabs>
           </>

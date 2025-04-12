@@ -25,6 +25,83 @@
     border-color: var(--color-gray-200, currentColor);
   }
 }
+
+
+/* Default styles for the flex layout */
+.pdf-flex-row {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.pdf-flex-item {
+  flex: 1;
+}
+
+/* Responsive styles for small screens */
+@media (max-width: 640px) {
+  .pdf-flex-row {
+    flex-direction: column;
+  }
+}
+
+/* PDF container styles */
+.pdf-container {
+  background-color: white !important;
+}
+
+/* Ensure all images have proper dimensions */
+.pdf-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .pdf-container {
+    width: 210mm;
+    padding: 10mm 10mm 15mm 10mm; /* top right bottom left */
+    box-sizing: border-box;
+    background-color: white !important;
+  }
+
+  .payment-card {
+    page-break-inside: avoid;
+    margin-bottom: 15mm !important; /* Ensure bottom margin in print */
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+  }
+
+  /* Force side-by-side layout in print */
+  .pdf-flex-row {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 20px !important;
+  }
+
+  .pdf-flex-item {
+    flex: 1 !important;
+  }
+
+  /* Ensure text is visible */
+  .pdf-container * {
+    color: black !important;
+  }
+
+  .pdf-container .text-green-600 {
+    color: #059669 !important;
+  }
+
+  .pdf-container .text-red-600 {
+    color: #dc2626 !important;
+  }
+}
+
+
 /*
   ---break---
 */
