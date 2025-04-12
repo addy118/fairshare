@@ -55,3 +55,25 @@ exports.settleSplit = async (req, res) => {
     res.status(500).json({ msg: "Failed to settle split" });
   }
 };
+
+exports.confirmSplit = async (req, res) => {
+  try {
+    const { splitId } = req.params;
+    await Expense.confirm(Number(splitId));
+    res.json({ msg: "success" });
+  } catch (err) {
+    console.error("ERROR in confirmSplit:", err);
+    res.status(500).json({ msg: "Failed to confirm split" });
+  }
+};
+
+exports.notConfirmSplit = async (req, res) => {
+  try {
+    const { splitId } = req.params;
+    await Expense.notConfirm(Number(splitId));
+    res.json({ msg: "success" });
+  } catch (err) {
+    console.error("ERROR in notConfirmSplit:", err);
+    res.status(500).json({ msg: "Failed to not confirm split" });
+  }
+};

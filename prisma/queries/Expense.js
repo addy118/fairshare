@@ -101,6 +101,30 @@ class Expense {
       throw new Error("Failed to settle split.");
     }
   }
+
+  static async confirm(id) {
+    try {
+      await db.split.update({
+        where: { id: Number(id) },
+        data: { settled: true, confirmed: true },
+      });
+    } catch (error) {
+      console.error("Error confirming split: ", error.stack);
+      throw new Error("Failed to confirm split.");
+    }
+  }
+
+  static async notConfirm(id) {
+    try {
+      await db.split.update({
+        where: { id: Number(id) },
+        data: { settled: false, confirmed: false },
+      });
+    } catch (error) {
+      console.error("Error not confirming split: ", error.stack);
+      throw new Error("Failed to confirm split.");
+    }
+  }
 }
 
 module.exports = Expense;

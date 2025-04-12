@@ -4,6 +4,8 @@ const {
   postExp,
   getExp,
   settleSplit,
+  confirmSplit,
+  notConfirmSplit,
 } = require("../controllers/expenseController");
 const expRouter = Router();
 
@@ -12,7 +14,10 @@ expRouter.use(verifyToken);
 expRouter.get("/:expId", getExp);
 
 expRouter.post("/new", postExp);
-expRouter.post("/:splitId/settle", settleSplit);
+
+expRouter.put("/:splitId/settle", settleSplit);
+expRouter.put("/:splitId/confirm", confirmSplit);
+expRouter.put("/:splitId/not-confirm", notConfirmSplit);
 
 expRouter.use((err, req, res, next) => {
   console.error(err.message);
