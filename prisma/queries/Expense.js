@@ -3,88 +3,103 @@ const Group = require("./Group");
 
 class Expense {
   static async create(exp, payersArr, splitsArr) {
-    // checks whether the user present in the expense is part of the group or not
-    for (const payer of payersArr) {
-      const isMember = await Group.isMember(
-        Number(payer.payerId),
-        Number(exp.groupId)
-      );
-
-      if (!isMember) {
-        throw new Error(
-          `User with ID ${payer.payerId} is not a member of the group with ID ${exp.groupId}`
+    try {
+      // checks whether the user present in the expense is part of the group or not
+      for (const payer of payersArr) {
+        const isMember = await Group.isMember(
+          Number(payer.payerId),
+          Number(exp.groupId)
         );
+
+        if (!isMember) {
+          throw new Error(
+            `User with ID ${payer.payerId} is not a member of the group with ID ${exp.groupId}`
+          );
+        }
       }
+
+      const res = await db.expense.create({
+        data: {
+          name: exp.name,
+          totalAmt: Number(exp.totalAmt),
+          // connect to the existing Group by ID
+          mainGroup: { connect: { id: Number(exp.groupId) } },
+
+          // create the payers relationships
+          payers: {
+            create: payersArr.map((payer) => ({
+              paidAmt: Number(payer.paidAmt),
+              payer: { connect: { id: Number(payer.payerId) } },
+            })),
+          },
+
+          // create the splits relationships
+          splits: {
+            create: splitsArr.map((split) => ({
+              name: exp.name,
+              amount: Number(split.amount),
+              // connect to mainGroup
+              mainGroup: { connect: { id: Number(exp.groupId) } },
+              // connect to debtor
+              debtor: { connect: { id: Number(split.debitorId) } },
+              // connect to creditor
+              creditor: { connect: { id: Number(split.creditorId) } },
+            })),
+          },
+        },
+      });
+
+      return res;
+    } catch (error) {
+      console.error("Error creating expense: ", error.stack);
+      throw new Error(error.message || "Failed to create expense.");
     }
-
-    const res = await db.expense.create({
-      data: {
-        name: exp.name,
-        totalAmt: Number(exp.totalAmt),
-        // connect to the existing Group by ID
-        mainGroup: { connect: { id: Number(exp.groupId) } },
-
-        // create the payers relationships
-        payers: {
-          create: payersArr.map((payer) => ({
-            paidAmt: Number(payer.paidAmt),
-            payer: { connect: { id: Number(payer.payerId) } },
-          })),
-        },
-
-        // create the splits relationships
-        splits: {
-          create: splitsArr.map((split) => ({
-            name: exp.name,
-            amount: Number(split.amount),
-            // connect to mainGroup
-            mainGroup: { connect: { id: Number(exp.groupId) } },
-            // connect to debtor
-            debtor: { connect: { id: Number(split.debitorId) } },
-            // connect to creditor
-            creditor: { connect: { id: Number(split.creditorId) } },
-          })),
-        },
-      },
-    });
-
-    return res;
   }
 
   static async get(id) {
-    const res = await db.expense.findFirst({
-      where: { id: Number(id) },
-      select: {
-        id: true,
-        name: true,
-        mainGroup: { select: { id: true, name: true } },
-        totalAmt: true,
-        payers: {
-          select: {
-            payer: { select: { id: true, name: true } },
-            paidAmt: true,
+    try {
+      const res = await db.expense.findFirst({
+        where: { id: Number(id) },
+        select: {
+          id: true,
+          name: true,
+          mainGroup: { select: { id: true, name: true } },
+          totalAmt: true,
+          payers: {
+            select: {
+              payer: { select: { id: true, name: true } },
+              paidAmt: true,
+            },
           },
-        },
-        splits: {
-          select: {
-            debtor: { select: { id: true, name: true } },
-            creditor: { select: { id: true, name: true } },
-            amount: true,
-            settled: true,
+          splits: {
+            select: {
+              debtor: { select: { id: true, name: true } },
+              creditor: { select: { id: true, name: true } },
+              amount: true,
+              settled: true,
+            },
           },
+          _count: { select: { payers: true, splits: true } },
         },
-        _count: { select: { payers: true, splits: true } },
-      },
-    });
+      });
 
-    return res;
+      return res;
+    } catch (error) {
+      console.error("Error fetching expense: ", error.stack);
+      throw new Error("Failed to fetch expense details.");
+    }
   }
 
   static async settle(id) {
-    await db.split.update({
-      where: { id: Number(id) },
-      data: { settled: true },
-    });
+    try {
+      await db.split.update({
+        where: { id: Number(id) },
+        data: { settled: true },
+      });
+    } catch (error) {
+      console.error("Error settling split: ", error.stack);
+      throw new Error("Failed to settle split.");
+    }
   }
 }
 

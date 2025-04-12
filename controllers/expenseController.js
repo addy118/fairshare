@@ -28,41 +28,30 @@ exports.postExp = async (req, res) => {
 
     res.json({ exp });
   } catch (err) {
-    console.error("🔥 ERROR in /exp/new:", err);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("ERROR in /exp/new:", err);
+    res.status(500).json({ msg: "Internal server error" });
   }
 };
 
 exports.getExp = async (req, res) => {
-  const { expId } = req.params;
-  // console.log(expId);
-  const exp = await Expense.get(Number(expId));
-  res.json({ exp });
+  try {
+    const { expId } = req.params;
+    // console.log(expId);
+    const exp = await Expense.get(Number(expId));
+    res.json({ exp });
+  } catch (err) {
+    console.error("ERROR in getExp:", err);
+    res.status(500).json({ msg: "Failed to retrieve expense" });
+  }
 };
 
 exports.settleSplit = async (req, res) => {
-  const { splitId } = req.params;
-
-  await Expense.settle(Number(splitId));
-  res.json({ msg: "success" });
-};
-
-const exp = {
-  id: 14,
-  name: "exp3",
-  groupId: 1,
-  totalAmt: 290,
-  payers: [
-    { payerId: 6, paidAmt: 60 },
-    { payerId: 5, paidAmt: 100 },
-    { payerId: 4, paidAmt: 80 },
-    { payerId: 3, paidAmt: 40 },
-    { payerId: 2, paidAmt: 10 },
-  ],
-  splits: [
-    { debtorId: 3, creditorId: 6, amount: 2, settled: false },
-    { debtorId: 3, creditorId: 4, amount: 16, settled: false },
-    { debtorId: 2, creditorId: 4, amount: 6, settled: false },
-    { debtorId: 2, creditorId: 5, amount: 42, settled: false },
-  ],
+  try {
+    const { splitId } = req.params;
+    await Expense.settle(Number(splitId));
+    res.json({ msg: "success" });
+  } catch (err) {
+    console.error("ERROR in settleSplit:", err);
+    res.status(500).json({ msg: "Failed to settle split" });
+  }
 };

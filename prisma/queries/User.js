@@ -8,7 +8,11 @@ class User {
       });
       return user;
     } catch (error) {
-      console.error("Error creating user:  ", error.stack);
+      console.error("Error creating user: ", error.stack);
+      if (error.code === "P2002") {
+        // Handling unique constraint violation
+        throw new Error("A user with this email, phone or username already exists.");
+      }
       throw new Error("Failed to create user.");
     }
   }
@@ -20,7 +24,11 @@ class User {
         data: { email },
       });
     } catch (error) {
-      console.error("Error changing email:  ", error.stack);
+      console.error("Error changing email: ", error.stack);
+      if (error.code === "P2002") {
+        // Handling unique constraint violation
+        throw new Error("Email is already taken.");
+      }
       throw new Error("Failed to update user email.");
     }
   }
@@ -32,7 +40,7 @@ class User {
         data: { name },
       });
     } catch (error) {
-      console.error("Error updating name:  ", error.stack);
+      console.error("Error updating name: ", error.stack);
       throw new Error("Failed to update user name.");
     }
   }
@@ -44,7 +52,7 @@ class User {
         data: { password },
       });
     } catch (error) {
-      console.error("Error updating password:  ", error.stack);
+      console.error("Error updating password: ", error.stack);
       throw new Error("Failed to update user password.");
     }
   }
@@ -85,8 +93,8 @@ class User {
       });
       return user;
     } catch (error) {
-      console.error("Error fetching user by email/username:  ", error.stack);
-      throw new Error("Failed to fetch user by email/username");
+      console.error("Error fetching user by email/username: ", error.stack);
+      throw new Error("Failed to fetch user by email/username.");
     }
   }
 
@@ -98,7 +106,7 @@ class User {
       });
       return user.name;
     } catch (error) {
-      console.error("Error fetching name by ID:  ", error.stack);
+      console.error("Error fetching name by ID: ", error.stack);
       throw new Error("Failed to fetch name by ID.");
     }
   }
@@ -111,7 +119,7 @@ class User {
       });
       return Number(userId.id);
     } catch (error) {
-      console.error("Error fetching ID by username:  ", error.stack);
+      console.error("Error fetching ID by username: ", error.stack);
       throw new Error("Failed to fetch ID by username.");
     }
   }
@@ -149,46 +157,36 @@ class User {
       });
       return user;
     } catch (error) {
-      console.error("Error fetching user by ID:  ", error.stack);
+      console.error("Error fetching user by ID: ", error.stack);
       throw new Error("Failed to fetch user by ID.");
     }
   }
 
   static async balance(id) {
-    const balance = await db.user.findFirst({
-      where: { id: Number(id) },
-      select: {
-        // amount to be debited
-        debtor: {
-          select: {
-            creditor: { select: { id: true, name: true } },
-            amount: true,
+    try {
+      const balance = await db.user.findFirst({
+        where: { id: Number(id) },
+        select: {
+          debtor: {
+            select: {
+              creditor: { select: { id: true, name: true } },
+              amount: true,
+            },
+          },
+          creditor: {
+            select: {
+              debtor: { select: { id: true, name: true } },
+              amount: true,
+            },
           },
         },
-        // amount to get credited
-        creditor: {
-          select: {
-            debtor: { select: { id: true, name: true } },
-            amount: true,
-          },
-        },
-      },
-    });
-
-    return balance;
+      });
+      return balance;
+    } catch (error) {
+      console.error("Error fetching balance: ", error.stack);
+      throw new Error("Failed to fetch balance.");
+    }
   }
-
-  // static async getByEmail(email) {
-  //   try {
-  //     const user = await db.user.findUnique({
-  //       where: { email },
-  //     });
-  //     return user;
-  //   } catch (error) {
-  //     console.error("Error fetching user by email:  ", error.stack);
-  //     throw new Error("Failed to fetch user by email.");
-  //   }
-  // }
 
   static async delete(userId) {
     try {
@@ -196,7 +194,7 @@ class User {
         where: { id: userId },
       });
     } catch (error) {
-      console.error("Error deleting user:  ", error.stack);
+      console.error("Error deleting user: ", error.stack);
       throw new Error("Failed to delete user.");
     }
   }

@@ -6,90 +6,100 @@ const { ACCESS_TOKEN, REFRESH_TOKEN } = process.env;
 
 exports.postSignup = async (req, res) => {
   const { name, username, phone, email, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await User.create(name, username, phone, email, hashedPassword);
-
-  res.status(200).json({ user });
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create(
+      name,
+      username,
+      phone,
+      email,
+      hashedPassword
+    );
+    res.status(200).json({ user });
+  } catch (error) {
+    if (error.code === "P2002") {
+      return res.status(400).json({
+        msg: "Email, Phone or Username already exists. Please choose a different one.",
+      });
+    }
+    console.error("Error during signup: ", error.stack);
+    res.status(500).json({ msg: "Failed to create user. Please try again." });
+  }
 };
 
 exports.postLogin = async (req, res) => {
   const { data, password } = req.body;
-  // console.log(data, password);
-  const user = await User.get(data);
-  // console.log(user);
-
-  if (!user) return res.status(404).send("User not found!");
-
-  const matched = await bcrypt.compare(password, user.password);
-  if (!matched) return res.status(400).send("Invalid password!");
-
-  const { accessToken, refreshToken } = generateTokens(user);
-
-  // send set-cookie header with response
-  res.cookie("refreshCookie", refreshToken, {
-    httpOnly: true,
-    // true in prod (only send over https)
-    secure: true,
-    sameSite: "None",
-  });
 
   try {
+    const user = await User.get(data);
+    if (!user) return res.status(404).send("User not found!");
+
+    const matched = await bcrypt.compare(password, user.password);
+    if (!matched) return res.status(400).send("Invalid password!");
+
+    const { accessToken, refreshToken } = generateTokens(user);
+
+    // send set-cookie header with response
+    res.cookie("refreshCookie", refreshToken, {
+      httpOnly: true,
+      secure: true, // true in production (only send over https)
+      sameSite: "None",
+    });
+
     const decoded = jwt.verify(accessToken, ACCESS_TOKEN);
-    // send the decoded and raw token to client
     return res.json({ msg: "Login Successful!", accessToken, user: decoded });
-  } catch (err) {
-    res.status(403).json({ msg: err.message });
+  } catch (error) {
+    console.error("Error during login: ", error.stack);
+    res.status(500).json({ msg: "Login failed. Please try again." });
   }
 };
 
 exports.postLogout = async (req, res) => {
-  res.clearCookie("refreshCookie", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-  });
-  res.status(200).json({ msg: "Logged out successfully" });
+  try {
+    res.clearCookie("refreshCookie", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
+    res.status(200).json({ msg: "Logged out successfully" });
+  } catch (error) {
+    console.error("Error during logout: ", error.stack);
+    res.status(500).json({ msg: "Logout failed. Please try again." });
+  }
 };
 
 exports.getToken = async (req, res) => {
-  // check access token in header
   const bearerHeader = req.headers["authorization"];
   const accessToken = bearerHeader && bearerHeader.split(" ")[1];
   if (!accessToken)
     return res.status(403).json({ msg: "Invalid or expired token" });
 
   try {
-    // verify the token
     const decoded = jwt.verify(accessToken, ACCESS_TOKEN);
-    // send the decoded and raw token to client
-    // console.log({ accessToken, user: decoded });
     return res.json({ accessToken, user: decoded });
   } catch (err) {
-    res.status(403).json({ msg: err.message });
+    console.error("Error verifying token: ", err.stack);
+    res.status(403).json({ msg: "Invalid or expired token" });
   }
 };
 
 exports.verifyToken = (req, res, next) => {
-  // extract access token from header
   const bearerHeader = req.headers["authorization"];
   const accessToken = bearerHeader && bearerHeader.split(" ")[1];
   if (!accessToken) return res.status(500).send("Unauthorized access!");
 
-  // verify it and proceed
   try {
     const decoded = jwt.verify(accessToken, ACCESS_TOKEN);
     req.user = decoded;
     next();
   } catch (err) {
-    console.error(err.message);
+    console.error("Error verifying access token: ", err.stack);
     res.status(403).json({ msg: "Invalid or expired token" });
   }
 };
 
 exports.refresh = async (req, res) => {
-  // verify the refresh token from cookie
-  // console.log("from refresh");
   const refreshCookie = req.cookies.refreshCookie;
 
   if (!refreshCookie) {
@@ -97,7 +107,6 @@ exports.refresh = async (req, res) => {
   }
 
   try {
-    // console.log(refreshCookie);
     const decoded = jwt.verify(refreshCookie, REFRESH_TOKEN);
     const user = await User.getById(decoded.id);
 
@@ -109,27 +118,26 @@ exports.refresh = async (req, res) => {
 
     res.cookie("refreshCookie", refreshToken, {
       httpOnly: true,
-      // true in prod (only send over https)
-      secure: true,
+      secure: true, // true in production (only send over https)
       sameSite: "None",
     });
 
     res.json({ msg: "Tokens Regenerated", accessToken });
   } catch (error) {
-    return res.status(403).json({ msg: "Invalid or expired token" });
+    console.error("Error refreshing token: ", error.stack);
+    return res.status(403).json({ msg: "Invalid or expired refresh token" });
   }
 };
 
 exports.verifyOwnership = (req, res, next) => {
   const userId = Number(req.params.userId);
-  if (userId !== req.user.id)
+  if (userId !== req.user.id) {
     return res.status(403).json({ msg: "You don't have access rights" });
-
+  }
   next();
 };
 
 const generateTokens = (user) => {
-  // sign access token
   const accessToken = jwt.sign(
     {
       id: user.id,
@@ -144,25 +152,9 @@ const generateTokens = (user) => {
     { expiresIn: "10m" }
   );
 
-  //   "accessToken": {
-  //     "id": 1,
-  //     "name": "addy",
-  //     "username": "addy118",
-  //     "email": "addy@test.com",
-  //     "iat": 1742489157,
-  //     "exp": 1742489757
-  // }
-
-  // sign refresh token
   const refreshToken = jwt.sign({ id: user.id }, REFRESH_TOKEN, {
     expiresIn: "10d",
   });
-
-  // "refreshToken": {
-  //   "id": 1,
-  //   "iat": 1742489157,
-  //   "exp": 1742489757,
-  // }
 
   return { accessToken, refreshToken };
 };
