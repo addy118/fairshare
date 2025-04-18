@@ -11,6 +11,7 @@ import GroupsPage from "./pages/Groups";
 import GroupPage from "./pages/Group";
 import Home from "./pages/Home";
 import ExpenseForm from "./pages/ExpenseForm";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
           {
             path: "home",
             element: <Home />,
+          },
+          {
+            path: "profile",
+            element: <Profile />,
           },
           {
             path: "groups/:groupId/expense/new",

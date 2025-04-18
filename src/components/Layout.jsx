@@ -17,7 +17,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -229,7 +228,7 @@ export default function Layout() {
                   >
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <Link to={"/home"}>
+                    <Link to={"/profile"}>
                       <DropdownMenuItem className="cursor-pointer">
                         Profile
                       </DropdownMenuItem>
