@@ -14,12 +14,14 @@ import {
 import { useParams } from "react-router-dom";
 import format from "@/utils/formatGroup";
 import Loading from "./Loading";
+import { toast } from "sonner";
 
 export default function Settlements() {
   const { id: groupId } = useParams();
   const { user } = useAuth();
   const { settlements, setSettlements, setBalances } = useContext(GroupContext);
   const [loading, setLoading] = useState(false);
+  // console.log(settlements);
 
   const handleOptimization = async () => {
     try {
@@ -43,9 +45,9 @@ export default function Settlements() {
     }
   };
 
-  const handleSettleTransaction = async (settlementId) => {
+  const handleSettle = async (settlementId) => {
     try {
-      await api.post(`/exp/${settlementId}/settle`);
+      await api.put(`/exp/${settlementId}/settle`);
 
       const { settlementsData } = await fetchExpensesAndSettlments(groupId);
 
@@ -57,6 +59,39 @@ export default function Settlements() {
       setBalances(balanceData);
     } catch (error) {
       console.error("Failed to settle transaction:", error);
+    }
+  };
+
+  const handleConfirm = async (settlementId, status) => {
+    try {
+      await api.put(
+        `/exp/${settlementId}/${status ? "confirm" : "not-confirm"}`
+      );
+
+      const { settlementsData } = await fetchExpensesAndSettlments(groupId);
+
+      // update settlements
+      setSettlements(settlementsData);
+
+      // refresh balances after settlement
+      const balanceData = await fetchBalances(groupId, user.id);
+      setBalances(balanceData);
+    } catch (error) {
+      console.error("Failed to settle transaction:", error);
+    }
+  };
+
+  const handleRemind = async (settlementId, toUserId) => {
+    try {
+      console.log("remind user " + toUserId);
+      const res = await api.get(`/user/${Number(toUserId)}/info`);
+      const toUser = res.data;
+
+      toast.success(`Reminded to ${toUser.email}`);
+      
+      console.log(toUser);
+    } catch (err) {
+      console.error("Failed to settle transaction:", err);
     }
   };
 
@@ -90,7 +125,7 @@ export default function Settlements() {
             {settlements?.map((settlement) => (
               <Card
                 key={settlement.id}
-                className={settlement.settled ? "opacity-50" : ""}
+                className={`${settlement.confirmed ? "opacity-50" : ""} rounded-sm`}
               >
                 <CardContent>
                   <div className="flex items-center justify-between">
@@ -121,26 +156,57 @@ export default function Settlements() {
                       </div>
                     </div>
 
+                    {/* amount */}
                     <div className="flex items-center gap-4">
                       <span className="font-bold">
                         ₹{settlement.amount.toFixed(2)}
                       </span>
 
-                      {settlement.settled ? (
+                      {/* status */}
+                      {settlement.confirmed ? (
                         <span className="flex items-center text-green-600">
                           <Check className="mr-1 h-4 w-4" />
                           Settled
                         </span>
-                      ) : user.id == settlement.from.id ? (
+                      ) : settlement.from.id === user.id &&
+                        settlement.settled ? (
+                        <span className="text-yellow-500">Waiting</span>
+                      ) : settlement.to.id === user.id && settlement.settled ? (
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => handleConfirm(settlement.id, true)}
+                          >
+                            Received
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleConfirm(settlement.id, false)}
+                          >
+                            Didn't receive
+                          </Button>
+                        </div>
+                      ) : settlement.from.id === user.id &&
+                        !settlement.settled ? (
                         <Button
                           size="sm"
-                          onClick={() => handleSettleTransaction(settlement.id)}
+                          onClick={() => handleSettle(settlement.id)}
                         >
                           Settle
                         </Button>
-                      ) : (
-                        " "
-                      )}
+                      ) : settlement.to.id === user.id &&
+                        !settlement.settled ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() =>
+                            handleRemind(settlement.id, settlement.to.id)
+                          }
+                        >
+                          Remind
+                        </Button>
+                      ) : null}
                     </div>
                   </div>
                 </CardContent>
