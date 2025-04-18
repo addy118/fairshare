@@ -1,4 +1,6 @@
+const transporter = require("../config/nodeMailer");
 const Expense = require("../prisma/queries/Expense");
+const Split = require("../prisma/queries/Split");
 const { createBalance, calculateSplits } = require("./util");
 
 exports.postExp = async (req, res) => {
@@ -76,4 +78,30 @@ exports.notConfirmSplit = async (req, res) => {
     console.error("ERROR in notConfirmSplit:", err);
     res.status(500).json({ msg: "Failed to not confirm split" });
   }
+};
+
+exports.remind = async (req, res) => {
+  const { splitId } = req.params;
+  const split = Split.get(Number(splitId));
+  const to = split.creditor;
+  const from = split.debtor;
+
+  const mailOptions = {
+    from: "addyyy118@gmail.com",
+    to: from.email,
+    subject: "Payment Reminder",
+    html: `<p>Hi <strong>${from.name}</strong>!</p>
+    <p>You need to pay <strong>₹${split.amount}</strong> to <strong>${to.name}</strong>.</p>
+    <p>Thanks,<br/>FairShare Team</p>`,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending email:", error);
+      res.status(500).json({ msg: "Error sending reminder mail." });
+    } else {
+      console.log("Email sent:", info.response);
+      res.status(200).json({ msg: "Reminder email was sent successfully!" });
+    }
+  });
 };
