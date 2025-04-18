@@ -29,6 +29,46 @@ class Split {
     }
   }
 
+  static async get(id) {
+    try {
+      return await db.split.findUnique({
+        where: { id: Number(id) },
+        select: {
+          id: true,
+          name: true,
+          groupId: true,
+          expenseId: true,
+          debtor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              username: true,
+            },
+          },
+          creditor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              username: true,
+            },
+          },
+          amount: true,
+          settled: true,
+          confirmed: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching split: ", error.stack);
+      throw new Error("Failed to fetch split.");
+    }
+  }
+
   static async delete(id) {
     try {
       await db.split.delete({
