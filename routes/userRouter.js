@@ -13,6 +13,7 @@ const {
   getUserBal,
   putUserUserName,
   putUserPhone,
+  getUserInfo,
 } = require("../controllers/userController");
 const { validateReq } = require("../config/validation/req");
 const {
@@ -28,6 +29,7 @@ userRouter.get("/:userId", getUser);
 userRouter.use("/:userId/*", [verifyToken, verifyOwnership]);
 
 userRouter.get("/:userId/balance", getUserBal);
+userRouter.get("/:userId/info", getUserInfo);
 
 userRouter.post("/:userId/protected", testProtected);
 

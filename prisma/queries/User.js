@@ -83,6 +83,24 @@ class User {
     }
   }
 
+  static async getBasicInfo(id) {
+    try {
+      return await db.user.findUnique({
+        where: { id: Number(id) },
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          email: true,
+          phone: true,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching user info: ", error.stack);
+      throw new Error("Failed to fetch user info.");
+    }
+  }
+
   static async get(data) {
     try {
       const user = await db.user.findFirst({

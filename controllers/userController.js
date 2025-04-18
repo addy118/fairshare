@@ -37,6 +37,18 @@ exports.getUser = async (req, res) => {
   }
 };
 
+exports.getUserInfo = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.getBasicInfo(Number(userId));
+    if (!user) return res.status(404).json({ msg: "No user found" });
+    res.status(200).json(user);
+  } catch (err) {
+    console.error("ERROR in getUser:", err);
+    res.status(500).json({ msg: err.message });
+  }
+};
+
 exports.getUserBal = async (req, res) => {
   try {
     const { userId } = req.params;
