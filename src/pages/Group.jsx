@@ -52,7 +52,7 @@ export default function GroupPage() {
   const [settlements, setSettlements] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("settlements");
+  const [activeTab, setActiveTab] = useState("balances");
 
   const [newMembers, setNewMembers] = useState([]);
   const [newGroupOpen, setNewGroupOpen] = useState(false);
