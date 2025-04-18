@@ -72,6 +72,7 @@ class Group {
               creditor: { select: { id: true, name: true } },
               amount: true,
               settled: true,
+              confirmed: true,
               createdAt: true,
               updatedAt: true,
             },
@@ -92,7 +93,7 @@ class Group {
         where: { id: Number(id) },
         select: {
           splits: {
-            where: { settled: false },
+            where: { confirmed: false },
             select: {
               id: true,
               debtor: { select: { id: true, name: true } },
@@ -195,7 +196,7 @@ class Group {
   static async splitsHistory(groupId) {
     try {
       return await db.split.findMany({
-        where: { groupId: Number(groupId), settled: true },
+        where: { groupId: Number(groupId), confirmed: true },
         select: {
           id: true,
           debtor: { select: { id: true, name: true } },
