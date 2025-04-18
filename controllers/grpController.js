@@ -81,7 +81,7 @@ exports.getGrpBalance = async (req, res) => {
     let splits = group.splits;
 
     // get only unsettled splits for calculating balances
-    splits = splits.filter((split) => split.settled == false);
+    splits = splits.filter((split) => split.confirmed == false);
 
     if (splits.length == 0) return res.json([]);
 
@@ -100,7 +100,6 @@ exports.getGrpBalance = async (req, res) => {
     });
 
     const splitBalance = getSplitBalance(cleanSplits);
-    // console.log(splitBalance);
 
     const balance = await Promise.all(
       Object.entries(splitBalance).map(async ([userId, amount]) => ({
@@ -138,7 +137,7 @@ exports.getMinSplits = async (req, res) => {
 
     const oldBalance = getSplitBalance(splits);
     const newSplits = calculateSplits(oldBalance);
-    console.log(newSplits);
+    // console.log(newSplits);
 
     const splitsArr = newSplits.map((split) => {
       return {

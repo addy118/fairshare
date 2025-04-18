@@ -1,17 +1,4 @@
-const { exp3, expenses, splits } = require("./expenses");
-
 function createBalance(expense) {
-  // creates a balance graph for a given raw expense (db data)
-  // expense = {
-  //   name: "expense",
-  //   groupId: 1,
-  //   totalAmt: 50,
-  //   payers: [
-  //     { name: "A", payerId: 2, amount: 0 },
-  //     { name: "B", payerId: 3, amount: 50 },
-  //   ],
-  // }
-
   const balance = {};
   const share = Math.floor(expense.totalAmt / expense.payers.length);
 
@@ -28,57 +15,7 @@ function createBalance(expense) {
   return balance;
 }
 
-function getExpBalance(expenses) {
-  // const expenses = [
-  //   {
-  //     id: 18,
-  //     name: "exp1",
-  //     totalAmt: 250,
-  //     payers: [
-  //       {
-  //         payerId: 4,
-  //         paidAmt: 50,
-  //       },
-  //       {
-  //         payerId: 3,
-  //         paidAmt: 0,
-  //       },
-  //     ],
-  //     createdAt: "2025-04-03T16:24:26.336Z",
-  //   },
-  // ];
-
-  const expBalance = {};
-
-  expenses.forEach((expense) => {
-    let totalAmt = expense.totalAmt;
-    let payers = expense.payers;
-    let numPayers = payers.length;
-    let share = Math.floor(totalAmt / numPayers);
-
-    payers.forEach((payer) => {
-      let payerId = payer.payerId;
-      let paidAmt = payer.paidAmt;
-
-      // initialize default key value
-      if (!(payerId in expBalance)) {
-        expBalance[payerId] = 0;
-      }
-
-      expBalance[payerId] -= share;
-      expBalance[payerId] += paidAmt;
-    });
-  });
-
-  return expBalance;
-}
-
 function getSplitBalance(splits) {
-  // creates a balance graph for a given splits array
-  // splits = [
-  //   { debtor: { id: 3, name: "" }, creditorId: { id: 2, name: "" }, amount: 43 },
-  // ];
-
   const balance = {};
 
   splits.forEach((split) => {
@@ -93,9 +30,6 @@ function getSplitBalance(splits) {
 }
 
 function calculateSplits(balance) {
-  // creates a minimal splits array from the given balance graph
-  // balance = { "3": -48, "4": 22, "5": -18, "6": 42, "7": 2 }
-
   // Step 1: Separate positive (creditors) and negative (debtors) balances
   const creditors = [];
   const debtors = [];
@@ -146,23 +80,6 @@ function calculateSplits(balance) {
   return splits;
 }
 
-function calcTolerance(before, after) {
-  // const before = { A: 117, B: -83, C: -33 };
-  // const after = { A: 116, B: -83, C: -33 };
-  const tolerance = {};
-
-  for (const key of Object.keys(before)) {
-    if (after[key] === undefined) continue;
-
-    const currTolerance = after[key] - before[key];
-    if (currTolerance != 0) {
-      tolerance[key] = currTolerance;
-    }
-  }
-
-  return tolerance;
-}
-
 function mergeChrono(expenses, splits) {
   const expEntries = expenses.map((expense) => ({
     type: "expense",
@@ -184,143 +101,6 @@ function mergeChrono(expenses, splits) {
 module.exports = {
   createBalance,
   calculateSplits,
-  getExpBalance,
   getSplitBalance,
-  calcTolerance,
   mergeChrono,
 };
-
-// const timeline = [
-//   {
-//     name: "exp3",
-//     totalAmt: 290,
-//     createdAt: "2025-04-04T17:17:05.369Z",
-//     payers: [
-//       {
-//         payerId: 6,
-//         paidAmt: 60,
-//       },
-//       {
-//         payerId: 5,
-//         paidAmt: 100,
-//       },
-//       {
-//         payerId: 4,
-//         paidAmt: 80,
-//       },
-//       {
-//         payerId: 3,
-//         paidAmt: 40,
-//       },
-//       {
-//         payerId: 2,
-//         paidAmt: 10,
-//       },
-//     ],
-//     type: "expense",
-//     timestamp: "2025-04-04T17:17:05.369Z",
-//     balance: {
-//       2: -48,
-//       3: -18,
-//       4: 22,
-//       5: 42,
-//       6: 2,
-//     },
-//   },
-//   {
-//     name: "exp1",
-//     totalAmt: 250,
-//     createdAt: "2025-04-07T10:45:50.295Z",
-//     payers: [
-//       {
-//         payerId: 4,
-//         paidAmt: 50,
-//       },
-//       {
-//         payerId: 3,
-//         paidAmt: 0,
-//       },
-//       {
-//         payerId: 2,
-//         paidAmt: 200,
-//       },
-//     ],
-//     type: "expense",
-//     timestamp: "2025-04-07T10:45:50.295Z",
-//     balance: {
-//       2: 69,
-//       3: -101,
-//       4: -11,
-//       5: 42,
-//       6: 2,
-//     },
-//   },
-//   {
-//     name: "exp2",
-//     totalAmt: 50,
-//     createdAt: "2025-04-07T10:46:14.075Z",
-//     payers: [
-//       {
-//         payerId: 3,
-//         paidAmt: 50,
-//       },
-//       {
-//         payerId: 2,
-//         paidAmt: 0,
-//       },
-//     ],
-//     type: "expense",
-//     timestamp: "2025-04-07T10:46:14.075Z",
-//     balance: {
-//       2: 44,
-//       3: -76,
-//       4: -11,
-//       5: 42,
-//       6: 2,
-//     },
-//   },
-//   {
-//     name: "exp4",
-//     totalAmt: 60,
-//     createdAt: "2025-04-07T10:46:23.475Z",
-//     payers: [
-//       {
-//         payerId: 6,
-//         paidAmt: 10,
-//       },
-//       {
-//         payerId: 4,
-//         paidAmt: 20,
-//       },
-//       {
-//         payerId: 3,
-//         paidAmt: 30,
-//       },
-//     ],
-//     type: "expense",
-//     timestamp: "2025-04-07T10:46:23.475Z",
-//     balance: {
-//       2: 44,
-//       3: -66,
-//       4: -11,
-//       5: 42,
-//       6: -8,
-//     },
-//   },
-//   {
-//     debtorId: 6,
-//     creditorId: 5,
-//     amount: 8,
-//     updatedAt: "2025-04-07T13:54:19.103Z",
-//     name: "Optimized Split",
-//     type: "split",
-//     timestamp: "2025-04-07T13:54:19.103Z",
-//     balance: {
-//       2: 44,
-//       3: -66,
-//       4: -11,
-//       5: 34,
-//       6: 0,
-//     },
-//   },
-// ];
