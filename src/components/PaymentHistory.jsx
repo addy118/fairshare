@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+"use client";
+
+import { useContext, useEffect, useState, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -15,6 +17,8 @@ import formatDate from "@/utils/formatDate";
 import { fetchHistory } from "@/utils/fetchGroupData";
 import { useParams } from "react-router-dom";
 import Loading from "./Loading";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export default function PaymentHistory() {
   const { id: groupId } = useParams();
@@ -23,6 +27,7 @@ export default function PaymentHistory() {
   const { history, setHistory } = useContext(GroupContext);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const pdfRef = useRef(null);
 
   // refresh history
   useEffect(() => {
@@ -64,7 +69,77 @@ export default function PaymentHistory() {
     );
   }
 
-  const handleExport = async () => {};
+  const handleExport = async () => {
+    try {
+      setIsExporting(true);
+
+      // Save the current expanded state to restore later
+      const originalExpandedState = { ...expandedItems };
+
+      // Expand all items
+      setExpandedItems(
+        history.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
+      );
+
+      // Wait for state update and DOM rendering
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      if (!pdfRef.current) {
+        console.error("PDF container reference is null");
+        return;
+      }
+
+      // Create PDF
+      const pdf = new jsPDF("p", "mm", "a4");
+      const container = pdfRef.current;
+
+      // Get the container dimensions
+      const containerWidth = container.offsetWidth;
+      const containerHeight = container.offsetHeight;
+
+      // Calculate scale to fit content on A4 page
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const scale = Math.min(pageWidth / containerWidth, 1);
+
+      // Generate canvas from container
+      const canvas = await html2canvas(container, {
+        scale: 2, // Higher scale for better quality
+        useCORS: true,
+        logging: true,
+        allowTaint: true,
+      });
+
+      // Add canvas to PDF
+      const imgData = canvas.toDataURL("image/png");
+
+      // Calculate how many pages we need
+      const totalPages = Math.ceil((containerHeight * scale) / pageHeight);
+
+      // Add first page
+      pdf.addImage(
+        imgData,
+        "PNG",
+        0,
+        0,
+        pageWidth,
+        (containerHeight * pageWidth) / containerWidth
+      );
+
+      // Save PDF
+      pdf.save(`${group.name}_payment_history.pdf`);
+
+      // Restore original expanded state
+      setExpandedItems(originalExpandedState);
+
+      console.log("PDF export completed successfully");
+    } catch (err) {
+      console.error("Error exporting PDF:", err);
+      alert("Failed to export PDF. Please try again.");
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   return (
     <>
@@ -79,10 +154,7 @@ export default function PaymentHistory() {
             <Button variant="outline" onClick={toggleAll}>
               Toggle All
             </Button>
-            <Button
-              variant="outline"
-              onClick={handleExport}
-            >
+            <Button variant="outline" onClick={handleExport}>
               {isExporting ? (
                 <Loading action="Exporting" item="history" />
               ) : (
@@ -93,7 +165,7 @@ export default function PaymentHistory() {
         </CardHeader>
 
         <CardContent>
-          <div className="space-y-4">
+          <div ref={pdfRef} className="payment-history-container space-y-4">
             {history?.map((item) => (
               <Card key={item.id} className="payment-card overflow-hidden">
                 <CardHeader className="pb-3">

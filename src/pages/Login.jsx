@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/authProvider";
 import { Link, useNavigate } from "react-router-dom";
-import Loading from "@/components/Loading";
 
 export default function LoginPage() {
   const { isAuth, login, loginErrors, loading } = useAuth();
@@ -102,7 +101,7 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full cursor-pointer border border-zinc-200 bg-zinc-200 text-black transition-colors duration-300 hover:border-zinc-800 hover:bg-zinc-800 hover:text-white active:border-zinc-200 active:bg-zinc-200 active:text-black"
+              className="w-full cursor-pointer border border-zinc-200 bg-zinc-200 text-black transition-colors duration-300 hover:border-zinc-300 hover:bg-zinc-300 active:border-zinc-200 active:bg-zinc-200 active:text-black"
               disabled={loading}
             >
               {loading ? (
