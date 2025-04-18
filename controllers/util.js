@@ -1,3 +1,6 @@
+const Group = require("../prisma/queries/Group");
+const User = require("../prisma/queries/User");
+
 function createBalance(expense) {
   const balance = {};
   const share = Math.floor(expense.totalAmt / expense.payers.length);
@@ -12,6 +15,35 @@ function createBalance(expense) {
       balance[split.payerId] = split.amount;
     }
   });
+  return balance;
+}
+
+async function getGroupBalance(groupId) {
+  const members = await Group.members(Number(groupId));
+  const { expenses, splits } = await Group.expenses(Number(groupId));
+  const settledSplits = splits.filter((split) => split.confirmed);
+
+  let balance = {};
+  members.forEach((mem) => (balance[mem.member.id] = 0));
+
+  // processing expenses
+  expenses.forEach((expense) => {
+    const share = Math.floor(expense.totalAmt / expense.payers.length);
+    expense.payers.forEach((payer) => {
+      balance[payer.payer.id] += payer.paidAmt - share;
+    });
+  });
+
+  // processing splits
+  settledSplits.forEach((split) => {
+    if (split.confirmed) {
+      // IMPORTANT: amounts are always positive
+      // NOTE: BEWARE OF +VE/-VE SIGNS
+      balance[split.debtor.id] += split.amount;
+      balance[split.creditor.id] -= split.amount;
+    }
+  });
+
   return balance;
 }
 
@@ -101,6 +133,7 @@ function mergeChrono(expenses, splits) {
 module.exports = {
   createBalance,
   calculateSplits,
+  getGroupBalance,
   getSplitBalance,
   mergeChrono,
 };

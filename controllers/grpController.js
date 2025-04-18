@@ -2,7 +2,12 @@ const { split } = require("../config/prismaClient");
 const Group = require("../prisma/queries/Group");
 const Split = require("../prisma/queries/Split");
 const User = require("../prisma/queries/User");
-const { calculateSplits, getSplitBalance, mergeChrono } = require("./util");
+const {
+  calculateSplits,
+  getSplitBalance,
+  mergeChrono,
+  getGroupBalance,
+} = require("./util");
 
 exports.postGrp = async (req, res) => {
   try {
@@ -76,33 +81,10 @@ exports.getAllExpenses = async (req, res) => {
 exports.getGrpBalance = async (req, res) => {
   try {
     const { grpId } = req.params;
-
-    const group = await Group.expenses(Number(grpId));
-    let splits = group.splits;
-
-    // get only unsettled splits for calculating balances
-    splits = splits.filter((split) => split.confirmed == false);
-
-    if (splits.length == 0) return res.json([]);
-
-    const cleanSplits = splits.map((split) => {
-      return {
-        debtor: {
-          id: Number(split.debtor.id),
-          name: split.debtor.name,
-        },
-        creditor: {
-          id: Number(split.creditor.id),
-          name: split.creditor.name,
-        },
-        amount: Number(split.amount),
-      };
-    });
-
-    const splitBalance = getSplitBalance(cleanSplits);
+    const rawBalance = await getGroupBalance(grpId);
 
     const balance = await Promise.all(
-      Object.entries(splitBalance).map(async ([userId, amount]) => ({
+      Object.entries(rawBalance).map(async ([userId, amount]) => ({
         user: {
           id: Number(userId),
           name: await User.getNameById(Number(userId)),
@@ -133,10 +115,8 @@ exports.getMinSplits = async (req, res) => {
   try {
     const { grpId } = req.params;
 
-    const splits = await Group.splits(Number(grpId));
-
-    const oldBalance = getSplitBalance(splits);
-    const newSplits = calculateSplits(oldBalance);
+    const balance = await getGroupBalance(grpId);
+    const newSplits = calculateSplits(balance);
     // console.log(newSplits);
 
     const splitsArr = newSplits.map((split) => {
@@ -191,7 +171,8 @@ exports.getGrpHistory = async (req, res) => {
 
       // past split
       else if (entry.type == "split") {
-        // amounts are always positive
+        // IMPORTANT: amounts are always positive
+        // NOTE: BEWARE OF +VE/-VE SIGNS
         balance[entry.debtor.id] += entry.amount;
         balance[entry.creditor.id] -= entry.amount;
       }
