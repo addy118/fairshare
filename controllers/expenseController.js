@@ -1,4 +1,4 @@
-const transporter = require("../config/nodeMailer");
+const { transporter } = require("../config/nodeMailer");
 const Expense = require("../prisma/queries/Expense");
 const Split = require("../prisma/queries/Split");
 const { createBalance, calculateSplits } = require("./util");
@@ -82,7 +82,7 @@ exports.notConfirmSplit = async (req, res) => {
 
 exports.remind = async (req, res) => {
   const { splitId } = req.params;
-  const split = Split.get(Number(splitId));
+  const split = await Split.get(Number(splitId));
   const to = split.creditor;
   const from = split.debtor;
 
