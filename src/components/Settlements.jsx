@@ -84,14 +84,22 @@ export default function Settlements() {
   const handleRemind = async (settlementId, toUserId) => {
     try {
       console.log("remind user " + toUserId);
-      const res = await api.get(`/user/${Number(toUserId)}/info`);
-      const toUser = res.data;
+      const userRes = await api.get(`/user/${Number(toUserId)}/info`);
+      if (userRes.status != 200) throw new Error("Can't fetch user!");
 
+      const toUser = userRes.data;
+
+      const remindRes = await api.post(`/exp/${Number(settlementId)}/remind`);
+      if (remindRes.status != 200) throw new Error("Unexpected error!");
+
+      toast.dismiss();
       toast.success(`Reminded to ${toUser.email}`);
-      
+
       console.log(toUser);
     } catch (err) {
+      toast.dismiss();
       console.error("Failed to settle transaction:", err);
+      toast.error("Failed to remind the user");
     }
   };
 
