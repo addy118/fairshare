@@ -1,6 +1,4 @@
-"use client";
-
-import { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -19,6 +17,7 @@ import { useParams } from "react-router-dom";
 import Loading from "./Loading";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { toast } from "sonner";
 
 export default function PaymentHistory() {
   const { id: groupId } = useParams();
@@ -135,7 +134,7 @@ export default function PaymentHistory() {
       console.log("PDF export completed successfully");
     } catch (err) {
       console.error("Error exporting PDF:", err);
-      alert("Failed to export PDF. Please try again.");
+      toast.error("Failed to export PDF. Please try again.");
     } finally {
       setIsExporting(false);
     }
