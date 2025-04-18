@@ -74,15 +74,28 @@ exports.putUserEmail = async (req, res) => {
   }
 };
 
-exports.putUserBio = async (req, res) => {
+exports.putUserUserName = async (req, res) => {
   const { userId } = req.params;
-  const { bio } = req.body;
+  const { username } = req.body;
 
   try {
-    await User.changeBio(Number(userId), bio);
-    res.status(200).json({ msg: "Bio updated successfully!" });
+    await User.changeUserName(Number(userId), username);
+    res.status(200).json({ msg: "Username updated successfully!" });
   } catch (err) {
-    console.error("ERROR in putUserBio:", err);
+    console.error("ERROR in putUserUserName:", err);
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+exports.putUserPhone = async (req, res) => {
+  const { userId } = req.params;
+  const { phone } = req.body;
+
+  try {
+    await User.changePhone(Number(userId), phone);
+    res.status(200).json({ msg: "Phone updated successfully!" });
+  } catch (err) {
+    console.error("ERROR in putUserPhone:", err);
     res.status(500).json({ msg: err.message });
   }
 };

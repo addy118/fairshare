@@ -11,7 +11,9 @@ class User {
       console.error("Error creating user: ", error.stack);
       if (error.code === "P2002") {
         // Handling unique constraint violation
-        throw new Error("A user with this email, phone or username already exists.");
+        throw new Error(
+          "A user with this email, phone or username already exists."
+        );
       }
       throw new Error("Failed to create user.");
     }
@@ -29,7 +31,7 @@ class User {
         // Handling unique constraint violation
         throw new Error("Email is already taken.");
       }
-      throw new Error("Failed to update user email.");
+      throw new Error("Failed to update user's email.");
     }
   }
 
@@ -41,7 +43,31 @@ class User {
       });
     } catch (error) {
       console.error("Error updating name: ", error.stack);
-      throw new Error("Failed to update user name.");
+      throw new Error("Failed to update user's name.");
+    }
+  }
+
+  static async changeUserName(userId, username) {
+    try {
+      await db.user.update({
+        where: { id: userId },
+        data: { username },
+      });
+    } catch (error) {
+      console.error("Error updating username: ", error.stack);
+      throw new Error("Failed to update user's username.");
+    }
+  }
+
+  static async changePhone(userId, phone) {
+    try {
+      await db.user.update({
+        where: { id: userId },
+        data: { phone },
+      });
+    } catch (error) {
+      console.error("Error updating name: ", error.stack);
+      throw new Error("Failed to update user's phone.");
     }
   }
 

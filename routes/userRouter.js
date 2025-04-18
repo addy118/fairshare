@@ -11,6 +11,8 @@ const {
   delUser,
   testProtected,
   getUserBal,
+  putUserUserName,
+  putUserPhone,
 } = require("../controllers/userController");
 const { validateReq } = require("../config/validation/req");
 const {
@@ -31,6 +33,8 @@ userRouter.post("/:userId/protected", testProtected);
 
 userRouter.put("/:userId/name", [validateName, validateReq, putUserName]);
 userRouter.put("/:userId/email", [validateEmail, validateReq, putUserEmail]);
+userRouter.put("/:userId/username", [validateReq, putUserUserName]);
+userRouter.put("/:userId/phone", [validateReq, putUserPhone]);
 userRouter.put("/:userId/password", [validatePass, validateReq, putUserPass]);
 
 userRouter.delete("/:userId", delUser);
