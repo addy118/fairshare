@@ -68,6 +68,7 @@ export default function PaymentHistory() {
     );
   }
 
+  // Update the handleExport function to add margins and improve color handling
   const handleExport = async () => {
     let originalExpandedState;
 
@@ -103,10 +104,10 @@ export default function PaymentHistory() {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       try {
-        // Create PDF with a specific page size
+        // Create PDF with a specific page size and margins
         const pdf = new jsPDF({
           orientation: "portrait",
-          unit: "px",
+          unit: "mm",
           format: "a4",
         });
         console.log("Created jsPDF instance");
@@ -118,16 +119,24 @@ export default function PaymentHistory() {
         const canvas = await html2canvas(container, {
           scale: 1.5,
           useCORS: true,
-          backgroundColor: "#ffffff",
-          logging: false, // Disable html2canvas verbose logging
+          backgroundColor: "#111827", // Dark background matching the UI
+          // backgroundColor: "#ffffff",
+          logging: false,
           ignoreElements: (element) => {
-            // Ignore elements that might cause issues
             return element.classList.contains("no-print");
           },
           onclone: (clonedDoc) => {
-            // Additional fixes for the cloned document if needed
+            // Additional fixes for the cloned document
             const clonedBody = clonedDoc.body;
             clonedBody.classList.add("pdf-export-mode");
+
+            // Apply consistent styling to payment cards
+            const cards = clonedBody.querySelectorAll(".payment-card");
+            cards.forEach((card) => {
+              card.style.backgroundColor = "rgba(17, 24, 39, 0.8)";
+              card.style.borderColor = "rgba(55, 65, 81, 0.5)";
+              card.style.color = "#d1d5db";
+            });
 
             // Remove any remaining problematic CSS properties
             const elements = clonedBody.querySelectorAll("*");
@@ -143,24 +152,38 @@ export default function PaymentHistory() {
         });
         console.log("html2canvas conversion complete");
 
-        // Get dimensions
-        const imgWidth = pdf.internal.pageSize.getWidth();
+        // Get dimensions with margins
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        // Define margins (in mm)
+        const margin = {
+          top: 15,
+          right: 15,
+          bottom: 15,
+          left: 15,
+        };
+
+        const contentWidth = pageWidth - margin.left - margin.right;
+        const contentHeight = pageHeight - margin.top - margin.bottom;
+
+        const imgWidth = contentWidth;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        // Add image to PDF
+        // Add image to PDF with margins
         pdf.addImage(
           canvas.toDataURL("image/png"),
           "PNG",
-          0,
-          0,
+          margin.left,
+          margin.top,
           imgWidth,
           imgHeight
         );
 
-        // If content is too tall, add more pages
+        // If content is too tall, add more pages with proper margins
         let heightLeft = imgHeight;
         let position = 0;
-        heightLeft -= pdf.internal.pageSize.getHeight();
+        heightLeft -= contentHeight;
 
         while (heightLeft > 0) {
           position = heightLeft - imgHeight;
@@ -168,25 +191,25 @@ export default function PaymentHistory() {
           pdf.addImage(
             canvas.toDataURL("image/png"),
             "PNG",
-            0,
-            position,
+            margin.left,
+            margin.top + position,
             imgWidth,
             imgHeight
           );
-          heightLeft -= pdf.internal.pageSize.getHeight();
+          heightLeft -= contentHeight;
         }
 
         // Save the PDF
         pdf.save(`${group.name}_payment_history.pdf`);
-        console.log("PDF export completed successfully");
+        toast.success("PDF export completed successfully");
       } catch (innerError) {
         console.error("Inner error during PDF generation:", innerError);
-        alert(`Failed to generate PDF: ${innerError.message}`);
+        toast.error(`Failed to generate PDF: ${innerError.message}`);
         throw innerError;
       }
     } catch (outerError) {
       console.error("Outer error exporting PDF:", outerError);
-      alert(`Failed to export PDF: ${outerError.message}`);
+      toast.error(`Failed to export PDF: ${outerError.message}`);
     } finally {
       console.log("Cleaning up...");
       document.body.classList.remove("pdf-export-mode");

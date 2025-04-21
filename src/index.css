@@ -426,7 +426,6 @@ input {
 }
 
 /* Additional styles for PDF export */
-/* Add this to your CSS file */
 .pdf-export-mode {
   /* Replace oklch colors with hex/rgb equivalents */
   --teal-400: #22d3ee !important;
