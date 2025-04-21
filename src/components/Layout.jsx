@@ -90,6 +90,8 @@ export default function Layout() {
     );
   };
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="flex min-h-screen flex-col bg-[#0f1728]">
       <div className="sticky top-0 z-50 w-full border-b border-[#0f1728] bg-gray-900/90 shadow-lg backdrop-blur-md">
@@ -241,9 +243,39 @@ export default function Layout() {
           </div>
         </header>
       </div>
+
       <div className="flex-1 bg-[#0f1728] py-16">
         <Outlet />
       </div>
+
+      <footer className="relative overflow-hidden border-t border-gray-800 bg-gray-900 px-6 py-6 md:py-8">
+        <div className="relative mx-auto max-w-6xl">
+          <div className="text-center text-sm text-gray-500">
+            <p>© {currentYear} FairShare. All rights reserved.</p>
+
+            {/* <div className="mt-2 flex justify-center space-x-4">
+              <a
+                href="#"
+                className="transition-colors duration-300 hover:text-gray-300"
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="#"
+                className="transition-colors duration-300 hover:text-gray-300"
+              >
+                Terms of Service
+              </a>
+              <a
+                href="#"
+                className="transition-colors duration-300 hover:text-gray-300"
+              >
+                Cookies
+              </a>
+            </div> */}
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
