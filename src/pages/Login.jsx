@@ -51,7 +51,9 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="data">Username or Email</Label>
+              <Label className="text-white" htmlFor="data">
+                Username or Email
+              </Label>
 
               <Input
                 id="data"
@@ -73,7 +75,9 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
+                <Label className="text-white" htmlFor="password">
+                  Password
+                </Label>
                 <a
                   href="/forgot-password"
                   className="text-sm text-teal-400 hover:underline"

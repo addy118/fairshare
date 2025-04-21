@@ -104,10 +104,7 @@ export default function Layout() {
 
           <div className="flex items-center space-x-4 text-white">
             {isAuth && (
-              <Button
-                onClick={() => navigate("groups")}
-                variant="ghost"
-              >
+              <Button onClick={() => navigate("groups")} variant="ghost">
                 <Users className="mr-2 h-4 w-4" />
                 My Groups
               </Button>
@@ -214,29 +211,37 @@ export default function Layout() {
 
             <DropdownMenu>
               <DropdownMenuTrigger className="cursor-pointer">
-                <Button variant="ghost" className="hover:text-teal-400">
+                <Button
+                  variant="ghost"
+                  className="gap-2 text-white transition-colors hover:text-teal-400"
+                >
                   <User className="h-5 w-5" />
                   Account
                 </Button>
               </DropdownMenuTrigger>
+
               <DropdownMenuContent
                 side="bottom"
                 align="end"
                 sideOffset={8}
-                className="glass-dark rounded-md border border-gray-700/50 bg-gray-800/90 text-white shadow-md backdrop-blur-md"
+                className="z-50 min-w-[180px] rounded-xl border border-gray-700/50 bg-gray-800/90 p-2 text-white shadow-xl backdrop-blur-md transition-all duration-200"
               >
                 {isAuth ? (
                   <>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator className="bg-gray-700" />
+                    <DropdownMenuLabel className="px-2 py-1 text-sm text-gray-300">
+                      My Account
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator className="my-1 bg-gray-700" />
+
                     <Link to={"/profile"}>
-                      <DropdownMenuItem className="cursor-pointer hover:text-teal-400">
+                      <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400">
                         Profile
                       </DropdownMenuItem>
                     </Link>
+
                     <DropdownMenuItem
                       onClick={logout}
-                      className="hover:text-red-400"
+                      className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm text-red-300 transition-colors hover:bg-red-900/40 hover:text-red-400"
                     >
                       Log Out
                     </DropdownMenuItem>
@@ -244,12 +249,12 @@ export default function Layout() {
                 ) : (
                   <>
                     <Link to={`/login`}>
-                      <DropdownMenuItem className="cursor-pointer hover:text-teal-400">
+                      <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400">
                         Login
                       </DropdownMenuItem>
                     </Link>
                     <Link to={`/signup`}>
-                      <DropdownMenuItem className="cursor-pointer hover:text-teal-400">
+                      <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400">
                         Register
                       </DropdownMenuItem>
                     </Link>
