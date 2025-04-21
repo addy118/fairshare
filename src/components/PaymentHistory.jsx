@@ -109,8 +109,20 @@ export default function PaymentHistory() {
           orientation: "portrait",
           unit: "mm",
           format: "a4",
+          putOnlyUsedFonts: true,
+          floatPrecision: 16,
         });
-        console.log("Created jsPDF instance");
+
+        // Add a colored background to the entire PDF page (including margins)
+        pdf.setFillColor(17, 24, 39); // RGB values for #111827
+        pdf.rect(
+          0,
+          0,
+          pdf.internal.pageSize.getWidth(),
+          pdf.internal.pageSize.getHeight(),
+          "F"
+        );
+        console.log("Created jsPDF instance with background color");
 
         const container = pdfRef.current;
 
@@ -188,6 +200,15 @@ export default function PaymentHistory() {
         while (heightLeft > 0) {
           position = heightLeft - imgHeight;
           pdf.addPage();
+          // Add background color to the new page too
+          pdf.setFillColor(17, 24, 39); // RGB values for #111827
+          pdf.rect(
+            0,
+            0,
+            pdf.internal.pageSize.getWidth(),
+            pdf.internal.pageSize.getHeight(),
+            "F"
+          );
           pdf.addImage(
             canvas.toDataURL("image/png"),
             "PNG",
