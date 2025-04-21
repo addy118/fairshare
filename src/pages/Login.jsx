@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -40,11 +39,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center">
-      <Card className="w-full max-w-md">
+    <div className="flex items-center justify-center px-4">
+      <Card className="glass-dark w-full max-w-md border border-gray-700/50 shadow-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl">Log In</CardTitle>
-          <CardDescription>
+          <CardTitle className="gradient-text text-2xl">Log In</CardTitle>
+          <CardDescription className="text-gray-300">
             Enter your credentials to access your account
           </CardDescription>
         </CardHeader>
@@ -61,6 +60,7 @@ export default function LoginPage() {
                 value={formData.data}
                 onChange={handleChange}
                 disabled={loading}
+                className="border-gray-700 bg-gray-800/50"
               />
 
               {loginErrors.data &&
@@ -76,7 +76,7 @@ export default function LoginPage() {
                 <Label htmlFor="password">Password</Label>
                 <a
                   href="/forgot-password"
-                  className="text-primary text-sm hover:underline"
+                  className="text-sm text-teal-400 hover:underline"
                 >
                   Forgot password?
                 </a>
@@ -89,6 +89,7 @@ export default function LoginPage() {
                 value={formData.password}
                 onChange={handleChange}
                 disabled={loading}
+                className="border-gray-700 bg-gray-800/50"
               />
 
               {loginErrors.password &&
@@ -101,13 +102,13 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full cursor-pointer border border-zinc-200 bg-zinc-200 text-black transition-colors duration-300 hover:border-zinc-300 hover:bg-zinc-300 active:border-zinc-200 active:bg-zinc-200 active:text-black"
+              className="w-full bg-gradient-to-r from-teal-500 to-teal-400 text-white shadow-lg transition-all duration-300 hover:from-teal-400 hover:to-teal-500 hover:shadow-teal-500/25"
               disabled={loading}
             >
               {loading ? (
                 <div className="flex items-center justify-center">
                   <span className="mr-2">Logging in</span>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-800 border-t-transparent"></span>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
                 </div>
               ) : (
                 "Log In"
@@ -117,9 +118,9 @@ export default function LoginPage() {
         </CardContent>
 
         <CardFooter className="flex justify-center">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-gray-400">
             Don't have an account?{" "}
-            <Link to={`/signup`} className="text-primary hover:underline">
+            <Link to={`/signup`} className="text-teal-400 hover:underline">
               Sign up
             </Link>
           </p>

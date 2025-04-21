@@ -26,6 +26,7 @@ import api from "@/axiosInstance";
 import { CardContent, CardFooter } from "./ui/card";
 import Loading from "./Loading";
 import Logo from "./Logo";
+import ParticleBackground from "./landingPage/ParticleBg";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -93,8 +94,11 @@ export default function Layout() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#0f1728]">
-      <div className="sticky top-0 z-50 w-full border-b border-[#0f1728] bg-gray-900/90 shadow-lg backdrop-blur-md">
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800 font-sans text-white">
+      {/* Background elements */}
+      <ParticleBackground />
+
+      <div className="sticky top-0 z-50 w-full border-b border-gray-800 bg-gray-900/90 shadow-lg backdrop-blur-md">
         <header className="mx-auto flex h-16 items-center justify-between px-4 md:px-12 lg:h-20">
           <Logo />
 
@@ -103,7 +107,6 @@ export default function Layout() {
               <Button
                 onClick={() => navigate("groups")}
                 variant="ghost"
-                className="hover:text-teal-400"
               >
                 <Users className="mr-2 h-4 w-4" />
                 My Groups
@@ -113,13 +116,13 @@ export default function Layout() {
             {isAuth && (
               <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
                 <DialogTrigger asChild>
-                  <Button variant="ghost" className="hover:text-teal-400">
+                  <Button variant="ghost">
                     <PlusCircle className="mr-2 h-4 w-4" />
                     Create Group
                   </Button>
                 </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
+                <DialogContent className="glass-dark border border-gray-700/50">
+                  <DialogHeader className="text-teal-400">
                     <DialogTitle>Create New Group</DialogTitle>
                     <DialogDescription>
                       Enter a name for your new expense sharing group.
@@ -128,23 +131,27 @@ export default function Layout() {
                   <form onSubmit={handleCreateGroup}>
                     <CardContent className="space-y-6">
                       <div className="space-y-2">
-                        <Label htmlFor="group-name">Group Name</Label>
+                        <Label htmlFor="group-name" className="text-teal-400">
+                          Group Name
+                        </Label>
                         <Input
                           id="group-name"
                           placeholder="Roommates, Goa Trip, etc."
                           value={newGroupName}
                           onChange={(e) => setNewGroupName(e.target.value)}
                           required
+                          className="border-gray-700 bg-gray-800/50"
                         />
                       </div>
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                          <Label>Group members</Label>
+                          <Label className="text-teal-400">Group members</Label>
                           <Button
                             type="button"
                             variant="outline"
                             size="sm"
                             onClick={addMemberField}
+                            className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
                           >
                             <Plus className="mr-1 h-4 w-4" /> Add Member
                           </Button>
@@ -155,7 +162,10 @@ export default function Layout() {
                             className="flex items-center gap-2"
                           >
                             <div className="flex-1">
-                              <Label htmlFor={`member-${member.id}`}>
+                              <Label
+                                htmlFor={`member-${member.id}`}
+                                className="mb-3 text-teal-400"
+                              >
                                 Username
                               </Label>
                               <Input
@@ -168,6 +178,7 @@ export default function Layout() {
                                   )
                                 }
                                 required
+                                className="border-gray-700 bg-gray-800/50"
                               />
                             </div>
                             <Button
@@ -176,7 +187,7 @@ export default function Layout() {
                               size="icon"
                               onClick={() => removeMemberField(member.id)}
                               disabled={newMembers.length === 1}
-                              className="mt-6"
+                              className="mt-6 hover:text-red-400"
                             >
                               <Trash className="h-4 w-4 text-red-600" />
                             </Button>
@@ -185,7 +196,10 @@ export default function Layout() {
                       </div>
                     </CardContent>
                     <CardFooter>
-                      <Button type="submit" className="mt-4 w-full">
+                      <Button
+                        type="submit"
+                        className="mt-4 w-full border-none bg-gradient-to-r from-teal-500 to-teal-400 text-white hover:from-teal-400 hover:to-teal-500"
+                      >
                         {loading ? (
                           <Loading action="Creating" item="group" />
                         ) : (
@@ -209,30 +223,33 @@ export default function Layout() {
                 side="bottom"
                 align="end"
                 sideOffset={8}
-                className="rounded-md border bg-white shadow-md"
+                className="glass-dark rounded-md border border-gray-700/50 bg-gray-800/90 text-white shadow-md backdrop-blur-md"
               >
                 {isAuth ? (
                   <>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
+                    <DropdownMenuSeparator className="bg-gray-700" />
                     <Link to={"/profile"}>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer hover:text-teal-400">
                         Profile
                       </DropdownMenuItem>
                     </Link>
-                    <DropdownMenuItem onClick={logout}>
+                    <DropdownMenuItem
+                      onClick={logout}
+                      className="hover:text-red-400"
+                    >
                       Log Out
                     </DropdownMenuItem>
                   </>
                 ) : (
                   <>
                     <Link to={`/login`}>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer hover:text-teal-400">
                         Login
                       </DropdownMenuItem>
                     </Link>
                     <Link to={`/signup`}>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer hover:text-teal-400">
                         Register
                       </DropdownMenuItem>
                     </Link>
@@ -244,35 +261,14 @@ export default function Layout() {
         </header>
       </div>
 
-      <div className="flex-1 bg-[#0f1728] py-16">
+      <div className="flex-1 py-16">
         <Outlet />
       </div>
 
-      <footer className="relative overflow-hidden border-t border-gray-800 bg-gray-900 px-6 py-6 md:py-8">
+      <footer className="relative overflow-hidden border-t border-gray-800 bg-gray-900/80 px-6 py-6 backdrop-blur-sm md:py-8">
         <div className="relative mx-auto max-w-6xl">
           <div className="text-center text-sm text-gray-500">
             <p>© {currentYear} FairShare. All rights reserved.</p>
-
-            {/* <div className="mt-2 flex justify-center space-x-4">
-              <a
-                href="#"
-                className="transition-colors duration-300 hover:text-gray-300"
-              >
-                Privacy Policy
-              </a>
-              <a
-                href="#"
-                className="transition-colors duration-300 hover:text-gray-300"
-              >
-                Terms of Service
-              </a>
-              <a
-                href="#"
-                className="transition-colors duration-300 hover:text-gray-300"
-              >
-                Cookies
-              </a>
-            </div> */}
           </div>
         </div>
       </footer>

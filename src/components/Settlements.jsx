@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import UserPic from "./UserPic";
 import { Avatar } from "./ui/avatar";
 import { Button } from "./ui/button";
@@ -12,7 +12,6 @@ import {
   fetchExpensesAndSettlments,
 } from "@/utils/fetchGroupData";
 import { useParams } from "react-router-dom";
-import format from "@/utils/formatGroup";
 import Loading from "./Loading";
 import { toast } from "sonner";
 
@@ -21,7 +20,6 @@ export default function Settlements() {
   const { user } = useAuth();
   const { settlements, setSettlements, setBalances } = useContext(GroupContext);
   const [loading, setLoading] = useState(false);
-  // console.log(settlements);
 
   const handleOptimization = async () => {
     try {
@@ -106,9 +104,9 @@ export default function Settlements() {
   return (
     <div className="space-y-6">
       {settlements?.length === 0 ? (
-        <Card>
+        <Card className="glass-dark border border-gray-700/50 shadow-lg">
           <CardContent className="pt-6">
-            <p className="text-center">
+            <p className="text-center text-gray-300">
               No settlements exist. Add expenses in the group to generate
               settlements!
             </p>
@@ -118,9 +116,8 @@ export default function Settlements() {
         <div className="mb-20 space-y-4">
           <>
             <Button
-              className="w-full"
+              className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg transition-all duration-300 hover:from-purple-500 hover:to-purple-600 hover:shadow-purple-500/30"
               size="sm"
-              variant="outline"
               onClick={handleOptimization}
               style={{ letterSpacing: "0.5em" }}
             >
@@ -133,32 +130,30 @@ export default function Settlements() {
             {settlements?.map((settlement) => (
               <Card
                 key={settlement.id}
-                className={`${settlement.confirmed ? "opacity-50" : ""} rounded-sm`}
+                className={`${settlement.confirmed ? "opacity-50" : ""} glass-dark rounded-sm border border-gray-700/50`}
               >
-                <CardContent>
+                <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       {/* source */}
-                      <Avatar>
+                      <Avatar className="border border-gray-700">
                         <UserPic name={settlement.from.name} />
                       </Avatar>
 
                       <div className="flex flex-col">
-                        <span className="font-medium">
+                        <span className="font-medium text-gray-300">
                           {settlement.from.name}
                         </span>
                       </div>
 
-                      <span className="text-muted-foreground text-sm">
-                        owes
-                      </span>
+                      <span className="text-sm text-gray-400">owes</span>
 
                       {/* destination */}
-                      <Avatar>
+                      <Avatar className="border border-gray-700">
                         <UserPic name={settlement.to.name} />
                       </Avatar>
                       <div className="flex flex-col">
-                        <span className="font-medium">
+                        <span className="font-medium text-gray-300">
                           {settlement.to.name}
                         </span>
                       </div>
@@ -166,7 +161,7 @@ export default function Settlements() {
 
                     {/* amount */}
                     <div className="flex items-center gap-4">
-                      <span className="font-bold">
+                      <span className="font-bold text-teal-400">
                         ₹{settlement.amount.toFixed(2)}
                       </span>
 
@@ -183,6 +178,7 @@ export default function Settlements() {
                         <div className="flex gap-2">
                           <Button
                             size="sm"
+                            className="bg-green-600 hover:bg-green-700"
                             onClick={() => handleConfirm(settlement.id, true)}
                           >
                             Received
@@ -190,6 +186,7 @@ export default function Settlements() {
                           <Button
                             size="sm"
                             variant="outline"
+                            className="border-gray-700 hover:bg-gray-700/70 hover:text-red-400"
                             onClick={() => handleConfirm(settlement.id, false)}
                           >
                             Didn't receive
@@ -199,6 +196,7 @@ export default function Settlements() {
                         !settlement.settled ? (
                         <Button
                           size="sm"
+                          className="bg-teal-500 hover:bg-teal-600"
                           onClick={() => handleSettle(settlement.id)}
                         >
                           Settle
@@ -208,6 +206,7 @@ export default function Settlements() {
                         <Button
                           size="sm"
                           variant="outline"
+                          className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
                           onClick={() =>
                             handleRemind(settlement.id, settlement.to.id)
                           }

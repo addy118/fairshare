@@ -24,49 +24,37 @@ export default function GrpSummary() {
   }, [groupId]);
 
   return (
-    <Card>
+    <Card className="glass-dark hover-lift border border-gray-700/50 shadow-lg transition-all duration-300">
       <CardHeader>
-        <CardTitle>Group Summary</CardTitle>
-        <CardDescription>Overview of group expenses</CardDescription>
+        <CardTitle className="gradient-text-purple">Group Summary</CardTitle>
+        <CardDescription className="text-gray-300">
+          Overview of group expenses
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
         <div className="space-y-4">
           {/* total of group expenses */}
           <div className="flex justify-between">
-            <span>Total Group Expenses</span>
-            <span className="font-bold">
+            <span className="text-gray-300">Total Group Expenses</span>
+            <span className="font-bold text-teal-400">
               ₹{group.totalExpenses?.toFixed(2) || "0.00"}
             </span>
           </div>
 
           {/* number of expenses */}
           <div className="flex justify-between">
-            <span>Number of Expenses</span>
-            <span className="font-bold">{group.expenses?.length}</span>
+            <span className="text-gray-300">Number of Expenses</span>
+            <span className="font-bold text-purple-400">
+              {group.expenses?.length}
+            </span>
           </div>
 
           {/* group members */}
           <div className="flex justify-between">
-            <span>Group Members</span>
-            <span className="font-bold">{group.memberCount}</span>
+            <span className="text-gray-300">Group Members</span>
+            <span className="font-bold text-teal-400">{group.memberCount}</span>
           </div>
-
-          {/* user balance */}
-          {/* <div className="flex justify-between">
-            <span>Your Balance</span>
-            {group.userBalance > 0 ? (
-              <span className="font-bold text-green-600">
-                +₹{group.userBalance.toFixed(2)}
-              </span>
-            ) : group.userBalance < 0 ? (
-              <span className="font-bold text-red-600">
-                -₹{Math.abs(group.userBalance).toFixed(2)}
-              </span>
-            ) : (
-              <span className="font-bold">₹0.00</span>
-            )}
-          </div> */}
         </div>
       </CardContent>
     </Card>

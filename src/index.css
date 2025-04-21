@@ -435,3 +435,7 @@
     animation: none !important;
   }
 }
+
+input {
+  color: teal;
+}

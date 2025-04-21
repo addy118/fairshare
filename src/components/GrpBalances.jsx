@@ -18,23 +18,23 @@ export default function GrpBalances() {
   const { user } = useAuth();
   const { group, balances, setBalances } = useContext(GroupContext);
   const members = group?.members;
-  // console.log("members: ", members);
 
   // refresh balance
   useEffect(() => {
     const refreshBalances = async () => {
       const newBalance = await fetchBalances(groupId);
       setBalances(newBalance);
-      // console.log("balances: ", newBalance);
     };
     refreshBalances();
   }, [groupId]);
 
   return (
-    <Card>
+    <Card className="glass-dark hover-lift border border-gray-700/50 shadow-lg transition-all duration-300">
       <CardHeader>
-        <CardTitle>Group Balances</CardTitle>
-        <CardDescription>Current balance for each member</CardDescription>
+        <CardTitle className="gradient-text">Group Balances</CardTitle>
+        <CardDescription className="text-gray-300">
+          Current balance for each member
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -46,17 +46,17 @@ export default function GrpBalances() {
                   className="flex items-center justify-between"
                 >
                   <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
+                    <Avatar className="h-8 w-8 border border-gray-700">
                       <UserPic name={member.name} />
                     </Avatar>
-                    <span>{member.name}</span>
+                    <span className="text-gray-300">{member.name}</span>
                     {member.id == user.id && (
-                      <span className="bg-muted rounded-full px-2 py-0.5 text-xs">
+                      <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-teal-400">
                         You
                       </span>
                     )}
                   </div>
-                  <span className="font-medium">₹0.00</span>
+                  <span className="font-medium text-gray-300">₹0.00</span>
                 </li>
               ))
             : members?.map((member) => {
@@ -69,24 +69,18 @@ export default function GrpBalances() {
                     className="flex items-center justify-between"
                   >
                     <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8">
+                      <Avatar className="h-8 w-8 border border-gray-700">
                         <UserPic name={member.name} />
                       </Avatar>
-                      <span>{member.name}</span>
+                      <span className="text-gray-300">{member.name}</span>
                       {isCurrentUser && (
-                        <span className="bg-muted rounded-full px-2 py-0.5 text-xs">
+                        <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-teal-400">
                           You
                         </span>
                       )}
                     </div>
                     <span
-                      className={`font-medium ${
-                        balance > 0
-                          ? "text-green-600"
-                          : balance < 0
-                            ? "text-red-600"
-                            : ""
-                      }`}
+                      className={`font-medium ${balance > 0 ? "text-green-600" : balance < 0 ? "text-red-600" : "text-gray-300"}`}
                     >
                       {balance > 0
                         ? `+₹${balance.toFixed(2)}`

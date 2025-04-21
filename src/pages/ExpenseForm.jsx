@@ -65,7 +65,6 @@ export default function ExpenseForm() {
   };
 
   const handleCreateExpense = async (expense) => {
-    // in a real app, you would send this to your api
     try {
       setLoading(true);
       await api.post("/exp/new", expense, {
@@ -73,16 +72,12 @@ export default function ExpenseForm() {
           "Content-Type": "application/json",
         },
       });
-      // console.log("Creating expense:", expense);
       setLoading(false);
       alert("Expense submitted successfully!");
       navigate(`/groups/${Number(groupId)}`);
     } catch (err) {
       console.error("Failed to create an expense: ", err);
     }
-
-    // Navigate back to group page after successful submission
-    // navigate(`/groups/${groupId}`);
   };
 
   const handleSubmit = (e) => {
@@ -108,9 +103,7 @@ export default function ExpenseForm() {
 
     if (Math.abs(Number.parseFloat(totalAmount) - payersTotal) > 0.01) {
       alert(
-        `Payer amounts total (${payersTotal.toFixed(
-          2
-        )}) doesn't match expense total (${Number.parseFloat(
+        `Payer amounts total (${payersTotal.toFixed(2)}) doesn't match expense total (${Number.parseFloat(
           totalAmount
         ).toFixed(2)})`
       );
@@ -132,13 +125,13 @@ export default function ExpenseForm() {
 
   return (
     <div className="mx-auto mb-20 max-w-xl px-4">
-      <h1 className="mb-4 text-2xl font-bold">Create Expense</h1>
+      <h1 className="gradient-text mb-4 text-2xl font-bold">Create Expense</h1>
 
-      <Card>
+      <Card className="glass-dark border border-gray-700/50 shadow-lg">
         <CardHeader>
-          <CardTitle>Create New Expense</CardTitle>
-          <CardDescription>
-            Add a new expense with multiple payers
+          <CardTitle className="text-teal-400">Create New Expense</CardTitle>
+          <CardDescription className="text-gray-300">
+            Add a new expense with multiple participants
           </CardDescription>
         </CardHeader>
 
@@ -146,19 +139,24 @@ export default function ExpenseForm() {
           <CardContent className="space-y-6">
             {/* expense name */}
             <div className="space-y-2">
-              <Label htmlFor="expense-name">Expense Name</Label>
+              <Label className="text-teal-400" htmlFor="expense-name">
+                Expense Name
+              </Label>
               <Input
                 id="expense-name"
                 placeholder="Dinner, Groceries, Movie tickets, etc."
                 value={expenseName}
                 onChange={(e) => setExpenseName(e.target.value)}
                 required
+                className="border-gray-700 bg-gray-800/50"
               />
             </div>
 
             {/* total amount */}
             <div className="space-y-2">
-              <Label htmlFor="total-amount">Total Amount</Label>
+              <Label className="text-teal-400" htmlFor="total-amount">
+                Total Amount
+              </Label>
               <Input
                 id="total-amount"
                 type="number"
@@ -166,7 +164,7 @@ export default function ExpenseForm() {
                 min="0"
                 placeholder="0"
                 value={totalAmount}
-                className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="appearance-none border-gray-700 bg-gray-800/50 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 onChange={(e) => setTotalAmount(e.target.value)}
                 required
               />
@@ -175,12 +173,13 @@ export default function ExpenseForm() {
             {/* dynamic payers */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label>Payers</Label>
+                <Label className="text-teal-400">Participants</Label>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={addPayer}
+                  className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
                 >
                   <Plus className="mr-1 h-4 w-4" /> Add Payer
                 </Button>
@@ -189,7 +188,12 @@ export default function ExpenseForm() {
               {payers.map((payer) => (
                 <div key={payer.id} className="flex items-center gap-2">
                   <div className="flex-1">
-                    <Label htmlFor={`payer-${payer.id}`}>Payer</Label>
+                    <Label
+                      className="mb-3 text-teal-400"
+                      htmlFor={`payer-${payer.id}`}
+                    >
+                      Participant
+                    </Label>
                     <div className="mt-1">
                       <Select
                         value={payer.payerId}
@@ -198,14 +202,18 @@ export default function ExpenseForm() {
                         }
                         required
                       >
-                        <SelectTrigger id={`payer-${payer.id}`}>
+                        <SelectTrigger
+                          id={`payer-${payer.id}`}
+                          className="border-gray-700 bg-gray-800/50 text-teal-600"
+                        >
                           <SelectValue placeholder="Select a payer" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="glass-dark border border-gray-700/50">
                           {users.map((user) => (
                             <SelectItem
                               key={user.id}
                               value={user.id.toString()}
+                              className="text-teal-400"
                             >
                               {user.name}
                             </SelectItem>
@@ -216,7 +224,12 @@ export default function ExpenseForm() {
                   </div>
 
                   <div className="flex-1">
-                    <Label htmlFor={`amount-${payer.id}`}>Amount</Label>
+                    <Label
+                      className="mb-3 text-teal-400"
+                      htmlFor={`amount-${payer.id}`}
+                    >
+                      Amount
+                    </Label>
                     <Input
                       id={`amount-${payer.id}`}
                       type="number"
@@ -228,7 +241,7 @@ export default function ExpenseForm() {
                         updatePayer(payer.id, "amount", e.target.value)
                       }
                       required
-                      className="mt-1 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                      className="mt-1 appearance-none border-gray-700 bg-gray-800/50 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     />
                   </div>
 
@@ -238,7 +251,7 @@ export default function ExpenseForm() {
                     size="icon"
                     onClick={() => removePayer(payer.id)}
                     disabled={payers.length === 1}
-                    className="mt-6"
+                    className="mt-6 hover:text-red-400"
                   >
                     <Trash className="h-4 w-4 text-red-600" />
                   </Button>
@@ -246,26 +259,29 @@ export default function ExpenseForm() {
               ))}
 
               <div className="flex justify-between pt-2 text-sm">
-                <span>Payers Total:</span>
+                <span className="text-gray-300">Participants Total:</span>
                 <span
                   className={
                     Math.abs(
                       Number.parseFloat(totalAmount || 0) - payersTotal
                     ) > 0.01
                       ? "font-medium text-red-600"
-                      : "font-medium"
+                      : "font-medium text-teal-400"
                   }
                 >
-                  ${payersTotal.toFixed(2)}
+                  ₹{payersTotal.toFixed(2)}
                   {totalAmount &&
-                    ` / $${Number.parseFloat(totalAmount).toFixed(2)}`}
+                    ` / ₹${Number.parseFloat(totalAmount).toFixed(2)}`}
                 </span>
               </div>
             </div>
           </CardContent>
 
           <CardFooter>
-            <Button type="submit" className="mt-4 w-full">
+            <Button
+              type="submit"
+              className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-400 text-white shadow-lg transition-all duration-300 hover:from-teal-400 hover:to-teal-500 hover:shadow-teal-500/25"
+            >
               {loading ? (
                 <Loading action="Creating" item="expense" />
               ) : (

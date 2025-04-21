@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, IndianRupee, Trash } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import Loading from "@/components/Loading";
 import Settlements from "@/components/Settlements";
 import GrpBalances from "@/components/GrpBalances";
@@ -68,19 +68,14 @@ export default function GroupPage() {
     }
 
     try {
-      // console.log(newMembers); // [{ id, username }, {...}, ...]
       console.log("adding members to new group...");
       console.log(newMembers);
       for (const user of newMembers) {
-        // console.log("adding user ", user.username);
-
         setIsLoading(true);
         await api.post(`/grp/${groupId}/member/new`, {
           username: user.username,
         });
         setIsLoading(false);
-
-        // console.log("added user ", user.username);
       }
 
       console.log("members added successfully!");
@@ -125,7 +120,7 @@ export default function GroupPage() {
       console.log(`user ${user.id} left the group ${groupId}`);
       navigate("/groups");
     } catch (err) {
-      console.error("Error leaving group: ", error);
+      console.error("Error leaving group: ", err);
       alert("Error leaving the group ", err);
     }
   };
@@ -176,107 +171,120 @@ export default function GroupPage() {
         {group && (
           <>
             {/* group header */}
-            <div className="mb-8 flex flex-col items-start justify-between md:flex-row md:items-center">
-              <h1 className="text-2xl font-bold">{group.name}</h1>
+            <div className="glass-dark mb-8 rounded-lg border border-gray-700/50 p-6 shadow-lg">
+              <div className="flex flex-col items-start justify-between md:flex-row md:items-center">
+                <h1 className="gradient-text mb-4 text-2xl font-bold md:mb-0">
+                  {group.name}
+                </h1>
 
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => navigate(`/groups/${groupId}/expense/new`)}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Expense
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate(`/groups/${groupId}/expense/new`)}
+                    className=""
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Expense
+                  </Button>
 
-                <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline">
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add New Member
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Add new group members</DialogTitle>
-                      <DialogDescription>
-                        Enter username for new members you wish to add in this
-                        group.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handleCreateGroup}>
-                      <CardContent className="space-y-6">
-                        {/* dynamic new member */}
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between">
-                            <Label>Group members</Label>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={addMemberField}
-                            >
-                              <Plus className="mr-1 h-4 w-4" /> Add Member
-                            </Button>
-                          </div>
-
-                          {newMembers?.map((member, index) => (
-                            <div
-                              key={member.id}
-                              className="flex items-center gap-2"
-                            >
-                              <div className="flex-1">
-                                <Label htmlFor={`member-${member.id}`}>
-                                  Username
-                                </Label>
-                                <Input
-                                  id={`member-${member.id}`}
-                                  placeholder="Enter username"
-                                  // value={member.username}
-                                  onChange={(e) =>
-                                    updateMemberUsername(
-                                      member.id,
-                                      e.target.value
-                                    )
-                                  }
-                                  required
-                                />
-                              </div>
+                  <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" className="">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add New Member
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="glass-dark border border-gray-700/50">
+                      <DialogHeader>
+                        <DialogTitle>Add new group members</DialogTitle>
+                        <DialogDescription className="text-gray-300">
+                          Enter username for new members you wish to add in this
+                          group.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <form onSubmit={handleCreateGroup}>
+                        <CardContent className="space-y-6">
+                          {/* dynamic new member */}
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <Label>Group members</Label>
                               <Button
                                 type="button"
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => removeMemberField(member.id)}
-                                disabled={newMembers.length === 1}
-                                className="mt-6"
+                                variant="outline"
+                                size="sm"
+                                onClick={addMemberField}
+                                className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
                               >
-                                <Trash className="h-4 w-4 text-red-600" />
+                                <Plus className="mr-1 h-4 w-4" /> Add Member
                               </Button>
                             </div>
-                          ))}
-                        </div>
-                      </CardContent>
 
-                      <CardFooter>
-                        <Button type="submit" className="mt-4 w-full">
-                          {isLoading ? (
-                            <Loading action="Adding" item="member(s)" />
-                          ) : (
-                            "Add member(s)"
-                          )}
-                        </Button>
-                      </CardFooter>
-                    </form>
-                  </DialogContent>
-                </Dialog>
+                            {newMembers?.map((member, index) => (
+                              <div
+                                key={member.id}
+                                className="flex items-center gap-2"
+                              >
+                                <div className="flex-1">
+                                  <Label htmlFor={`member-${member.id}`}>
+                                    Username
+                                  </Label>
+                                  <Input
+                                    id={`member-${member.id}`}
+                                    placeholder="Enter username"
+                                    onChange={(e) =>
+                                      updateMemberUsername(
+                                        member.id,
+                                        e.target.value
+                                      )
+                                    }
+                                    required
+                                    className="border-gray-700 bg-gray-800/50"
+                                  />
+                                </div>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => removeMemberField(member.id)}
+                                  disabled={newMembers.length === 1}
+                                  className="mt-6 hover:text-red-400"
+                                >
+                                  <Trash className="h-4 w-4 text-red-600" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
 
-                <Button variant="destructive" onClick={handleLeaveGroup}>
-                  <Trash className="mr-2 h-4 w-4" />
-                  {isLoading ? (
-                    <Loading action="Leaving" item="group" />
-                  ) : (
-                    "Leave Group"
-                  )}
-                </Button>
+                        <CardFooter>
+                          <Button
+                            type="submit"
+                            className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-400 text-white shadow-lg transition-all duration-300 hover:from-teal-400 hover:to-teal-500 hover:shadow-teal-500/25"
+                          >
+                            {isLoading ? (
+                              <Loading action="Adding" item="member(s)" />
+                            ) : (
+                              "Add member(s)"
+                            )}
+                          </Button>
+                        </CardFooter>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+
+                  <Button
+                    variant="destructive"
+                    onClick={handleLeaveGroup}
+                    className="bg-red-600/80 hover:bg-red-600"
+                  >
+                    <Trash className="mr-2 h-4 w-4" />
+                    {isLoading ? (
+                      <Loading action="Leaving" item="group" />
+                    ) : (
+                      "Leave Group"
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
 
@@ -285,10 +293,25 @@ export default function GroupPage() {
               onValueChange={setActiveTab}
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="balances">Balances</TabsTrigger>
-                <TabsTrigger value="settlements">Settle Debts</TabsTrigger>
-                <TabsTrigger value="history">Payments History</TabsTrigger>
+              <TabsList className="glass-dark grid w-full grid-cols-3 rounded-lg p-1">
+                <TabsTrigger
+                  value="balances"
+                  className="text-teal-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
+                >
+                  Balances
+                </TabsTrigger>
+                <TabsTrigger
+                  value="settlements"
+                  className="text-teal-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
+                >
+                  Settle Debts
+                </TabsTrigger>
+                <TabsTrigger
+                  value="history"
+                  className="text-teal-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
+                >
+                  Payments History
+                </TabsTrigger>
               </TabsList>
 
               {/* group balances tab */}
@@ -307,7 +330,6 @@ export default function GroupPage() {
               {/* payments history tab */}
               <TabsContent value="history" className="mt-6">
                 <PaymentHistory />
-                {/* <PaymentHistoryExport history={history} groupName={group?.name} /> */}
               </TabsContent>
             </Tabs>
           </>

@@ -5,6 +5,7 @@ import UserPic from "@/components/UserPic";
 import api from "@/axiosInstance";
 import UserBalance from "@/components/UserBalance";
 import Loading from "@/components/Loading";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function Home() {
   const { user, isAuth } = useAuth();
@@ -36,19 +37,25 @@ export default function Home() {
     <div className="mx-auto max-w-4xl px-4">
       {user && (
         <>
-          <div className="mb-8 flex flex-col items-start justify-between md:flex-row md:items-center">
-            {/* user details */}
-            <div className="mb-4 flex items-center gap-4 md:mb-0">
-              <Avatar className="h-16 w-16">
-                <UserPic name={user.name} />
-              </Avatar>
+          <Card className="glass-dark mb-8 shadow-lg">
+            <CardContent className="p-6">
+              <div className="flex flex-col items-start justify-between md:flex-row md:items-center">
+                {/* user details */}
+                <div className="mb-4 flex items-center gap-4 md:mb-0">
+                  <Avatar className="h-16 w-16 border border-teal-500/30">
+                    <UserPic name={user.name} />
+                  </Avatar>
 
-              <div>
-                <h1 className="text-2xl font-bold">{user.name}</h1>
-                <p className="text-muted-foreground">{user.email}</p>
+                  <div>
+                    <h1 className="gradient-text text-2xl font-bold">
+                      {user.name}
+                    </h1>
+                    <p className="text-gray-300">{user.email}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           <div className="grid gap-6 md:grid-cols-2">
             {/* money you are owed */}

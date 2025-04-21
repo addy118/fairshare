@@ -29,18 +29,17 @@ export default function SignupPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log("Signup Data:", formData);
-
-    // ensure formData matches the structure for /signup body
     signup(formData);
   };
 
   return (
-    <div className="bg-[#0f1728] flex items-center justify-center">
-      <Card className="w-full max-w-md">
+    <div className="flex items-center justify-center px-4">
+      <Card className="glass-dark w-full max-w-md border border-gray-700/50 shadow-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl">Sign Up</CardTitle>
-          <CardDescription>Create a new account</CardDescription>
+          <CardTitle className="gradient-text text-2xl">Sign Up</CardTitle>
+          <CardDescription className="text-gray-300">
+            Create a new account
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -56,6 +55,7 @@ export default function SignupPage() {
                 value={formData.name}
                 onChange={handleChange}
                 disabled={loading}
+                className="border-gray-700 bg-gray-800/50"
               />
 
               {signupErrors.name &&
@@ -77,6 +77,7 @@ export default function SignupPage() {
                 value={formData.username}
                 onChange={handleChange}
                 disabled={loading}
+                className="border-gray-700 bg-gray-800/50"
               />
 
               {signupErrors.username &&
@@ -89,15 +90,16 @@ export default function SignupPage() {
 
             {/* phone */}
             <div className="space-y-2">
-              <Label htmlFor="name">Phone</Label>
+              <Label htmlFor="phone">Phone</Label>
 
               <Input
                 id="phone"
-                placeholder="John Doe"
+                placeholder="+919999999999"
                 required
                 value={formData.phone}
                 onChange={handleChange}
                 disabled={loading}
+                className="border-gray-700 bg-gray-800/50"
               />
 
               {signupErrors.phone &&
@@ -120,6 +122,7 @@ export default function SignupPage() {
                 value={formData.email}
                 onChange={handleChange}
                 disabled={loading}
+                className="border-gray-700 bg-gray-800/50"
               />
 
               {signupErrors.email &&
@@ -141,6 +144,7 @@ export default function SignupPage() {
                 value={formData.password}
                 onChange={handleChange}
                 disabled={loading}
+                className="border-gray-700 bg-gray-800/50"
               />
 
               {signupErrors.password &&
@@ -153,13 +157,13 @@ export default function SignupPage() {
 
             <Button
               type="submit"
-              className="w-full cursor-pointer border border-zinc-200 bg-zinc-200 text-black transition-colors duration-300 hover:border-zinc-300 hover:bg-zinc-300 active:border-zinc-200 active:bg-zinc-200 active:text-black"
+              className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg transition-all duration-300 hover:from-purple-500 hover:to-purple-600 hover:shadow-purple-500/30"
               disabled={loading}
             >
               {loading ? (
                 <div className="flex items-center justify-center">
                   <span className="mr-2">Creating account</span>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-800 border-t-transparent"></span>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
                 </div>
               ) : (
                 "Create Account"
@@ -169,9 +173,9 @@ export default function SignupPage() {
         </CardContent>
 
         <CardFooter className="flex justify-center">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-gray-400">
             Already have an account?{" "}
-            <Link to={`/login`} className="text-primary hover:underline">
+            <Link to={`/login`} className="text-teal-400 hover:underline">
               Login
             </Link>
           </p>
