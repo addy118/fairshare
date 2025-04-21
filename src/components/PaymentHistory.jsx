@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import Loading from "./Loading";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { toast } from "sonner";
 
 export default function PaymentHistory() {
   const { id: groupId } = useParams();
@@ -68,27 +69,38 @@ export default function PaymentHistory() {
   }
 
   const handleExport = async () => {
+    let originalExpandedState;
+
     try {
+      console.log("Starting PDF export...");
       setIsExporting(true);
 
       // Save the current expanded state to restore later
-      const originalExpandedState = { ...expandedItems };
+      originalExpandedState = { ...expandedItems };
+      console.log("Saved original expanded state:", originalExpandedState);
 
       // Expand all items
       setExpandedItems(
         history.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
       );
+      console.log("All items expanded for PDF generation");
 
       // Wait for state update and DOM rendering
       await new Promise((resolve) => setTimeout(resolve, 500));
+      console.log("Waiting for DOM update complete");
 
       if (!pdfRef.current) {
         console.error("PDF container reference is null");
-        return;
+        throw new Error("PDF container reference is null");
       }
+      console.log("PDF reference element found");
 
       // Add a temporary class to use basic colors instead of oklch
       document.body.classList.add("pdf-export-mode");
+      console.log("Added PDF export mode class to body");
+
+      // Wait for styles to apply
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       try {
         // Create PDF with a specific page size
@@ -97,15 +109,39 @@ export default function PaymentHistory() {
           unit: "px",
           format: "a4",
         });
+        console.log("Created jsPDF instance");
 
         const container = pdfRef.current;
 
         // Generate canvas with simplified options
+        console.log("Starting html2canvas conversion...");
         const canvas = await html2canvas(container, {
           scale: 1.5,
           useCORS: true,
           backgroundColor: "#ffffff",
+          logging: false, // Disable html2canvas verbose logging
+          ignoreElements: (element) => {
+            // Ignore elements that might cause issues
+            return element.classList.contains("no-print");
+          },
+          onclone: (clonedDoc) => {
+            // Additional fixes for the cloned document if needed
+            const clonedBody = clonedDoc.body;
+            clonedBody.classList.add("pdf-export-mode");
+
+            // Remove any remaining problematic CSS properties
+            const elements = clonedBody.querySelectorAll("*");
+            elements.forEach((el) => {
+              const style = window.getComputedStyle(el);
+              Object.keys(style).forEach((key) => {
+                if (style[key] && style[key].includes("oklch")) {
+                  el.style[key] = "inherit";
+                }
+              });
+            });
+          },
         });
+        console.log("html2canvas conversion complete");
 
         // Get dimensions
         const imgWidth = pdf.internal.pageSize.getWidth();
@@ -124,11 +160,8 @@ export default function PaymentHistory() {
         // If content is too tall, add more pages
         let heightLeft = imgHeight;
         let position = 0;
-
-        // Remove the first page height
         heightLeft -= pdf.internal.pageSize.getHeight();
 
-        // Add new pages if needed
         while (heightLeft > 0) {
           position = heightLeft - imgHeight;
           pdf.addPage();
@@ -145,21 +178,19 @@ export default function PaymentHistory() {
 
         // Save the PDF
         pdf.save(`${group.name}_payment_history.pdf`);
-
         console.log("PDF export completed successfully");
-      } catch (err) {
-        console.error("Error during PDF generation:", err);
-        alert("Failed to generate PDF. Please try again.");
+      } catch (innerError) {
+        console.error("Inner error during PDF generation:", innerError);
+        alert(`Failed to generate PDF: ${innerError.message}`);
+        throw innerError;
       }
-    } catch (err) {
-      console.error("Error exporting PDF:", err);
-      alert("Failed to export PDF. Please try again.");
+    } catch (outerError) {
+      console.error("Outer error exporting PDF:", outerError);
+      alert(`Failed to export PDF: ${outerError.message}`);
     } finally {
-      // Remove the temporary class
+      console.log("Cleaning up...");
       document.body.classList.remove("pdf-export-mode");
-
-      // Restore original expanded state
-      setExpandedItems(originalExpandedState);
+      setExpandedItems(originalExpandedState || {});
       setIsExporting(false);
     }
   };

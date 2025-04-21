@@ -192,21 +192,6 @@
   --ring: #a1a1aa;
 }
 
-/* Additional styles for PDF export */
-.pdf-export-mode .payment-card {
-  border: 1px solid #e5e7eb !important;
-  margin-bottom: 15px !important;
-  page-break-inside: avoid !important;
-}
-
-.pdf-export-mode .text-red-500/90 {
-  color: #dc2626 !important;
-}
-
-.pdf-export-mode .text-green-600 {
-  color: #16a34a !important;
-}
-
 /* landing page animations */
 @keyframes fadeIn {
   from {
@@ -438,4 +423,53 @@
 
 input {
   color: teal;
+}
+
+/* Additional styles for PDF export */
+/* Add this to your CSS file */
+.pdf-export-mode {
+  /* Replace oklch colors with hex/rgb equivalents */
+  --teal-400: #22d3ee !important;
+  --gray-300: #d1d5db !important;
+  --gray-400: #9ca3af !important;
+  --gray-700: rgba(55, 65, 81, 0.5) !important;
+  --red-500: #ef4444 !important;
+  --green-600: #16a34a !important;
+}
+
+/* Override specific classes that use oklch colors */
+.pdf-export-mode .gradient-text {
+  background: linear-gradient(to right, #22d3ee, #3b82f6) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.pdf-export-mode .glass-dark {
+  background: rgba(31, 41, 55, 0.8) !important;
+  border-color: rgba(55, 65, 81, 0.5) !important;
+}
+
+.pdf-export-mode .text-teal-400 {
+  color: #22d3ee !important;
+}
+
+.pdf-export-mode .text-gray-300 {
+  color: #d1d5db !important;
+}
+
+.pdf-export-mode .text-gray-400 {
+  color: #9ca3af !important;
+}
+
+.pdf-export-mode .text-red-500\/90 {
+  color: rgba(239, 68, 68, 0.9) !important;
+}
+
+.pdf-export-mode .text-green-600 {
+  color: #16a34a !important;
+}
+
+.pdf-export-mode .border-gray-700\/50 {
+  border-color: rgba(55, 65, 81, 0.5) !important;
 }
