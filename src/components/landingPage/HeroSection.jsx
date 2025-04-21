@@ -111,9 +111,7 @@ export default function HeroSection() {
             <div className="text-sm text-gray-400">Active Users</div>
           </div>
           <div className="glass hover-lift rounded-lg p-4">
-            <div className="gradient-text text-2xl font-bold">
-              ₹200+
-            </div>
+            <div className="gradient-text text-2xl font-bold">₹200+</div>
             <div className="text-sm text-gray-400">Expenses Tracked</div>
           </div>
           <div className="glass hover-lift col-span-2 rounded-lg p-4 md:col-span-1">
