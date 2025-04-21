@@ -12,6 +12,7 @@ import GroupPage from "./pages/Group";
 import Home from "./pages/Home";
 import ExpenseForm from "./pages/ExpenseForm";
 import Profile from "./pages/Profile";
+import LandingPage from "./pages/LandingPage";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { path: "/", element: <App /> },
+      // { path: "/", element: <LandingPage /> },
       { path: "login", element: <LoginPage /> },
       { path: "signup", element: <SignupPage /> },
       {

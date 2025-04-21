@@ -36,7 +36,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="bg-[#0f1728] flex items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl">Sign Up</CardTitle>
