@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAuth } from "./authProvider";
 import { useNavigate } from "react-router-dom";
-import LandingPage from "./pages/LandingPage";
+import LandingPage from "./components/LandingPage";
 
 export default function App() {
   const { isAuth } = useAuth();
@@ -15,9 +15,7 @@ export default function App() {
 
   return (
     <div className="flex items-center justify-center">
-      {!isAuth && (
-        <LandingPage />
-      )}
+      {!isAuth && <LandingPage />}
     </div>
   );
 }

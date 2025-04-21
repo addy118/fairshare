@@ -12,7 +12,7 @@ import GroupPage from "./pages/Group";
 import Home from "./pages/Home";
 import ExpenseForm from "./pages/ExpenseForm";
 import Profile from "./pages/Profile";
-import LandingPage from "./pages/LandingPage";
+import LandingPage from "./components/LandingPage";
 
 const router = createBrowserRouter([
   {
