@@ -32,7 +32,7 @@ export default function Logo() {
           strokeLinejoin="round"
         />
       </svg>
-      <span className="gradient-text text-white">FairShare</span>
+      <span className="text-white">FairShare</span>
     </Link>
   );
 }
