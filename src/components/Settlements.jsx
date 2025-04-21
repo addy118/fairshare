@@ -79,21 +79,15 @@ export default function Settlements() {
     }
   };
 
-  const handleRemind = async (settlementId, toUserId) => {
+  const handleRemind = async (settlementId, fromUser) => {
     try {
-      console.log("remind user " + toUserId);
-      const userRes = await api.get(`/user/${Number(toUserId)}/info`);
-      if (userRes.status != 200) throw new Error("Can't fetch user!");
-
-      const toUser = userRes.data;
+      // console.log("remind user " + fromUser);
 
       const remindRes = await api.post(`/exp/${Number(settlementId)}/remind`);
       if (remindRes.status != 200) throw new Error("Unexpected error!");
 
       toast.dismiss();
-      toast.success(`Reminded to ${toUser.email}`);
-
-      console.log(toUser);
+      toast.success(`Reminded to ${fromUser}`);
     } catch (err) {
       toast.dismiss();
       console.error("Failed to settle transaction:", err);
@@ -208,7 +202,7 @@ export default function Settlements() {
                           variant="outline"
                           className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
                           onClick={() =>
-                            handleRemind(settlement.id, settlement.to.id)
+                            handleRemind(settlement.id, settlement.from.name)
                           }
                         >
                           Remind
