@@ -249,7 +249,7 @@ export default function GroupPage() {
                                   disabled={newMembers.length === 1}
                                   className="mt-6 hover:text-red-400"
                                 >
-                                  <Trash className="h-4 w-4 text-red-600" />
+                                  <Trash className="h-4 w-4 text-red-500/90" />
                                 </Button>
                               </div>
                             ))}
@@ -275,7 +275,7 @@ export default function GroupPage() {
                   <Button
                     variant="destructive"
                     onClick={handleLeaveGroup}
-                    className="bg-red-600/80 hover:bg-red-600"
+                    className=""
                   >
                     <Trash className="mr-2 h-4 w-4" />
                     {isLoading ? (

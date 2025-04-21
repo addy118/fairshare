@@ -11,8 +11,11 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
+        // destructive:
+        //   "bg-red-300 text-white shadow-md hover:bg-red-400 hover:shadow-lg active:bg-red-800 active:shadow-inner focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 transition-all duration-200 hover:text-red-100",
         destructive:
-          "border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground border-rose-300 bg-rose-200/70 text-white-800 transition-all hover:border-rose-500 hover:bg-transparent hover:text-white-600 active:scale-95 active:border-rose-600 active:bg-rose-100",
+          "border border-red-400 text-red-400 hover:bg-transparent bg-red-900/40 hover:text-red-400 active:scale-95 active:border-red-500 focus-visible:ring-2 focus-visible:ring-red-500 transition-all duration-200",
+
         outline:
           "border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground border-gray-700 bg-gray-700/70 text-teal-400 transition-all hover:border-teal-400 hover:bg-transparent hover:text-white active:scale-95 active:border-teal-500 active:bg-gray-800",
         secondary:

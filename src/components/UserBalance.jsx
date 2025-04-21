@@ -56,7 +56,7 @@ export default function UserBalance({ balances, isCreditor }) {
                   </span>
                 </div>
                 <span
-                  className={`font-medium ${isCreditor ? "text-green-600" : "text-red-600"}`}
+                  className={`font-medium ${isCreditor ? "text-green-600" : "text-red-500/90"}`}
                 >
                   {isCreditor ? "+" : "-"}₹{balance.amount.toFixed(2)}
                 </span>
@@ -69,7 +69,7 @@ export default function UserBalance({ balances, isCreditor }) {
         <div className="flex w-full justify-between">
           <span className="font-bold text-gray-300">Total</span>
           <span
-            className={`font-bold ${isCreditor ? "text-green-600" : "text-red-600"}`}
+            className={`font-bold ${isCreditor ? "text-green-600" : "text-red-500/90"}`}
           >
             {isCreditor ? "+" : "-"}₹
             {list.reduce((sum, item) => sum + item.amount, 0).toFixed(2)}

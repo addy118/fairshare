@@ -80,7 +80,7 @@ export default function GrpBalances() {
                       )}
                     </div>
                     <span
-                      className={`font-medium ${balance > 0 ? "text-green-600" : balance < 0 ? "text-red-600" : "text-gray-300"}`}
+                      className={`font-medium ${balance > 0 ? "text-green-600" : balance < 0 ? "text-red-500/90" : "text-gray-300"}`}
                     >
                       {balance > 0
                         ? `+₹${balance.toFixed(2)}`

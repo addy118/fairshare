@@ -129,7 +129,7 @@ export default function ExpenseForm() {
 
       <Card className="glass-dark border border-gray-700/50 shadow-lg">
         <CardHeader>
-          <CardTitle className="text-teal-400">Create New Expense</CardTitle>
+          <CardTitle className="text-white">Create New Expense</CardTitle>
           <CardDescription className="text-gray-300">
             Add a new expense with multiple participants
           </CardDescription>
@@ -139,7 +139,7 @@ export default function ExpenseForm() {
           <CardContent className="space-y-6">
             {/* expense name */}
             <div className="space-y-2">
-              <Label className="text-teal-400" htmlFor="expense-name">
+              <Label className="text-white" htmlFor="expense-name">
                 Expense Name
               </Label>
               <Input
@@ -154,7 +154,7 @@ export default function ExpenseForm() {
 
             {/* total amount */}
             <div className="space-y-2">
-              <Label className="text-teal-400" htmlFor="total-amount">
+              <Label className="text-white" htmlFor="total-amount">
                 Total Amount
               </Label>
               <Input
@@ -173,7 +173,7 @@ export default function ExpenseForm() {
             {/* dynamic payers */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label className="text-teal-400">Participants</Label>
+                <Label className="text-white">Participants</Label>
                 <Button
                   type="button"
                   variant="outline"
@@ -189,7 +189,7 @@ export default function ExpenseForm() {
                 <div key={payer.id} className="flex items-center gap-2">
                   <div className="flex-1">
                     <Label
-                      className="mb-3 text-teal-400"
+                      className="mb-3 text-white"
                       htmlFor={`payer-${payer.id}`}
                     >
                       Participant
@@ -225,7 +225,7 @@ export default function ExpenseForm() {
 
                   <div className="flex-1">
                     <Label
-                      className="mb-3 text-teal-400"
+                      className="mb-3 text-white"
                       htmlFor={`amount-${payer.id}`}
                     >
                       Amount
@@ -253,7 +253,7 @@ export default function ExpenseForm() {
                     disabled={payers.length === 1}
                     className="mt-6 hover:text-red-400"
                   >
-                    <Trash className="h-4 w-4 text-red-600" />
+                    <Trash className="h-4 w-4 text-red-500/90" />
                   </Button>
                 </div>
               ))}
@@ -265,7 +265,7 @@ export default function ExpenseForm() {
                     Math.abs(
                       Number.parseFloat(totalAmount || 0) - payersTotal
                     ) > 0.01
-                      ? "font-medium text-red-600"
+                      ? "font-medium text-red-500/90"
                       : "font-medium text-teal-400"
                   }
                 >

@@ -199,7 +199,7 @@
   page-break-inside: avoid !important;
 }
 
-.pdf-export-mode .text-red-600 {
+.pdf-export-mode .text-red-500/90 {
   color: #dc2626 !important;
 }
 

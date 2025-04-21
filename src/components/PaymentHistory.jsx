@@ -261,7 +261,7 @@ export default function PaymentHistory() {
                                 </div>
 
                                 <span
-                                  className={`font-medium ${payer.paidAmt == 0 ? "text-gray-300" : "text-red-600"}`}
+                                  className={`font-medium ${payer.paidAmt == 0 ? "text-gray-300" : "text-red-500/90"}`}
                                 >
                                   ₹{payer.paidAmt.toFixed(2)}
                                 </span>
@@ -286,7 +286,7 @@ export default function PaymentHistory() {
                                   {item.debtor.name}
                                 </span>
                               </div>
-                              <span className="font-medium text-red-600">
+                              <span className="font-medium text-red-500/90">
                                 ₹{item.amount?.toFixed(2)}
                               </span>
                             </div>
@@ -338,7 +338,7 @@ export default function PaymentHistory() {
                                   ₹{balance.amount.toFixed(2)}
                                 </span>
                               ) : balance.amount < 0 ? (
-                                <span className="font-medium text-red-600">
+                                <span className="font-medium text-red-500/90">
                                   ₹{Math.abs(balance.amount).toFixed(2)}
                                 </span>
                               ) : (

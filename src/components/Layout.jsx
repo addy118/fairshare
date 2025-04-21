@@ -128,7 +128,7 @@ export default function Layout() {
                   <form onSubmit={handleCreateGroup}>
                     <CardContent className="space-y-6">
                       <div className="space-y-2">
-                        <Label htmlFor="group-name" className="text-teal-400">
+                        <Label htmlFor="group-name" className="mb-3 text-white">
                           Group Name
                         </Label>
                         <Input
@@ -142,7 +142,7 @@ export default function Layout() {
                       </div>
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                          <Label className="text-teal-400">Group members</Label>
+                          <Label className="text-white">Group members</Label>
                           <Button
                             type="button"
                             variant="outline"
@@ -161,7 +161,7 @@ export default function Layout() {
                             <div className="flex-1">
                               <Label
                                 htmlFor={`member-${member.id}`}
-                                className="mb-3 text-teal-400"
+                                className="mb-3 text-white"
                               >
                                 Username
                               </Label>
@@ -186,7 +186,7 @@ export default function Layout() {
                               disabled={newMembers.length === 1}
                               className="mt-6 hover:text-red-400"
                             >
-                              <Trash className="h-4 w-4 text-red-600" />
+                              <Trash className="h-4 w-4 text-red-500/90" />
                             </Button>
                           </div>
                         ))}
