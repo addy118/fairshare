@@ -26,7 +26,6 @@ import api from "@/axiosInstance";
 import { CardContent, CardFooter } from "./ui/card";
 import Loading from "./Loading";
 import Logo from "./Logo";
-import ParticleBackground from "./landingPage/ParticleBg";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -95,9 +94,6 @@ export default function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800 font-sans text-white">
-      {/* Background elements */}
-      <ParticleBackground />
-
       <div className="sticky top-0 z-50 w-full border-b border-gray-800 bg-gray-900/90 shadow-lg backdrop-blur-md">
         <header className="mx-auto flex h-16 items-center justify-between px-4 md:px-12 lg:h-20">
           <Logo />
@@ -233,31 +229,35 @@ export default function Layout() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator className="my-1 bg-gray-700" />
 
-                    <Link to={"/profile"}>
-                      <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400">
-                        Profile
-                      </DropdownMenuItem>
-                    </Link>
+                    <DropdownMenuItem
+                      className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none"
+                      asChild
+                    >
+                      <Link to="/profile">Profile</Link>
+                    </DropdownMenuItem>
 
                     <DropdownMenuItem
                       onClick={logout}
-                      className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm text-red-300 transition-colors hover:bg-red-900/40 hover:text-red-400"
+                      className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm text-red-300 transition-colors hover:bg-red-900/40 hover:text-red-400 focus:bg-red-900/40 focus:text-red-400 focus:outline-none"
                     >
                       Log Out
                     </DropdownMenuItem>
                   </>
                 ) : (
                   <>
-                    <Link to={`/login`}>
-                      <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400">
-                        Login
-                      </DropdownMenuItem>
-                    </Link>
-                    <Link to={`/signup`}>
-                      <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400">
-                        Register
-                      </DropdownMenuItem>
-                    </Link>
+                    <DropdownMenuItem
+                      className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none"
+                      asChild
+                    >
+                      <Link to="/login">Login</Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none"
+                      asChild
+                    >
+                      <Link to="/signup">Register</Link>
+                    </DropdownMenuItem>
                   </>
                 )}
               </DropdownMenuContent>

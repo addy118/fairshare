@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -7,37 +7,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/authProvider";
 import format from "@/utils/formatGroup";
 import formatDate from "@/utils/formatDate";
-import api from "@/axiosInstance";
 import UserPic from "@/components/UserPic";
 
 export default function GroupsPage() {
   const navigate = useNavigate();
-  const [newGroupName, setNewGroupName] = useState("");
-  const [newGroupOpen, setNewGroupOpen] = useState(false);
 
   const { user } = useAuth();
   const groups = format.groups(user.groups);
-
-  const handleCreateGroup = async (e) => {
-    e.preventDefault();
-    if (!newGroupName.trim()) return;
-
-    try {
-      await api.post("/grp/new", { name: newGroupName });
-      console.log(`Creating group: ${newGroupName}`);
-      setNewGroupOpen(false);
-      setNewGroupName("");
-      navigate("/groups");
-    } catch (err) {
-      console.error("Failed to create a group: ", err);
-    }
-  };
 
   return (
     <div className="mx-auto max-w-4xl px-4">
