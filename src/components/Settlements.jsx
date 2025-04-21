@@ -110,10 +110,10 @@ export default function Settlements() {
         <div className="mb-20 space-y-4">
           <>
             <Button
-              className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg transition-all duration-300 hover:from-purple-500 hover:to-purple-600 hover:shadow-purple-500/30"
+              className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg transition-all duration-300 hover:from-purple-500 hover:to-purple-600 hover:shadow-purple-500/30 "
               size="sm"
               onClick={handleOptimization}
-              style={{ letterSpacing: "0.5em" }}
+              style={{ letterSpacing: "0.5em", textTransform: "uppercase" }}
             >
               {loading ? (
                 <Loading action="Optimizing" item="splits" />
