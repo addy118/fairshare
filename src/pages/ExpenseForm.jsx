@@ -179,7 +179,7 @@ export default function ExpenseForm() {
                   variant="outline"
                   size="sm"
                   onClick={addPayer}
-                  className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
+                  className=""
                 >
                   <Plus className="mr-1 h-4 w-4" /> Add Participant
                 </Button>

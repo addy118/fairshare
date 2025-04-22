@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import step1 from "../../assets/step1.png";
+import step2 from "../../assets/step2.png";
 
 export default function HowItWorks() {
   const sectionRef = useRef(null);
@@ -45,7 +47,7 @@ export default function HowItWorks() {
       title: "Create a Group & Invite Members",
       description:
         "Set up a group and easily add your friends, family, or roommates.",
-      image: "/placeholder.svg?height=250&width=400",
+      image: step1,
       alt: "Create a group and invite members",
       gradient: "from-teal-500 to-cyan-400",
       bgGradient: "from-teal-500/10 to-cyan-500/10",
@@ -55,7 +57,7 @@ export default function HowItWorks() {
       title: "Add and Track Expenses",
       description:
         "Log expenses in real-time and keep everyone on the same page.",
-      image: "/placeholder.svg?height=250&width=400",
+      image: step2,
       alt: "Add and track expenses",
       gradient: "from-cyan-500 to-blue-400",
       bgGradient: "from-cyan-500/10 to-blue-500/10",
@@ -118,7 +120,7 @@ export default function HowItWorks() {
               <div className="absolute top-1/2 right-full hidden h-0.5 w-8 bg-gradient-to-r from-teal-500/50 to-cyan-500/50 md:block"></div>
 
               <div className="glass-dark group hover-lift overflow-hidden rounded-lg border border-gray-700/50 shadow-xl">
-                <div className="relative flex h-64 items-center justify-center overflow-hidden">
+                <div className="relative flex h-79 items-center justify-center overflow-hidden">
                   {/* Gradient overlay */}
                   <div
                     className={`absolute inset-0 bg-gradient-to-br ${step.bgGradient} opacity-20 transition-opacity duration-500 group-hover:opacity-30`}
