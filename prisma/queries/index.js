@@ -6,10 +6,21 @@ const User = require("./User");
 const users = require("./users");
 
 async function main() {
-  const res = await Split.get(26);
-  console.log(res);
+  try {
+    let res = await prisma.expense.deleteMany({
+      where: { groupId: 10 },
+    });
 
-  console.log("Query successful!");
+    res = await prisma.group.delete({
+      where: { id: 10 },
+    });
+
+    console.log(`Deleted group`, res);
+  } catch (error) {
+    console.error(`Failed to delete group`, error.message);
+  }
+
+  console.log("Query execution completed!");
 }
 
 main()
