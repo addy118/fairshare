@@ -194,9 +194,11 @@ export default function GroupPage() {
                         Add New Member
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="glass-dark border border-gray-700/50">
+                    <DialogContent className="glass-dark border border-gray-700">
                       <DialogHeader>
-                        <DialogTitle>Add new group members</DialogTitle>
+                        <DialogTitle className="text-gray-300">
+                          Add new group members
+                        </DialogTitle>
                         <DialogDescription className="text-gray-300">
                           Enter username for new members you wish to add in this
                           group.
@@ -207,7 +209,9 @@ export default function GroupPage() {
                           {/* dynamic new member */}
                           <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                              <Label>Group members</Label>
+                              <Label className="text-gray-300">
+                                Group members
+                              </Label>
                               <Button
                                 type="button"
                                 variant="outline"
@@ -225,7 +229,10 @@ export default function GroupPage() {
                                 className="flex items-center gap-2"
                               >
                                 <div className="flex-1">
-                                  <Label htmlFor={`member-${member.id}`}>
+                                  <Label
+                                    className="mb-3 text-gray-300"
+                                    htmlFor={`member-${member.id}`}
+                                  >
                                     Username
                                   </Label>
                                   <Input

@@ -181,7 +181,7 @@ export default function ExpenseForm() {
                   onClick={addPayer}
                   className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
                 >
-                  <Plus className="mr-1 h-4 w-4" /> Add Payer
+                  <Plus className="mr-1 h-4 w-4" /> Add Participant
                 </Button>
               </div>
 
@@ -206,7 +206,7 @@ export default function ExpenseForm() {
                           id={`payer-${payer.id}`}
                           className="border-gray-700 bg-gray-800/50 text-teal-600"
                         >
-                          <SelectValue placeholder="Select a payer" />
+                          <SelectValue placeholder="Select a participant" />
                         </SelectTrigger>
                         <SelectContent className="glass-dark border border-gray-700/50">
                           {users.map((user) => (

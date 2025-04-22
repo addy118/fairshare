@@ -316,8 +316,10 @@ export default function PaymentHistory() {
                       Expense per person:{" "}
                       <span className="text-gray-300">
                         ₹
-                        {(item.totalAmt?.toFixed(2) ||
-                          item.amount?.toFixed(2)) / item.payers?.length}
+                        {Math.floor(
+                          (item.totalAmt?.toFixed(2) ||
+                            item.amount?.toFixed(2)) / item.payers?.length
+                        )}
                       </span>
                     </h3>
 
