@@ -296,19 +296,19 @@ export default function GroupPage() {
               <TabsList className="glass-dark grid w-full grid-cols-3 rounded-lg p-1">
                 <TabsTrigger
                   value="balances"
-                  className="text-teal-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
+                  className="text-white-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
                 >
                   Balances
                 </TabsTrigger>
                 <TabsTrigger
                   value="settlements"
-                  className="text-teal-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
+                  className="text-white-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
                 >
                   Settle Debts
                 </TabsTrigger>
                 <TabsTrigger
                   value="history"
-                  className="text-teal-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
+                  className="text-white-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
                 >
                   Payments History
                 </TabsTrigger>

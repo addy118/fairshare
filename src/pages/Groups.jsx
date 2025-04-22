@@ -23,7 +23,7 @@ export default function GroupsPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4">
-      <h1 className="gradient-text mb-8 text-2xl font-bold">My Groups</h1>
+      <h1 className="mb-8 text-2xl font-bold text-white">My Groups</h1>
 
       {groups.length === 0 ? (
         <Card className="glass-dark border border-gray-700/50 py-12 text-center shadow-lg">

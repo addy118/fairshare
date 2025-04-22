@@ -114,7 +114,7 @@ export default function Layout() {
                     Create Group
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="glass-dark border border-gray-700/50">
+                <DialogContent className="glass-dark border border-gray-700">
                   <DialogHeader className="text-teal-400">
                     <DialogTitle>Create New Group</DialogTitle>
                     <DialogDescription>

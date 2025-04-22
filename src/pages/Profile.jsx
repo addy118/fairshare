@@ -286,7 +286,7 @@ export default function ProfilePage() {
 
       {/* Password Change Dialog */}
       <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
-        <DialogContent className="glass-dark border border-gray-700/50">
+        <DialogContent className="glass-dark border border-gray-700">
           <DialogHeader>
             <DialogTitle className="text-teal-400">Change Password</DialogTitle>
             <DialogDescription className="text-gray-300">

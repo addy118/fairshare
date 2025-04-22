@@ -312,12 +312,21 @@ export default function PaymentHistory() {
                 {/* payment details ( expense / split ) */}
                 {expandedItems?.[item.id] && (
                   <CardContent>
+                    <h3 className="mb-3 font-medium text-purple-400">
+                      Expense per person:{" "}
+                      <span className="text-gray-300">
+                        ₹
+                        {(item.totalAmt?.toFixed(2) ||
+                          item.amount?.toFixed(2)) / item.payers?.length}
+                      </span>
+                    </h3>
+
                     <div className="flex items-start space-x-12">
                       {item.type == "expense" ? (
                         // type expense
                         <div className="flex-1">
-                          <h4 className="mb-3 font-medium text-gray-300">
-                            Payers
+                          <h4 className="mb-3 font-medium text-teal-400">
+                            Participants
                           </h4>
                           <div className="space-y-3">
                             {item.payers?.map((payer, index) => (
@@ -349,7 +358,7 @@ export default function PaymentHistory() {
                         <div className="flex-1 space-y-6">
                           {/* debitor */}
                           <div>
-                            <h4 className="mb-3 font-medium text-gray-300">
+                            <h4 className="mb-3 font-medium text-teal-400">
                               Debitor
                             </h4>
                             <div className="flex items-center justify-between text-sm">
@@ -369,7 +378,7 @@ export default function PaymentHistory() {
 
                           {/* creditor */}
                           <div>
-                            <h4 className="mb-3 font-medium text-gray-300">
+                            <h4 className="mb-3 font-medium text-teal-400">
                               Creditor
                             </h4>
                             <div className="flex items-center justify-between text-sm">
@@ -391,7 +400,7 @@ export default function PaymentHistory() {
 
                       {/* balance post pay */}
                       <div className="flex-1">
-                        <h4 className="mb-3 font-medium text-gray-300">
+                        <h4 className="mb-3 font-medium text-teal-400">
                           Balance After This Transaction
                         </h4>
                         <div className="space-y-3">
