@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import step1 from "../../assets/step1.png";
 import step2 from "../../assets/step2.png";
+import step3 from "../../assets/step3.png";
 
 export default function HowItWorks() {
   const sectionRef = useRef(null);
@@ -67,7 +68,7 @@ export default function HowItWorks() {
       title: "Simplify Settlements with Smart Splits",
       description:
         "Use our optimized algorithm to minimize the number of transactions.",
-      image: "/placeholder.svg?height=250&width=400",
+      image: step3,
       alt: "Simplify settlements with smart splits",
       gradient: "from-purple-500 to-pink-400",
       bgGradient: "from-purple-500/10 to-pink-500/10",
