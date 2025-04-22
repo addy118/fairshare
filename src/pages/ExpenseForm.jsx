@@ -125,11 +125,13 @@ export default function ExpenseForm() {
 
   return (
     <div className="mx-auto mb-20 max-w-xl px-4">
-      <h1 className="gradient-text mb-4 text-2xl font-bold">Create Expense</h1>
+      <h1 className="gradient-text mb-4 text-2xl font-bold text-teal-400">
+        Create Expense
+      </h1>
 
       <Card className="glass-dark border border-gray-700/50 shadow-lg">
         <CardHeader>
-          <CardTitle className="text-white">Create New Expense</CardTitle>
+          {/* <CardTitle className="text-white">Create New Expense</CardTitle> */}
           <CardDescription className="text-gray-300">
             Add a new expense with multiple participants
           </CardDescription>
