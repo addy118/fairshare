@@ -22,7 +22,7 @@ This template includes a basic setup with ShadCN UI components for a Tailwind Re
    npm i
    ```
 
-   > **[!WARNING]** > Only run the following command **if** `src/components/ui/` is not present:
+   > **⚠️ Warning!** Only run the following command **if** `src/components/ui/` is not present:
 
    ```sh
    npx shadcn@latest add button card input label dropdown-menu avatar
