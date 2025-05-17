@@ -1,4 +1,4 @@
-# React Auth Template
+# React Auth Template by Aditya Kirti
 
 This template includes a basic setup with ShadCN UI components for a Tailwind React project.
 
@@ -22,7 +22,7 @@ This template includes a basic setup with ShadCN UI components for a Tailwind Re
    npm i
    ```
 
-   > **⚠️ Warning:** Only run the following command **if** `src/components/ui/` is not present:
+   > **[!WARNING]** > Only run the following command **if** `src/components/ui/` is not present:
 
    ```sh
    npx shadcn@latest add button card input label dropdown-menu avatar

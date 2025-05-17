@@ -1,4 +1,4 @@
-# Prisma Auth Template
+# Prisma Auth Template by Aditya Kirti
 
 This template provides a ready-to-use authentication system with Prisma and Node.js.
 
