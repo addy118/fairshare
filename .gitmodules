@@ -1,0 +1,6 @@
+[submodule "fair-share-client"]
+	path = fair-share-client
+	url = https://github.com/addy118/fair-share-client
+[submodule "fair-share-server"]
+	path = fair-share-server
+	url = https://github.com/addy118/fair-share-server
