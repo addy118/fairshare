@@ -10,7 +10,6 @@ FairShare goes beyond just dividing the bill equally — it handles real-world s
 
 Whether you're **roommates sharing rent and utilities**, **friends on a vacation**, or **tired of tracking money in spreadsheets or WhatsApp chats**, FairShare makes your group expenses **fair, optimized, and frictionless**.
 
-
 ## 🔑 Features
 
 - ✅ **Secure Two-Way Payments**  
@@ -31,7 +30,6 @@ Whether you're **roommates sharing rent and utilities**, **friends on a vacation
 - 📄 **PDF Export for Reports**  
   Generate clean, shareable reports in one click.
 
-
 ## 🧠 Smart Split Algorithm
 
 Our **graph algorithm** minimizes the number of transactions required to settle debts within a group.
@@ -40,23 +38,22 @@ Our **graph algorithm** minimizes the number of transactions required to settle 
 - 🌍 Supports multi-currency optimization
 - 👥 Handles complex group scenarios effortlessly
 
-
 ## 🚀 How It Works
 
 1. **Create a Group & Invite Members**  
    Set up your group, add members, and get started in seconds.
 
 2. **Add & Track Expenses in Real Time**
-   - Log the expense name and total amount
-   - Log all the participants in a payment, all the payers with their amount
-   - Everyone stays updated with the transactions.
+
+- Log the expense name and total amount
+- Log all the participants in a payment, all the payers with their amount
+- Everyone stays updated with the transactions.
 
 3. **Simplify Settlements with Smart Splits**  
    FairShare’s algorithm calculates the most efficient way to settle up.
 
 4. **Two-way payment confirmation**
    Payment is marked as done in the group for all only after both the end users acknowledge it.
-
 
 ## 🛠 Tech Stack
 
