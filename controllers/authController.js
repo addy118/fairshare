@@ -43,8 +43,8 @@ exports.postLogin = async (req, res) => {
     // send set-cookie header with response
     res.cookie("refreshCookie", refreshToken, {
       httpOnly: true,
-      secure: true, // true in production (only send over https)
-      sameSite: "None",
+      secure: false, // true in production (only send over https)
+      sameSite: "Lax",
     });
 
     const decoded = jwt.verify(accessToken, ACCESS_TOKEN);
@@ -59,8 +59,8 @@ exports.postLogout = async (req, res) => {
   try {
     res.clearCookie("refreshCookie", {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: false,
+      sameSite: "Lax",
     });
     res.status(200).json({ msg: "Logged out successfully" });
   } catch (error) {
@@ -118,8 +118,8 @@ exports.refresh = async (req, res) => {
 
     res.cookie("refreshCookie", refreshToken, {
       httpOnly: true,
-      secure: true, // true in production (only send over https)
-      sameSite: "None",
+      secure: false, // true in production (only send over https)
+      sameSite: "Lax",
     });
 
     res.json({ msg: "Tokens Regenerated", accessToken });
