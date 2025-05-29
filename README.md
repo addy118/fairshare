@@ -1,4 +1,4 @@
-# React Auth Template
+# React Auth Template by Aditya Kirti
 
 This template includes a basic setup with ShadCN UI components for a Tailwind React project.
 
