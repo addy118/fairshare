@@ -1,20 +1,23 @@
-# Prisma Auth Template
+# Prisma Auth Template by Aditya Kirti
 
 This template provides a ready-to-use authentication system with Prisma and Node.js.
 
 ## 🚀 Installation
 
 1. Clone the repository:
+
    ```sh
    git clone <repo-url>
    cd <repo-folder>
    ```
 
 2. **Update the package name**:
+
    - Open `package.json` and `package-lock.json`.
    - Change the `"name"` field to your actual project name.
 
 3. Install dependencies:
+
    ```sh
    npm i
    ```
@@ -34,7 +37,6 @@ This template provides a ready-to-use authentication system with Prisma and Node
    ```sh
    npx prisma migrate dev --name basic_auth_init
    ```
-   
 6. Start the server:
    ```sh
    nodemon server.js
