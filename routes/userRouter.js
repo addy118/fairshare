@@ -14,6 +14,7 @@ const {
   putUserUserName,
   putUserPhone,
   getUserInfo,
+  getUserGroups,
 } = require("../controllers/userController");
 const { validateReq } = require("../config/validation/req");
 const {
@@ -30,16 +31,9 @@ userRouter.use("/:userId/*", [verifyToken, verifyOwnership]);
 
 userRouter.get("/:userId/balance", getUserBal);
 userRouter.get("/:userId/info", getUserInfo);
+userRouter.post("/:userId/groups", getUserGroups);
 
 userRouter.post("/:userId/protected", testProtected);
-
-userRouter.put("/:userId/name", [validateName, validateReq, putUserName]);
-userRouter.put("/:userId/email", [validateEmail, validateReq, putUserEmail]);
-userRouter.put("/:userId/username", [validateReq, putUserUserName]);
-userRouter.put("/:userId/phone", [validateReq, putUserPhone]);
-userRouter.put("/:userId/password", [validatePass, validateReq, putUserPass]);
-
-userRouter.delete("/:userId", delUser);
 
 userRouter.use((err, req, res, next) => {
   console.error(err.message);

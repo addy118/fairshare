@@ -37,7 +37,7 @@ exports.postMember = async (req, res) => {
     const { username } = req.body;
 
     const userId = await User.getIdbyUserName(username);
-    await Group.join(Number(userId), Number(groupId));
+    await Group.join(userId, Number(groupId));
     res.json({ msg: "success" });
   } catch (err) {
     console.error("ERROR in postMember:", err);
@@ -86,8 +86,8 @@ exports.getGrpBalance = async (req, res) => {
     const balance = await Promise.all(
       Object.entries(rawBalance).map(async ([userId, amount]) => ({
         user: {
-          id: Number(userId),
-          name: await User.getNameById(Number(userId)),
+          id: userId,
+          name: await User.getNameById(userId),
         },
         amount: Number(amount),
       }))
@@ -181,8 +181,8 @@ exports.getGrpHistory = async (req, res) => {
       entry.balance = await Promise.all(
         Object.entries(balance).map(async ([userId, amount]) => ({
           user: {
-            id: Number(userId),
-            name: await User.getNameById(Number(userId)),
+            id: userId,
+            name: await User.getNameById(userId),
           },
           amount: Number(amount),
         }))

@@ -19,70 +19,6 @@ class User {
     }
   }
 
-  static async changeEmail(userId, email) {
-    try {
-      await db.user.update({
-        where: { id: userId },
-        data: { email },
-      });
-    } catch (error) {
-      console.error("Error changing email: ", error.stack);
-      if (error.code === "P2002") {
-        // Handling unique constraint violation
-        throw new Error("Email is already taken.");
-      }
-      throw new Error("Failed to update user's email.");
-    }
-  }
-
-  static async changeName(userId, name) {
-    try {
-      await db.user.update({
-        where: { id: userId },
-        data: { name },
-      });
-    } catch (error) {
-      console.error("Error updating name: ", error.stack);
-      throw new Error("Failed to update user's name.");
-    }
-  }
-
-  static async changeUserName(userId, username) {
-    try {
-      await db.user.update({
-        where: { id: userId },
-        data: { username },
-      });
-    } catch (error) {
-      console.error("Error updating username: ", error.stack);
-      throw new Error("Failed to update user's username.");
-    }
-  }
-
-  static async changePhone(userId, phone) {
-    try {
-      await db.user.update({
-        where: { id: userId },
-        data: { phone },
-      });
-    } catch (error) {
-      console.error("Error updating name: ", error.stack);
-      throw new Error("Failed to update user's phone.");
-    }
-  }
-
-  static async changePass(userId, password) {
-    try {
-      await db.user.update({
-        where: { id: userId },
-        data: { password },
-      });
-    } catch (error) {
-      console.error("Error updating password: ", error.stack);
-      throw new Error("Failed to update user password.");
-    }
-  }
-
   static async getBasicInfo(id) {
     try {
       return await db.user.findUnique({
@@ -92,7 +28,7 @@ class User {
           name: true,
           username: true,
           email: true,
-          phone: true,
+          pfp: true,
         },
       });
     } catch (error) {
@@ -109,11 +45,10 @@ class User {
         },
         select: {
           id: true,
+          pfp: true,
           name: true,
           username: true,
-          phone: true,
           email: true,
-          password: true,
           groups: {
             select: {
               group: {
@@ -174,9 +109,9 @@ class User {
         where: { id },
         select: {
           id: true,
+          pfp: true,
           name: true,
           username: true,
-          phone: true,
           email: true,
           groups: {
             select: {
@@ -200,6 +135,38 @@ class User {
         },
       });
       return user;
+    } catch (error) {
+      console.error("Error fetching user by ID: ", error.stack);
+      throw new Error("Failed to fetch user by ID.");
+    }
+  }
+
+  static async groups(id) {
+    try {
+      const response = await db.user.findUnique({
+        where: { id },
+        select: {
+          groups: {
+            select: {
+              group: {
+                select: {
+                  id: true,
+                  name: true,
+                  members: {
+                    select: {
+                      member: {
+                        select: { id: true, name: true, username: true },
+                      },
+                    },
+                  },
+                  createdAt: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      return response.groups;
     } catch (error) {
       console.error("Error fetching user by ID: ", error.stack);
       throw new Error("Failed to fetch user by ID.");

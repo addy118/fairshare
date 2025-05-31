@@ -114,7 +114,7 @@ class Group {
   static async join(memberId, groupId) {
     try {
       await db.member.create({
-        data: { memberId: Number(memberId), groupId: Number(groupId) },
+        data: { memberId, groupId: Number(groupId) },
       });
     } catch (error) {
       console.error("Error adding member to group: ", error.stack);
