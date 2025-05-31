@@ -155,7 +155,12 @@ class User {
                   members: {
                     select: {
                       member: {
-                        select: { id: true, name: true, username: true },
+                        select: {
+                          id: true,
+                          name: true,
+                          username: true,
+                          pfp: true,
+                        },
                       },
                     },
                   },
