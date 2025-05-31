@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -7,29 +7,72 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/authProvider";
 import format from "@/utils/formatGroup";
 import formatDate from "@/utils/formatDate";
 import UserPic from "@/components/UserPic";
+import { useUser } from "@clerk/clerk-react";
+import formatUser from "@/utils/formatUser";
+import Loading from "@/components/Loading";
+import api from "@/axiosInstance";
 
 export default function GroupsPage() {
   const navigate = useNavigate();
 
-  const { user } = useAuth();
-  const groups = format.groups(user.groups);
+  const { user: clerkUser, isSignedIn, isLoaded } = useUser();
+  const user = formatUser(clerkUser);
+  console.log(user);
+  const [groups, setGroups] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // fetch user groups
+  useEffect(() => {
+    if (!isSignedIn) return null;
+
+    const fetchGroups = async () => {
+      try {
+        console.log("started...");
+        console.log(`/user/${user.id}/groups`);
+        const response = await api.post(`/user/${user.id}/groups`);
+        console.log("done!");
+
+        console.log(response.data);
+        const formatRes = format.groups(response.data);
+
+        console.log(formatRes);
+        setGroups(formatRes);
+      } catch (err) {
+        console.error(
+          "Failed to fetch groups:",
+          err?.response?.data || err.message || err
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchGroups();
+  }, [isSignedIn, user?.id]);
+
+  if (!isLoaded) return <Loading item="user" />;
+  if (isLoading) return <Loading item="groups" />;
+
+  console.log(groups);
 
   return (
     <div className="mx-auto max-w-4xl px-4">
       <h1 className="mb-8 text-2xl font-bold text-white">My Groups</h1>
 
-      {groups.length === 0 ? (
+      {groups?.length === 0 ? (
         <Card className="glass-dark border border-gray-700/50 py-12 text-center shadow-lg">
           <CardContent>
             <Users className="mx-auto h-12 w-12 text-teal-400" />
-            <h2 className="mt-4 text-xl font-semibold">No Groups Yet</h2>
+            <h2 className="mt-4 text-xl font-semibold text-gray-300">
+              No Groups Yet
+            </h2>
             <p className="mt-2 text-gray-300">
               Create a group to start splitting expenses with friends.
             </p>
@@ -37,7 +80,7 @@ export default function GroupsPage() {
         </Card>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {groups.map((group) => (
+          {groups?.map((group) => (
             <Card
               key={group.id}
               className="glass-dark hover-lift cursor-pointer border border-gray-700/50 shadow-lg transition-all duration-300"

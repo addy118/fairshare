@@ -32,13 +32,14 @@ const settlementsData = (data) => {
 };
 
 const groups = (groups) => {
-  return groups.map(({ group }) => ({
+  return groups?.map(({ group }) => ({
     id: group.id,
     name: group.name,
     memberCount: group.members.length,
     createdAt: group.createdAt,
     members: group.members.map(({ member }) => ({
       id: member.id,
+      pfp: member.pfp,
       name: member.name,
       username: member.username,
     })),
