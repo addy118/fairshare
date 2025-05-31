@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Avatar } from "@/components/ui/avatar";
-import { useAuth } from "@clerk/clerk-react";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import UserPic from "@/components/UserPic";
 import api from "@/axiosInstance";
 import UserBalance from "@/components/UserBalance";
 import Loading from "@/components/Loading";
 import { Card, CardContent } from "@/components/ui/card";
+import formatUser from "@/utils/formatUser";
 
 export default function Home() {
-  // const { user, isAuth } = useAuth();
-  const { isSignedIn } = useAuth();
-  const user = {
-    id: 1,
-  };
+  const { isSignedIn, isLoaded, user: clerkUser } = useUser();
+  const user = formatUser(clerkUser);
+  console.log(user);
 
   const [balances, setBalances] = useState({ owed: [], owes: [] });
   const [isLoading, setIsLoading] = useState(true);
 
   // fetch user balance
   useEffect(() => {
-    if (!isSignedIn) return;
+    if (!isSignedIn) return null;
 
     const fetchBalances = async () => {
       try {
@@ -33,8 +32,9 @@ export default function Home() {
     };
 
     fetchBalances();
-  }, [user]);
+  }, [isSignedIn, user?.id]);
 
+  if (!isLoaded) return <Loading item="user" />;
   if (isLoading) return <Loading item="profile" />;
 
   return (
@@ -47,7 +47,7 @@ export default function Home() {
                 {/* user details */}
                 <div className="mb-4 flex items-center gap-4 md:mb-0">
                   <Avatar className="h-16 w-16 border border-teal-500/30">
-                    <UserPic name={user.name} />
+                    <AvatarImage src={user.pfp} />
                   </Avatar>
 
                   <div>

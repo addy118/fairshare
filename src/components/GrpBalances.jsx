@@ -47,7 +47,7 @@ export default function GrpBalances() {
                 >
                   <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8 border border-gray-700">
-                      <UserPic name={member.name} />
+                      <AvatarImage src={user.pfp} />
                     </Avatar>
                     <span className="text-gray-300">{member.name}</span>
                     {member.id == user.id && (
@@ -70,7 +70,7 @@ export default function GrpBalances() {
                   >
                     <div className="flex items-center gap-2">
                       <Avatar className="h-8 w-8 border border-gray-700">
-                        <UserPic name={member.name} />
+                        <AvatarImage src={user.pfp} />
                       </Avatar>
                       <span className="text-gray-300">{member.name}</span>
                       {isCurrentUser && (

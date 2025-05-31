@@ -110,7 +110,7 @@ export default function Settlements() {
         <div className="mb-20 space-y-4">
           <>
             <Button
-              className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg transition-all duration-300 hover:from-purple-500 hover:to-purple-600 hover:shadow-purple-500/30 "
+              className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg transition-all duration-300 hover:from-purple-500 hover:to-purple-600 hover:shadow-purple-500/30"
               size="sm"
               onClick={handleOptimization}
               style={{ letterSpacing: "0.5em", textTransform: "uppercase" }}
@@ -131,7 +131,7 @@ export default function Settlements() {
                     <div className="flex items-center gap-4">
                       {/* source */}
                       <Avatar className="border border-gray-700">
-                        <UserPic name={settlement.from.name} />
+                        <AvatarImage src={user.pfp} />
                       </Avatar>
 
                       <div className="flex flex-col">
@@ -144,7 +144,7 @@ export default function Settlements() {
 
                       {/* destination */}
                       <Avatar className="border border-gray-700">
-                        <UserPic name={settlement.to.name} />
+                        <AvatarImage src={user.pfp} />
                       </Avatar>
                       <div className="flex flex-col">
                         <span className="font-medium text-gray-300">

@@ -56,7 +56,7 @@ export default function GroupsPage() {
                 <div className="flex -space-x-2 overflow-hidden">
                   {group.members?.slice(0, 5).map((member, index) => (
                     <Avatar key={index} className="border-1 border-teal-800">
-                      <UserPic name={member.name} />
+                      <AvatarImage src={member.pfp} />
                     </Avatar>
                   ))}
                   {group.memberCount > 5 && (

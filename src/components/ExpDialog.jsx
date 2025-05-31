@@ -38,7 +38,7 @@ export default function ExpDialog() {
                   <span>Paid by</span>
                   <div className="flex items-center gap-2">
                     <Avatar className="h-6 w-6">
-                      <UserPic name={selectedItem.paidBy.name} />
+                      <AvatarImage src={user.pfp} />
                     </Avatar>
                     <span>{selectedItem.paidBy.name}</span>
                     {selectedItem.paidBy.isCurrentUser && (
@@ -61,7 +61,7 @@ export default function ExpDialog() {
                       >
                         <div className="flex items-center gap-2">
                           <Avatar className="h-6 w-6">
-                            <UserPic name={split.user.name} />
+                            <AvatarImage src={user.pfp} />
                           </Avatar>
 
                           <span>{split.user.name}</span>
@@ -111,7 +111,7 @@ export default function ExpDialog() {
                   <span>From</span>
                   <div className="flex items-center gap-2">
                     <Avatar className="h-6 w-6">
-                      <UserPic name={selectedItem.from.name} />
+                      <AvatarImage src={user.pfp} />
                     </Avatar>
                     <span>{selectedItem.from.name}</span>
                   </div>
@@ -120,7 +120,7 @@ export default function ExpDialog() {
                   <span>To</span>
                   <div className="flex items-center gap-2">
                     <Avatar className="h-6 w-6">
-                      <UserPic name={selectedItem.to.name} />
+                      <AvatarImage src={user.pfp} />
                     </Avatar>
                     <span>{selectedItem.to.name}</span>
                   </div>
