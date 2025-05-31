@@ -9,6 +9,7 @@ const groupData = (data) => {
       id: member.id,
       name: member.name,
       username: member.username,
+      pfp: member.pfp,
     })),
     createdAt: data.createdAt,
   };
@@ -18,6 +19,7 @@ const balanceData = (data, userId) => {
   return data.map(({ user, amount }) => ({
     userId: user.id,
     name: user.name,
+    pfp: user.pfp,
     balance: amount,
     isCurrentUser: user.id === userId,
   }));

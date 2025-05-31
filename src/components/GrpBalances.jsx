@@ -8,14 +8,17 @@ import {
 } from "./ui/card";
 import { GroupContext } from "@/pages/Group";
 import UserPic from "./UserPic";
-import { Avatar } from "./ui/avatar";
+import { Avatar, AvatarImage } from "./ui/avatar";
 import { fetchBalances } from "@/utils/fetchGroupData";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@/authProvider";
+import { useUser } from "@clerk/clerk-react";
+import formatUser from "@/utils/formatUser";
 
 export default function GrpBalances() {
   const { id: groupId } = useParams();
-  const { user } = useAuth();
+  const { user: clerkUser } = useUser();
+  const user = formatUser(clerkUser);
   const { group, balances, setBalances } = useContext(GroupContext);
   const members = group?.members;
 
@@ -46,11 +49,14 @@ export default function GrpBalances() {
                   className="flex items-center justify-between"
                 >
                   <div className="flex items-center gap-2">
+                    {console.log(member.pfp)}
                     <Avatar className="h-8 w-8 border border-gray-700">
-                      <AvatarImage src={user.pfp} />
+                      <AvatarImage src={member.pfp} />
                     </Avatar>
                     <span className="text-gray-300">{member.name}</span>
-                    {member.id == user.id && (
+
+                    {console.log(member.id, user?.id)}
+                    {member.id == user?.id && (
                       <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-teal-400">
                         You
                       </span>
@@ -62,17 +68,19 @@ export default function GrpBalances() {
             : members?.map((member) => {
                 const balObj = balances.find((b) => b.userId === member.id);
                 const balance = balObj?.balance ?? 0;
-                const isCurrentUser = member.id === user.id;
+                const isCurrentUser = member.id === user?.id;
                 return (
                   <li
                     key={member.id}
                     className="flex items-center justify-between"
                   >
                     <div className="flex items-center gap-2">
+                      {console.log(member.pfp)}
                       <Avatar className="h-8 w-8 border border-gray-700">
-                        <AvatarImage src={user.pfp} />
+                        <AvatarImage src={member.pfp} />
                       </Avatar>
                       <span className="text-gray-300">{member.name}</span>
+
                       {isCurrentUser && (
                         <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-teal-400">
                           You
