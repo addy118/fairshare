@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import format from "./formatGroup";
 import { useAuth } from "@/authProvider";
 import { fetchGroupData } from "./fetchGroupData";
+import { useUser } from "@clerk/clerk-react";
 
 export default function useGroupData(groupId) {
-  const { user } = useAuth();
+  const { user } = useUser();
   const [data, setData] = useState({
     group: {},
     balances: [],
