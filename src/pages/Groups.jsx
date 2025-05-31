@@ -10,7 +10,6 @@ import {
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/authProvider";
 import format from "@/utils/formatGroup";
 import formatDate from "@/utils/formatDate";
 import UserPic from "@/components/UserPic";

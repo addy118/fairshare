@@ -1,7 +1,6 @@
 import api from "@/axiosInstance";
 import React, { useEffect, useState } from "react";
 import format from "./formatGroup";
-import { useAuth } from "@/authProvider";
 import { fetchGroupData } from "./fetchGroupData";
 import { useUser } from "@clerk/clerk-react";
 

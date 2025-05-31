@@ -12,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/authProvider";
 import {
   Dialog,
   DialogContent,
@@ -30,11 +29,14 @@ import {
   SignedIn,
   SignedOut,
   SignOutButton,
+  useUser,
 } from "@clerk/clerk-react";
+import formatUser from "@/utils/formatUser";
 
 export default function Layout() {
   const navigate = useNavigate();
-  const { user, isAuth, logout } = useAuth();
+  const { user: clerkUser } = useUser();
+  const user = formatUser(clerkUser);
 
   const [newGroupName, setNewGroupName] = useState("");
   const [newMembers, setNewMembers] = useState([]);

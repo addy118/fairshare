@@ -1,7 +1,5 @@
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
-import AuthProvider from "@/authProvider";
-import ProtectedRoute from "@/ProtectedRoute";
 import App from "@/App";
 import Layout from "./components/Layout";
 import ErrorPage from "./pages/ErrorPage";
@@ -11,15 +9,12 @@ import Home from "./pages/Home";
 import ExpenseForm from "./pages/ExpenseForm";
 import Profile from "./pages/Profile";
 import SignInPage from "./pages/SignInPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <AuthProvider>
-        <Layout />
-      </AuthProvider>
-    ),
+    element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
       { path: "/", element: <App /> },

@@ -11,7 +11,6 @@ import UserPic from "./UserPic";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { fetchBalances } from "@/utils/fetchGroupData";
 import { useParams } from "react-router-dom";
-import { useAuth } from "@/authProvider";
 import { useUser } from "@clerk/clerk-react";
 import formatUser from "@/utils/formatUser";
 

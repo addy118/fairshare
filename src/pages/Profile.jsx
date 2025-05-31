@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Pencil, Check, X, Lock } from "lucide-react";
 import { toast } from "sonner";
-import { useAuth } from "@/authProvider";
 import api from "@/axiosInstance";
 import {
   Dialog,

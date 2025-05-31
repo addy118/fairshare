@@ -3,7 +3,6 @@ import UserPic from "./UserPic";
 import { Avatar } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
-import { useAuth } from "@/authProvider";
 import { GroupContext } from "@/pages/Group";
 import { Check } from "lucide-react";
 import api from "@/axiosInstance";
@@ -14,10 +13,13 @@ import {
 import { useParams } from "react-router-dom";
 import Loading from "./Loading";
 import { toast } from "sonner";
+import { useUser } from "@clerk/clerk-react";
+import formatUser from "@/utils/formatUser";
 
 export default function Settlements() {
   const { id: groupId } = useParams();
-  const { user } = useAuth();
+  const { user: clerkUser } = useUser();
+  const user = formatUser(clerkUser);
   const { settlements, setSettlements, setBalances } = useContext(GroupContext);
   const [loading, setLoading] = useState(false);
 

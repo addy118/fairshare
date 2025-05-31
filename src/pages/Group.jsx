@@ -21,7 +21,8 @@ import { CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import api from "@/axiosInstance";
-import { useAuth } from "@/authProvider";
+import { useUser } from "@clerk/clerk-react";
+import formatUser from "@/utils/formatUser";
 
 export const GroupContext = createContext({
   group: {},
@@ -42,7 +43,8 @@ export const GroupContext = createContext({
 
 export default function GroupPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user: clerkUser } = useUser();
+  const user = formatUser(clerkUser);
   const { id: groupId } = useParams();
 
   const [group, setGroup] = useState(null);
