@@ -5,10 +5,10 @@ const { createBalance, calculateSplits } = require("./util");
 
 exports.postExp = async (req, res) => {
   try {
-    console.log("Hit /exp/new");
+    // console.log("Hit /exp/new");
 
     const expense = req.body;
-    console.log("Request body:", expense);
+    // console.log("Request body:", expense);
 
     const balance = createBalance(expense);
     const splits = calculateSplits(balance);
@@ -38,7 +38,7 @@ exports.postExp = async (req, res) => {
 exports.getExp = async (req, res) => {
   try {
     const { expId } = req.params;
-    // console.log(expId);
+    // // console.log(expId);
     const exp = await Expense.get(Number(expId));
     res.json({ exp });
   } catch (err) {
@@ -100,7 +100,7 @@ exports.remind = async (req, res) => {
       console.error("Error sending email:", error);
       res.status(400).json({ msg: "Error sending reminder mail." });
     } else {
-      console.log("Email sent:", info.response);
+      // console.log("Email sent:", info.response);
       res.status(200).json({ msg: "Reminder email was sent successfully!" });
     }
   });

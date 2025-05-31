@@ -52,7 +52,7 @@ exports.getUserInfo = async (req, res) => {
 exports.getUserBal = async (req, res) => {
   try {
     const { userId } = req.params;
-    console.log(userId);
+    // console.log(userId);
     const balance = await User.balance(userId);
     res.json(balance);
   } catch (err) {
@@ -65,7 +65,7 @@ exports.getUserGroups = async (req, res) => {
   try {
     const { userId } = req.params;
     const response = await User.groups(userId);
-    console.log(response);
+    // console.log(response);
     return res.status(200).json(response);
   } catch (err) {
     console.error("ERROR in getUserGroups:", err);

@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { requireAuth } = require("@clerk/express");
 const {
   getAllExpenses,
   getMinSplits,
@@ -10,11 +11,10 @@ const {
   postMember,
   deleteMember,
   getGrpInfo,
-} = require("../controllers/grpController");
-const { verifyToken } = require("../controllers/authController");
+} = require("../controllers/grp.controller");
 const grpRouter = new Router();
 
-// grpRouter.use(verifyToken);
+grpRouter.use(requireAuth());
 
 grpRouter.get("/:grpId/info", getGrpInfo);
 grpRouter.get("/:grpId/expenses", getAllExpenses);

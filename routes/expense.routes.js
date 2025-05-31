@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { verifyToken } = require("../controllers/authController");
+const { requireAuth } = require("@clerk/express");
 const {
   postExp,
   getExp,
@@ -7,10 +7,10 @@ const {
   confirmSplit,
   notConfirmSplit,
   remind,
-} = require("../controllers/expenseController");
+} = require("../controllers/expense.controller");
 const expRouter = Router();
 
-// expRouter.use(verifyToken);
+expRouter.use(requireAuth());
 
 expRouter.get("/:expId", getExp);
 

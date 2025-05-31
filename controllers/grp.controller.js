@@ -117,7 +117,7 @@ exports.getMinSplits = async (req, res) => {
 
     const balance = await getGroupBalance(grpId);
     const newSplits = calculateSplits(balance);
-    // console.log(newSplits);
+    // // console.log(newSplits);
 
     const splitsArr = newSplits.map((split) => {
       return {

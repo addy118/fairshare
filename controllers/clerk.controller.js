@@ -7,9 +7,9 @@ exports.postClerkUser = async (req, res) => {
     const user = evt.data;
     const eventType = evt.type;
 
-    console.log(
-      `Received webhook with ID ${user.id} and event type of ${eventType}`
-    );
+    // console.log(
+    //   `Received webhook with ID ${user.id} and event type of ${eventType}`
+    // );
 
     if (eventType === "user.created") {
       try {

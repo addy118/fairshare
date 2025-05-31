@@ -11,11 +11,11 @@ async function main() {
     // const res = await Group.join("user_2xr6Vz2hPcAvh0HmMGacSHaBwsm", 3);
     const res = await User.groups("user_2xr6Vz2hPcAvh0HmMGacSHaBwsm");
 
-    console.log(`Query succeeded: `, res);
+    // console.log(`Query succeeded: `, res);
   } catch (error) {
     console.error(`Query failed: `, error.message);
   } finally {
-    console.log("Query execution completed!");
+    // console.log("Query execution completed!");
   }
 }
 

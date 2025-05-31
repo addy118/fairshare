@@ -1,10 +1,6 @@
 const { Router } = require("express");
 const { requireAuth } = require("@clerk/express");
 const {
-  verifyToken,
-  verifyOwnership,
-} = require("../controllers/authController");
-const {
   getUser,
   putUserName,
   putUserEmail,
@@ -16,7 +12,7 @@ const {
   putUserPhone,
   getUserInfo,
   getUserGroups,
-} = require("../controllers/userController");
+} = require("../controllers/user.controller");
 const { validateReq } = require("../config/validation/req");
 const {
   validateName,
@@ -24,7 +20,6 @@ const {
   validatePass,
 } = require("../config/validation/user");
 const userRouter = Router();
-const { CLERK_SIGN_IN_URL } = process.env;
 
 userRouter.get("/:userId", getUser);
 

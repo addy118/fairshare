@@ -2,10 +2,9 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-// const authRouter = require("./routes/authRouter");
-const userRouter = require("./routes/userRouter");
-const expRouter = require("./routes/expenseRouter");
-const grpRouter = require("./routes/grpRouter");
+const userRouter = require("./routes/user.routes");
+const expRouter = require("./routes/expense.routes");
+const grpRouter = require("./routes/grp.routes");
 const { clerkMiddleware } = require("@clerk/express");
 const clerkRouter = require("./routes/clerk.routes");
 const app = express();
@@ -47,5 +46,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  // console.log(`Server listening on port ${PORT}`);
 });
