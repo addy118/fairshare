@@ -1,50 +1,30 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import App from "@/App";
-import Layout from "./components/Layout";
-import ErrorPage from "./pages/ErrorPage";
-import GroupsPage from "./pages/Groups";
-import GroupPage from "./pages/Group";
-import Home from "./pages/Home";
-import ExpenseForm from "./pages/ExpenseForm";
-import SignInPage from "./pages/SignInPage";
-import ProtectedRoute from "./ProtectedRoute";
-import Profile from "./pages/Profile";
+const App = lazy(() => import("./App"));
+const Layout = lazy(() => import("./components/Layout"));
+const ErrorPage = lazy(() => import("./pages/ErrorPage"));
+const GroupsPage = lazy(() => import("./pages/Groups"));
+const GroupPage = lazy(() => import("./pages/Group"));
+const ExpenseForm = lazy(() => import("./pages/ExpenseForm"));
+const SignInPage = lazy(() => import("./pages/SignInPage"));
+const ProtectedRoute = lazy(() => import("./ProtectedRoute"));
+const Profile = lazy(() => import("./pages/Profile"));
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
-    errorElement: <ErrorPage />,
+    Component: Layout,
+    errorElement: ErrorPage,
     children: [
-      { path: "/", element: <App /> },
+      { index: true, Component: App },
+      { path: "login", Component: SignInPage },
       {
-        path: "login",
-        element: <SignInPage />,
-      },
-      {
-        element: <ProtectedRoute />,
+        Component: ProtectedRoute,
         children: [
-          {
-            path: "home",
-            element: <Home />,
-          },
-          {
-            path: "profile",
-            element: <Profile />,
-          },
-          {
-            path: "groups/:groupId/expense/new",
-            element: <ExpenseForm />,
-          },
-          {
-            path: "groups",
-            element: <GroupsPage />,
-          },
-          {
-            path: "groups/:id",
-            element: <GroupPage />,
-          },
+          { path: "profile", Component: Profile },
+          { path: "groups", Component: GroupsPage },
+          { path: "groups/:id", Component: GroupPage },
+          { path: "groups/:id/expense/new", Component: ExpenseForm },
         ],
       },
     ],

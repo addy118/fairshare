@@ -24,8 +24,8 @@ import Loading from "@/components/Loading";
 
 export default function ExpenseForm() {
   const navigate = useNavigate();
-  const { groupId } = useParams();
-  const { group } = useGroupData(Number(groupId));
+  const { id } = useParams();
+  const { group } = useGroupData(Number(id));
   // console.log(group);
   const users = group?.members || [];
   // console.log(users);
