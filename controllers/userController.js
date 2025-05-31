@@ -9,7 +9,7 @@ exports.test = async (req, res) => {
     res.status(200).json(user);
   } catch (err) {
     console.error("ERROR in test:", err);
-    res.status(500).json({ msg: err.message });
+    res.status(400).json({ msg: err.message });
   }
 };
 
@@ -21,7 +21,7 @@ exports.testProtected = async (req, res) => {
     res.status(200).json(user);
   } catch (err) {
     console.error("ERROR in testProtected:", err);
-    res.status(500).json({ msg: err.message });
+    res.status(400).json({ msg: err.message });
   }
 };
 

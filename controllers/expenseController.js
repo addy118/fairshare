@@ -31,7 +31,7 @@ exports.postExp = async (req, res) => {
     res.json({ exp });
   } catch (err) {
     console.error("ERROR in /exp/new:", err);
-    res.status(500).json({ msg: "Internal server error" });
+    res.status(400).json({ msg: "Internal server error" });
   }
 };
 
@@ -43,7 +43,7 @@ exports.getExp = async (req, res) => {
     res.json({ exp });
   } catch (err) {
     console.error("ERROR in getExp:", err);
-    res.status(500).json({ msg: "Failed to retrieve expense" });
+    res.status(400).json({ msg: "Failed to retrieve expense" });
   }
 };
 
@@ -54,7 +54,7 @@ exports.settleSplit = async (req, res) => {
     res.json({ msg: "success" });
   } catch (err) {
     console.error("ERROR in settleSplit:", err);
-    res.status(500).json({ msg: "Failed to settle split" });
+    res.status(400).json({ msg: "Failed to settle split" });
   }
 };
 
@@ -65,7 +65,7 @@ exports.confirmSplit = async (req, res) => {
     res.json({ msg: "success" });
   } catch (err) {
     console.error("ERROR in confirmSplit:", err);
-    res.status(500).json({ msg: "Failed to confirm split" });
+    res.status(400).json({ msg: "Failed to confirm split" });
   }
 };
 
@@ -76,7 +76,7 @@ exports.notConfirmSplit = async (req, res) => {
     res.json({ msg: "success" });
   } catch (err) {
     console.error("ERROR in notConfirmSplit:", err);
-    res.status(500).json({ msg: "Failed to not confirm split" });
+    res.status(400).json({ msg: "Failed to not confirm split" });
   }
 };
 
@@ -98,7 +98,7 @@ exports.remind = async (req, res) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error("Error sending email:", error);
-      res.status(500).json({ msg: "Error sending reminder mail." });
+      res.status(400).json({ msg: "Error sending reminder mail." });
     } else {
       console.log("Email sent:", info.response);
       res.status(200).json({ msg: "Reminder email was sent successfully!" });

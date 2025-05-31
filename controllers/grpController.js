@@ -16,7 +16,7 @@ exports.postGrp = async (req, res) => {
     res.json({ msg: "success", group });
   } catch (err) {
     console.error("ERROR in postGrp:", err);
-    res.status(500).json({ msg: "Failed to create group" });
+    res.status(400).json({ msg: "Failed to create group" });
   }
 };
 
@@ -27,7 +27,7 @@ exports.postDelGrp = async (req, res) => {
     res.json({ msg: "success" });
   } catch (err) {
     console.error("ERROR in postDelGrp:", err);
-    res.status(500).json({ msg: "Failed to delete group" });
+    res.status(400).json({ msg: "Failed to delete group" });
   }
 };
 
@@ -41,7 +41,7 @@ exports.postMember = async (req, res) => {
     res.json({ msg: "success" });
   } catch (err) {
     console.error("ERROR in postMember:", err);
-    res.status(500).json({ msg: "Failed to add member to group" });
+    res.status(400).json({ msg: "Failed to add member to group" });
   }
 };
 
@@ -52,7 +52,7 @@ exports.deleteMember = async (req, res) => {
     res.json({ msg: "success" });
   } catch (err) {
     console.error("ERROR in deleteMember:", err);
-    res.status(500).json({ msg: "Failed to remove member from group" });
+    res.status(400).json({ msg: "Failed to remove member from group" });
   }
 };
 
@@ -63,7 +63,7 @@ exports.getGrpInfo = async (req, res) => {
     res.json(group);
   } catch (err) {
     console.error("ERROR in getGrpInfo:", err);
-    res.status(500).json({ msg: "Failed to retrieve group information" });
+    res.status(400).json({ msg: "Failed to retrieve group information" });
   }
 };
 
@@ -74,7 +74,7 @@ exports.getAllExpenses = async (req, res) => {
     res.json(group);
   } catch (err) {
     console.error("ERROR in getAllExpenses:", err);
-    res.status(500).json({ msg: "Failed to retrieve group expenses" });
+    res.status(400).json({ msg: "Failed to retrieve group expenses" });
   }
 };
 
@@ -96,7 +96,7 @@ exports.getGrpBalance = async (req, res) => {
     res.json(balance);
   } catch (err) {
     console.error("ERROR in getGrpBalance:", err);
-    res.status(500).json({ msg: "Failed to calculate group balance" });
+    res.status(400).json({ msg: "Failed to calculate group balance" });
   }
 };
 
@@ -107,7 +107,7 @@ exports.getSplits = async (req, res) => {
     res.json(splits);
   } catch (err) {
     console.error("ERROR in getSplits:", err);
-    res.status(500).json({ msg: "Failed to retrieve splits information" });
+    res.status(400).json({ msg: "Failed to retrieve splits information" });
   }
 };
 
@@ -137,7 +137,7 @@ exports.getMinSplits = async (req, res) => {
   } catch (err) {
     console.error("ERROR in getMinSplits:", err);
     res
-      .status(500)
+      .status(400)
       .json({ msg: "Failed to calculate and update optimized splits" });
   }
 };
@@ -192,6 +192,6 @@ exports.getGrpHistory = async (req, res) => {
     res.json(timeline);
   } catch (err) {
     console.error("ERROR in getGrpHistory:", err);
-    res.status(500).json({ msg: "Failed to retrieve group history" });
+    res.status(400).json({ msg: "Failed to retrieve group history" });
   }
 };

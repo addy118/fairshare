@@ -10,7 +10,7 @@ const {
 } = require("../controllers/expenseController");
 const expRouter = Router();
 
-expRouter.use(verifyToken);
+// expRouter.use(verifyToken);
 
 expRouter.get("/:expId", getExp);
 

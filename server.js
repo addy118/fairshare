@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const authRouter = require("./routes/authRouter");
+// const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
 const expRouter = require("./routes/expenseRouter");
 const grpRouter = require("./routes/grpRouter");
@@ -31,13 +31,13 @@ const { PORT } = process.env;
 app.use("/clerk", clerkRouter);
 
 app.use(express.json());
-app.use("/auth", authRouter);
+// app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/grp", grpRouter);
 app.use("/exp", expRouter);
 
 app.get("/", (req, res) => {
-  res.json("Welcome to our app Fair Share!");
+  res.json("Welcome to our app Fair Share! You are an unauthenticated user!");
 });
 
 app.use((err, req, res, next) => {

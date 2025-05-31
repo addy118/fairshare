@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { requireAuth } = require("@clerk/express");
 const {
   verifyToken,
   verifyOwnership,
@@ -23,17 +24,20 @@ const {
   validatePass,
 } = require("../config/validation/user");
 const userRouter = Router();
+const { CLERK_SIGN_IN_URL } = process.env;
 
 userRouter.get("/:userId", getUser);
 
 // protect the routes
-// userRouter.use("/:userId/*", [verifyToken, verifyOwnership]);
+userRouter.use("/:userId/*", requireAuth());
 
 userRouter.get("/:userId/balance", getUserBal);
 userRouter.get("/:userId/info", getUserInfo);
 userRouter.post("/:userId/groups", getUserGroups);
 
-userRouter.post("/:userId/protected", testProtected);
+userRouter.get("/:userId/protected", requireAuth(), (req, res) => {
+  res.send("Accessed protected route.");
+});
 
 userRouter.use((err, req, res, next) => {
   console.error(err.message);
