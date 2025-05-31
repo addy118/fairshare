@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -6,20 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { GroupContext } from "@/pages/Group";
 import ExpDialog from "./ExpDialog";
 import PaymentHistory from "./PaymentHistory";
 
 export default function GrpHistory() {
-  const { expenses, history, setSelectedItem, setDetailsOpen } =
-    useContext(GroupContext);
-
-  // trigger expense details dialog
-  const showDetails = (item, type) => {
-    setSelectedItem({ ...item, type });
-    setDetailsOpen(true);
-  };
-
   return (
     <>
       <Card>

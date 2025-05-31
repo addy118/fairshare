@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import UserPic from "@/components/UserPic";
 import api from "@/axiosInstance";
 import UserBalance from "@/components/UserBalance";
 import Loading from "@/components/Loading";

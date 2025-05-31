@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "./ui/card";
 import { GroupContext } from "@/pages/Group";
-import UserPic from "./UserPic";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { fetchBalances } from "@/utils/fetchGroupData";
 import { useParams } from "react-router-dom";

@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { GroupContext } from "@/pages/Group";
 import { Avatar } from "./ui/avatar";
-import UserPic from "./UserPic";
 import {
   Dialog,
   DialogContent,
@@ -38,7 +37,7 @@ export default function ExpDialog() {
                   <span>Paid by</span>
                   <div className="flex items-center gap-2">
                     <Avatar className="h-6 w-6">
-                      <AvatarImage src={user.pfp} />
+                      <AvatarImage src={selectedItem.paidBy.pfp} />
                     </Avatar>
                     <span>{selectedItem.paidBy.name}</span>
                     {selectedItem.paidBy.isCurrentUser && (
@@ -61,7 +60,7 @@ export default function ExpDialog() {
                       >
                         <div className="flex items-center gap-2">
                           <Avatar className="h-6 w-6">
-                            <AvatarImage src={user.pfp} />
+                            <AvatarImage src={split.user.pfp} />
                           </Avatar>
 
                           <span>{split.user.name}</span>
@@ -111,7 +110,7 @@ export default function ExpDialog() {
                   <span>From</span>
                   <div className="flex items-center gap-2">
                     <Avatar className="h-6 w-6">
-                      <AvatarImage src={user.pfp} />
+                      <AvatarImage src={selectedItem.from.pfp} />
                     </Avatar>
                     <span>{selectedItem.from.name}</span>
                   </div>
@@ -120,7 +119,7 @@ export default function ExpDialog() {
                   <span>To</span>
                   <div className="flex items-center gap-2">
                     <Avatar className="h-6 w-6">
-                      <AvatarImage src={user.pfp} />
+                      <AvatarImage src={selectedItem.to.pfp} />
                     </Avatar>
                     <span>{selectedItem.to.name}</span>
                   </div>

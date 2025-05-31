@@ -10,7 +10,6 @@ import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Clock } from "lucide-react";
 import { GroupContext } from "@/pages/Group";
-import UserPic from "./UserPic";
 import formatDate from "@/utils/formatDate";
 import { fetchHistory } from "@/utils/fetchGroupData";
 import { useParams } from "react-router-dom";
@@ -338,7 +337,7 @@ export default function PaymentHistory() {
                               >
                                 <div className="flex items-center gap-4">
                                   <Avatar className="h-6 w-6 border border-gray-700">
-                                    <AvatarImage src={user.pfp} />
+                                    <AvatarImage src={payer.pfp} />
                                   </Avatar>
 
                                   <span className="text-gray-300">
@@ -366,7 +365,7 @@ export default function PaymentHistory() {
                             <div className="flex items-center justify-between text-sm">
                               <div className="flex items-center gap-4">
                                 <Avatar className="h-6 w-6 border border-gray-700">
-                                  <AvatarImage src={user.pfp} />
+                                  <AvatarImage src={item.debtor.pfp} />
                                 </Avatar>
                                 <span className="text-gray-300">
                                   {item.debtor.name}
@@ -386,7 +385,7 @@ export default function PaymentHistory() {
                             <div className="flex items-center justify-between text-sm">
                               <div className="flex items-center gap-4">
                                 <Avatar className="h-6 w-6 border border-gray-700">
-                                  <AvatarImage src={user.pfp} />
+                                  <AvatarImage src={item.creditor.pfp} />
                                 </Avatar>
                                 <span className="text-gray-300">
                                   {item.creditor.name}
@@ -413,7 +412,7 @@ export default function PaymentHistory() {
                             >
                               <div className="flex items-center gap-3">
                                 <Avatar className="h-6 w-6 border border-gray-700">
-                                  <AvatarImage src={user.pfp} />
+                                  <AvatarImage src={balance.user.pfp} />
                                 </Avatar>
                                 <span className="text-gray-300">
                                   {balance.user.name}

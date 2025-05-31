@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import UserPic from "./UserPic";
 import { Avatar } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
@@ -133,7 +132,7 @@ export default function Settlements() {
                     <div className="flex items-center gap-4">
                       {/* source */}
                       <Avatar className="border border-gray-700">
-                        <AvatarImage src={user.pfp} />
+                        <AvatarImage src={settlement.from.pfp} />
                       </Avatar>
 
                       <div className="flex flex-col">
@@ -146,7 +145,7 @@ export default function Settlements() {
 
                       {/* destination */}
                       <Avatar className="border border-gray-700">
-                        <AvatarImage src={user.pfp} />
+                        <AvatarImage src={settlement.to.pfp} />
                       </Avatar>
                       <div className="flex flex-col">
                         <span className="font-medium text-gray-300">

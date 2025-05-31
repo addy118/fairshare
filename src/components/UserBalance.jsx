@@ -7,8 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import UserPic from "./UserPic";
-import { Avatar } from "./ui/avatar";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 export default function UserBalance({ balances, isCreditor }) {
   const list = isCreditor ? balances.creditor : balances.debtor;
@@ -45,9 +44,9 @@ export default function UserBalance({ balances, isCreditor }) {
               >
                 <div className="flex items-center gap-2">
                   <Avatar className="h-8 w-8 border border-gray-700">
-                    <UserPic
-                      name={
-                        isCreditor ? balance.debtor.name : balance.creditor.name
+                    <AvatarImage
+                      src={
+                        isCreditor ? balance.debtor.pfp : balance.creditor.pfp
                       }
                     />
                   </Avatar>

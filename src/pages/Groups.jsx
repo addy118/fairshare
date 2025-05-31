@@ -12,7 +12,6 @@ import { Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import format from "@/utils/formatGroup";
 import formatDate from "@/utils/formatDate";
-import UserPic from "@/components/UserPic";
 import { useUser } from "@clerk/clerk-react";
 import formatUser from "@/utils/formatUser";
 import Loading from "@/components/Loading";
