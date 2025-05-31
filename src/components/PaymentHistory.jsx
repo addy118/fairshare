@@ -38,7 +38,7 @@ export default function PaymentHistory() {
   }, [groupId]);
 
   const toggleAll = () => {
-    console.log("clicked toggle all");
+    // console.log("clicked toggle all");
 
     // toggle the deciding flag
     const newState = !isExpanded;
@@ -73,32 +73,32 @@ export default function PaymentHistory() {
     let originalExpandedState;
 
     try {
-      console.log("Starting PDF export...");
+      // console.log("Starting PDF export...");
       setIsExporting(true);
 
       // Save the current expanded state to restore later
       originalExpandedState = { ...expandedItems };
-      console.log("Saved original expanded state:", originalExpandedState);
+      // console.log("Saved original expanded state:", originalExpandedState);
 
       // Expand all items
       setExpandedItems(
         history.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
       );
-      console.log("All items expanded for PDF generation");
+      // console.log("All items expanded for PDF generation");
 
       // Wait for state update and DOM rendering
       await new Promise((resolve) => setTimeout(resolve, 500));
-      console.log("Waiting for DOM update complete");
+      // console.log("Waiting for DOM update complete");
 
       if (!pdfRef.current) {
         console.error("PDF container reference is null");
         throw new Error("PDF container reference is null");
       }
-      console.log("PDF reference element found");
+      // console.log("PDF reference element found");
 
       // Add a temporary class to use basic colors instead of oklch
       document.body.classList.add("pdf-export-mode");
-      console.log("Added PDF export mode class to body");
+      // console.log("Added PDF export mode class to body");
 
       // Wait for styles to apply
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -122,12 +122,12 @@ export default function PaymentHistory() {
           pdf.internal.pageSize.getHeight(),
           "F"
         );
-        console.log("Created jsPDF instance with background color");
+        // console.log("Created jsPDF instance with background color");
 
         const container = pdfRef.current;
 
         // Generate canvas with simplified options
-        console.log("Starting html2canvas conversion...");
+        // console.log("Starting html2canvas conversion...");
         const canvas = await html2canvas(container, {
           scale: 1.5,
           useCORS: true,
@@ -162,7 +162,7 @@ export default function PaymentHistory() {
             });
           },
         });
-        console.log("html2canvas conversion complete");
+        // console.log("html2canvas conversion complete");
 
         // Get dimensions with margins
         const pageWidth = pdf.internal.pageSize.getWidth();
@@ -232,7 +232,7 @@ export default function PaymentHistory() {
       console.error("Outer error exporting PDF:", outerError);
       toast.error(`Failed to export PDF: ${outerError.message}`);
     } finally {
-      console.log("Cleaning up...");
+      // console.log("Cleaning up...");
       document.body.classList.remove("pdf-export-mode");
       setExpandedItems(originalExpandedState || {});
       setIsExporting(false);

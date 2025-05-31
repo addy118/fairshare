@@ -13,7 +13,7 @@ export default function Home() {
   const { getToken } = useAuth();
 
   const user = formatUser(clerkUser);
-  // console.log(user);
+  // // console.log(user);
 
   const [balances, setBalances] = useState({ owed: [], owes: [] });
   const [isLoading, setIsLoading] = useState(true);
@@ -24,19 +24,19 @@ export default function Home() {
 
     const fetchBalances = async () => {
       try {
-        console.log("start...");
+        // console.log("start...");
 
         const token = await getToken();
-        console.log(token);
+        // console.log(token);
 
         const response = await api.get(`user/${user.id}/balance`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        // console.log(response.status);
+        // // console.log(response.status);
 
-        console.log("end.");
+        // console.log("end.");
         setBalances(response.data);
       } catch (err) {
         console.error("Failed to fetch balances:", err);

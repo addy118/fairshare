@@ -48,13 +48,11 @@ export default function GrpBalances() {
                   className="flex items-center justify-between"
                 >
                   <div className="flex items-center gap-2">
-                    {console.log(member.pfp)}
                     <Avatar className="h-8 w-8 border border-gray-700">
                       <AvatarImage src={member.pfp} />
                     </Avatar>
                     <span className="text-gray-300">{member.name}</span>
 
-                    {console.log(member.id, user?.id)}
                     {member.id == user?.id && (
                       <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-teal-400">
                         You
@@ -74,7 +72,6 @@ export default function GrpBalances() {
                     className="flex items-center justify-between"
                   >
                     <div className="flex items-center gap-2">
-                      {console.log(member.pfp)}
                       <Avatar className="h-8 w-8 border border-gray-700">
                         <AvatarImage src={member.pfp} />
                       </Avatar>

@@ -27,9 +27,9 @@ export default function ExpenseForm() {
   const navigate = useNavigate();
   const { groupId } = useParams();
   const { group } = useGroupData(Number(groupId));
-  console.log(group);
+  // console.log(group);
   const users = group?.members || [];
-  console.log(users);
+  // console.log(users);
 
   const [expenseName, setExpenseName] = useState("");
   const [totalAmount, setTotalAmount] = useState("");

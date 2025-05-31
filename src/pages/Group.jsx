@@ -70,8 +70,8 @@ export default function GroupPage() {
     }
 
     try {
-      console.log("adding members to new group...");
-      console.log(newMembers);
+      // console.log("adding members to new group...");
+      // console.log(newMembers);
       for (const user of newMembers) {
         setIsLoading(true);
         await api.post(`/grp/${groupId}/member/new`, {
@@ -80,7 +80,7 @@ export default function GroupPage() {
         setIsLoading(false);
       }
 
-      console.log("members added successfully!");
+      // console.log("members added successfully!");
 
       setNewGroupOpen(false);
       setNewMembers([]);
@@ -113,13 +113,13 @@ export default function GroupPage() {
 
   const handleLeaveGroup = async () => {
     try {
-      console.log(`user ${user.id} leaving the group ${groupId}...`);
+      // console.log(`user ${user.id} leaving the group ${groupId}...`);
 
       setIsLoading(true);
       await api.delete(`/grp/${groupId}/member/${user.id}`);
       setIsLoading(false);
 
-      console.log(`user ${user.id} left the group ${groupId}`);
+      // console.log(`user ${user.id} left the group ${groupId}`);
       navigate("/groups");
     } catch (err) {
       console.error("Error leaving group: ", err);
@@ -147,8 +147,10 @@ export default function GroupPage() {
     setHistory(hist);
   }, [grp, bal, exp, hist, loading]);
 
-  if (error) console.log(error);
-  if (loading) return <Loading item="group" />;
+  if (error)
+    if (loading)
+      // console.log(error);
+      return <Loading item="group" />;
 
   return (
     <GroupContext.Provider

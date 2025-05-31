@@ -23,7 +23,7 @@ export default function GroupsPage() {
 
   const { user: clerkUser, isSignedIn, isLoaded } = useUser();
   const user = formatUser(clerkUser);
-  console.log(user);
+  // console.log(user);
   const [groups, setGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,15 +33,15 @@ export default function GroupsPage() {
 
     const fetchGroups = async () => {
       try {
-        console.log("started...");
-        console.log(`/user/${user.id}/groups`);
+        // console.log("started...");
+        // console.log(`/user/${user.id}/groups`);
         const response = await api.post(`/user/${user.id}/groups`);
-        console.log("done!");
+        // console.log("done!");
 
-        console.log(response.data);
+        // console.log(response.data);
         const formatRes = format.groups(response.data);
 
-        console.log(formatRes);
+        // console.log(formatRes);
         setGroups(formatRes);
       } catch (err) {
         console.error(
@@ -59,7 +59,7 @@ export default function GroupsPage() {
   if (!isLoaded) return <Loading item="user" />;
   if (isLoading) return <Loading item="groups" />;
 
-  console.log(groups);
+  // console.log(groups);
 
   return (
     <div className="mx-auto max-w-4xl px-4">
@@ -85,7 +85,7 @@ export default function GroupsPage() {
               className="glass-dark hover-lift cursor-pointer border border-gray-700/50 shadow-lg transition-all duration-300"
               onClick={() => {
                 navigate(`${group.id}`);
-                console.log(group.id);
+                // console.log(group.id);
               }}
             >
               <CardHeader>

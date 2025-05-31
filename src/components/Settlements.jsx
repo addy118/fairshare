@@ -25,7 +25,7 @@ export default function Settlements() {
 
   const handleOptimization = async () => {
     try {
-      console.log("optimizing splits...");
+      // console.log("optimizing splits...");
 
       setLoading(true);
       await api.get(`grp/${groupId}/splits/min`);
@@ -83,7 +83,7 @@ export default function Settlements() {
 
   const handleRemind = async (settlementId, fromUser) => {
     try {
-      // console.log("remind user " + fromUser);
+      // // console.log("remind user " + fromUser);
 
       const remindRes = await api.post(`/exp/${Number(settlementId)}/remind`);
       if (remindRes.status != 200) throw new Error("Unexpected error!");

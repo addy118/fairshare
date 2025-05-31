@@ -24,13 +24,13 @@ export default function useGroupData(groupId) {
         setData(groupInfo);
       } catch (err) {
         if (err.response) {
-          console.log(`HTTP Error: ${err.response.status}`);
+          // console.log(`HTTP Error: ${err.response.status}`);
           setError(err.response);
         } else if (err.request) {
-          console.log("Request Error: No response received");
+          // console.log("Request Error: No response received");
           setError(err.request);
         } else {
-          console.log(`Error: ${err.message}`);
+          // console.log(`Error: ${err.message}`);
           setError(err.message);
         }
       } finally {
