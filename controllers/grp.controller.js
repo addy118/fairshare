@@ -1,10 +1,8 @@
-const { split } = require("../config/prismaClient");
 const Group = require("../prisma/queries/Group");
 const Split = require("../prisma/queries/Split");
 const User = require("../prisma/queries/User");
 const {
   calculateSplits,
-  getSplitBalance,
   mergeChrono,
   getGroupBalance,
 } = require("./util");

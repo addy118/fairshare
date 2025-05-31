@@ -30,7 +30,6 @@ const { PORT } = process.env;
 app.use("/clerk", clerkRouter);
 
 app.use(express.json());
-// app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/grp", grpRouter);
 app.use("/exp", expRouter);
@@ -46,5 +45,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  // console.log(`Server listening on port ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });

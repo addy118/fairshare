@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs");
 const User = require("../prisma/queries/User");
 
 exports.test = async (req, res) => {

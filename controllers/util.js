@@ -1,5 +1,4 @@
 const Group = require("../prisma/queries/Group");
-const User = require("../prisma/queries/User");
 
 function createBalance(expense) {
   const balance = {};
