@@ -27,7 +27,7 @@ const userRouter = Router();
 userRouter.get("/:userId", getUser);
 
 // protect the routes
-userRouter.use("/:userId/*", [verifyToken, verifyOwnership]);
+// userRouter.use("/:userId/*", [verifyToken, verifyOwnership]);
 
 userRouter.get("/:userId/balance", getUserBal);
 userRouter.get("/:userId/info", getUserInfo);

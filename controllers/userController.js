@@ -33,7 +33,7 @@ exports.getUser = async (req, res) => {
     res.status(200).json(user);
   } catch (err) {
     console.error("ERROR in getUser:", err);
-    res.status(500).json({ msg: err.message });
+    res.status(400).json({ msg: err.message });
   }
 };
 
@@ -45,18 +45,19 @@ exports.getUserInfo = async (req, res) => {
     res.status(200).json(user);
   } catch (err) {
     console.error("ERROR in getUser:", err);
-    res.status(500).json({ msg: err.message });
+    res.status(400).json({ msg: err.message });
   }
 };
 
 exports.getUserBal = async (req, res) => {
   try {
     const { userId } = req.params;
+    console.log(userId)
     const balance = await User.balance(userId);
     res.json(balance);
   } catch (err) {
     console.error("ERROR in getUserBal:", err);
-    res.status(500).json({ msg: "Failed to retrieve user balance" });
+    res.status(400).json({ msg: "Failed to retrieve user balance" });
   }
 };
 
@@ -67,6 +68,6 @@ exports.getUserGroups = async (req, res) => {
     console.log(res);
   } catch (err) {
     console.error("ERROR in getUserGroup:", err);
-    res.status(500).json({ msg: "Failed to retrieve user groups" });
+    res.status(400).json({ msg: "Failed to retrieve user groups" });
   }
 };

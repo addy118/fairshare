@@ -59,7 +59,7 @@ class Expense {
   static async get(id) {
     try {
       const res = await db.expense.findFirst({
-        where: { id: Number(id) },
+        where: { id },
         select: {
           id: true,
           name: true,
@@ -93,7 +93,7 @@ class Expense {
   static async settle(id) {
     try {
       await db.split.update({
-        where: { id: Number(id) },
+        where: { id },
         data: { settled: true },
       });
     } catch (error) {
@@ -105,7 +105,7 @@ class Expense {
   static async confirm(id) {
     try {
       await db.split.update({
-        where: { id: Number(id) },
+        where: { id },
         data: { settled: true, confirmed: true },
       });
     } catch (error) {
@@ -117,7 +117,7 @@ class Expense {
   static async notConfirm(id) {
     try {
       await db.split.update({
-        where: { id: Number(id) },
+        where: { id },
         data: { settled: false, confirmed: false },
       });
     } catch (error) {

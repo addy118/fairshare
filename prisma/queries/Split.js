@@ -32,7 +32,7 @@ class Split {
   static async get(id) {
     try {
       return await db.split.findUnique({
-        where: { id: Number(id) },
+        where: { id },
         select: {
           id: true,
           name: true,
@@ -72,7 +72,7 @@ class Split {
   static async delete(id) {
     try {
       await db.split.delete({
-        where: { id: Number(id) },
+        where: { id },
       });
     } catch (error) {
       console.error("Error deleting split: ", error.stack);

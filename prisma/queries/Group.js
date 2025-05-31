@@ -48,7 +48,7 @@ class Group {
   static async expenses(id) {
     try {
       const expenses = await db.group.findMany({
-        where: { id: Number(id) },
+        where: { id },
         select: {
           expenses: {
             select: {
@@ -90,7 +90,7 @@ class Group {
   static async splits(id) {
     try {
       const splits = await db.group.findMany({
-        where: { id: Number(id) },
+        where: { id },
         select: {
           splits: {
             where: { confirmed: false },

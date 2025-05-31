@@ -22,7 +22,7 @@ class User {
   static async getBasicInfo(id) {
     try {
       return await db.user.findUnique({
-        where: { id: Number(id) },
+        where: { id },
         select: {
           id: true,
           name: true,
@@ -176,7 +176,7 @@ class User {
   static async balance(id) {
     try {
       const balance = await db.user.findFirst({
-        where: { id: Number(id) },
+        where: { id },
         select: {
           debtor: {
             select: {
