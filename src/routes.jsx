@@ -7,9 +7,9 @@ import GroupsPage from "./pages/Groups";
 import GroupPage from "./pages/Group";
 import Home from "./pages/Home";
 import ExpenseForm from "./pages/ExpenseForm";
-import Profile from "./pages/Profile";
 import SignInPage from "./pages/SignInPage";
 import ProtectedRoute from "./ProtectedRoute";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +18,6 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { path: "/", element: <App /> },
-      // { path: "/", element: <LandingPage /> },
       {
         path: "login",
         element: <SignInPage />,
