@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@clerk/express": "^1.5.2",
     "@prisma/client": "^6.8.2",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
@@ -21,7 +22,8 @@
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.10.1",
     "nodemon": "^3.1.9",
-    "pg": "^8.13.2"
+    "pg": "^8.13.2",
+    "svix": "^1.66.0"
   },
   "devDependencies": {
     "prisma": "^6.8.2"

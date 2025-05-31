@@ -6,11 +6,12 @@ const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
 const expRouter = require("./routes/expenseRouter");
 const grpRouter = require("./routes/grpRouter");
+const { clerkMiddleware } = require("@clerk/express");
+const clerkRouter = require("./routes/clerk.routes");
 const app = express();
-
+app.use(clerkMiddleware());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.json());
 
 const allowedOrigins = [
   "https://fairsharee.netlify.app",
@@ -25,9 +26,11 @@ app.use(
   })
 );
 app.options("*", cors());
-
 const { PORT } = process.env;
 
+app.use("/clerk", clerkRouter);
+
+app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/grp", grpRouter);

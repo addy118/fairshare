@@ -7,20 +7,14 @@ const users = require("./users");
 
 async function main() {
   try {
-    let res = await prisma.expense.deleteMany({
-      where: { groupId: 10 },
-    });
+    let res = await prisma.user.deleteMany({});
 
-    res = await prisma.group.delete({
-      where: { id: 10 },
-    });
-
-    console.log(`Deleted group`, res);
+    console.log(`Query succeeded: `, res);
   } catch (error) {
-    console.error(`Failed to delete group`, error.message);
+    console.error(`Query failed: `, error.message);
+  } finally {
+    console.log("Query execution completed!");
   }
-
-  console.log("Query execution completed!");
 }
 
 main()
