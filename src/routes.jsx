@@ -3,16 +3,14 @@ import { createBrowserRouter } from "react-router-dom";
 import AuthProvider from "@/authProvider";
 import ProtectedRoute from "@/ProtectedRoute";
 import App from "@/App";
-import LoginPage from "@/pages/Login";
 import Layout from "./components/Layout";
-import SignupPage from "./pages/SignUp";
 import ErrorPage from "./pages/ErrorPage";
 import GroupsPage from "./pages/Groups";
 import GroupPage from "./pages/Group";
 import Home from "./pages/Home";
 import ExpenseForm from "./pages/ExpenseForm";
 import Profile from "./pages/Profile";
-import LandingPage from "./components/LandingPage";
+import SignInPage from "./pages/SignInPage";
 
 const router = createBrowserRouter([
   {
@@ -26,8 +24,10 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <App /> },
       // { path: "/", element: <LandingPage /> },
-      { path: "login", element: <LoginPage /> },
-      { path: "signup", element: <SignupPage /> },
+      {
+        path: "login",
+        element: <SignInPage />,
+      },
       {
         element: <ProtectedRoute />,
         children: [

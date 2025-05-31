@@ -26,6 +26,11 @@ import api from "@/axiosInstance";
 import { CardContent, CardFooter } from "./ui/card";
 import Loading from "./Loading";
 import Logo from "./Logo";
+import {
+  SignedIn,
+  SignedOut,
+  SignOutButton,
+} from "@clerk/clerk-react";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -99,14 +104,12 @@ export default function Layout() {
           <Logo />
 
           <div className="flex items-center space-x-4 text-white">
-            {isAuth && (
+            <SignedIn>
               <Button onClick={() => navigate("groups")} variant="ghost">
                 <Users className="mr-2 h-4 w-4" />
                 My Groups
               </Button>
-            )}
 
-            {isAuth && (
               <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
                 <DialogTrigger asChild>
                   <Button variant="ghost">
@@ -203,7 +206,7 @@ export default function Layout() {
                   </form>
                 </DialogContent>
               </Dialog>
-            )}
+            </SignedIn>
 
             <DropdownMenu>
               <DropdownMenuTrigger className="cursor-pointer">
@@ -222,44 +225,34 @@ export default function Layout() {
                 sideOffset={8}
                 className="z-50 min-w-[180px] rounded-xl border border-gray-700/50 bg-gray-800/90 p-2 text-white shadow-xl backdrop-blur-md transition-all duration-200"
               >
-                {isAuth ? (
-                  <>
-                    <DropdownMenuLabel className="px-2 py-1 text-sm text-gray-300">
-                      My Account
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator className="my-1 bg-gray-700" />
+                <SignedIn>
+                  <DropdownMenuLabel className="px-2 py-1 text-sm text-gray-300">
+                    My Account
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="my-1 bg-gray-700" />
 
-                    <DropdownMenuItem
-                      className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none"
-                      asChild
-                    >
-                      <Link to="/profile">Profile</Link>
-                    </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none"
+                    asChild
+                  >
+                    <Link to="/profile">Profile</Link>
+                  </DropdownMenuItem>
 
-                    <DropdownMenuItem
-                      onClick={logout}
-                      className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm text-red-300 transition-colors hover:bg-red-900/40 hover:text-red-400 focus:bg-red-900/40 focus:text-red-400 focus:outline-none"
-                    >
-                      Log Out
-                    </DropdownMenuItem>
-                  </>
-                ) : (
-                  <>
-                    <DropdownMenuItem
-                      className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none"
-                      asChild
-                    >
-                      <Link to="/login">Login</Link>
-                    </DropdownMenuItem>
+                  <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm text-red-300 transition-colors hover:bg-red-900/40 hover:text-red-400 focus:bg-red-900/40 focus:text-red-400 focus:outline-none">
+                    <SignOutButton />
+                  </DropdownMenuItem>
+                </SignedIn>
 
-                    <DropdownMenuItem
-                      className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none"
-                      asChild
-                    >
-                      <Link to="/signup">Register</Link>
-                    </DropdownMenuItem>
-                  </>
-                )}
+                <SignedOut>
+                  <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none">
+                    {/* <SignInButton /> */}
+                    <Link to="/login">Sign In</Link>
+                  </DropdownMenuItem>
+
+                  {/* <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none">
+                    <SignInButton />
+                  </DropdownMenuItem> */}
+                </SignedOut>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

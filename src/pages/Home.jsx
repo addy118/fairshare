@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Avatar } from "@/components/ui/avatar";
-import { useAuth } from "@/authProvider";
+import { useAuth } from "@clerk/clerk-react";
 import UserPic from "@/components/UserPic";
 import api from "@/axiosInstance";
 import UserBalance from "@/components/UserBalance";
@@ -8,14 +8,18 @@ import Loading from "@/components/Loading";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function Home() {
-  const { user, isAuth } = useAuth();
+  // const { user, isAuth } = useAuth();
+  const { isSignedIn } = useAuth();
+  const user = {
+    id: 1,
+  };
 
   const [balances, setBalances] = useState({ owed: [], owes: [] });
   const [isLoading, setIsLoading] = useState(true);
 
   // fetch user balance
   useEffect(() => {
-    if (!isAuth) return;
+    if (!isSignedIn) return;
 
     const fetchBalances = async () => {
       try {

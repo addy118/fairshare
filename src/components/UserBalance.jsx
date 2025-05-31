@@ -30,7 +30,7 @@ export default function UserBalance({ balances, isCreditor }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {list.length === 0 ? (
+        {list?.length === 0 ? (
           <p className="text-gray-400">
             {isCreditor
               ? "No one owes you money right now."
@@ -38,7 +38,7 @@ export default function UserBalance({ balances, isCreditor }) {
           </p>
         ) : (
           <ul className="space-y-4">
-            {list.map((balance) => (
+            {list?.map((balance) => (
               <li
                 key={isCreditor ? balance.debtor.id : balance.creditor.id}
                 className="flex items-center justify-between"
@@ -72,7 +72,7 @@ export default function UserBalance({ balances, isCreditor }) {
             className={`font-bold ${isCreditor ? "text-green-600" : "text-red-500/90"}`}
           >
             {isCreditor ? "+" : "-"}₹
-            {list.reduce((sum, item) => sum + item.amount, 0).toFixed(2)}
+            {list?.reduce((sum, item) => sum + item.amount, 0).toFixed(2)}
           </span>
         </div>
       </CardFooter>
