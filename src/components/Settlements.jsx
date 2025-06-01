@@ -23,9 +23,12 @@ import {
 } from "./ui/dialog";
 import { isMobile } from "react-device-detect";
 import { QRCodeSVG } from "qrcode.react";
+import { selectCurrentGroup } from "@/store/slices/groupSlice";
 
 export default function Settlements() {
   const { user: clerkUser } = useUser();
+  const group = useSelector(selectCurrentGroup);
+  console.log(group.id);
   const user = formatUser(clerkUser);
   const [isOptimizing, setIsOptimizing] = useState(false);
 
@@ -41,10 +44,11 @@ export default function Settlements() {
   const handleOptimization = async () => {
     try {
       setIsOptimizing(true);
-      await optimizeSettlements();
+      await optimizeSettlements(group.id);
       setIsOptimizing(false);
     } catch (error) {
-      console.error("Failed to optimize splits: ", error);
+      console.log("Failed to optimize splits: ", error);
+      toast.error(error.response?.data?.message);
     }
   };
 
