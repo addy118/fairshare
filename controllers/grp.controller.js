@@ -121,8 +121,8 @@ exports.getMinSplits = async (req, res) => {
       return {
         name: "Optimized Split",
         groupId: Number(grpId),
-        debtorId: Number(split[0]),
-        creditorId: Number(split[1]),
+        debtorId: split[0],
+        creditorId: split[1],
         amount: Number(split[2]),
       };
     });

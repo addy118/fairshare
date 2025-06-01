@@ -10,11 +10,11 @@ const {
 } = require("../controllers/expense.controller");
 const expRouter = Router();
 
+expRouter.post("/new", postExp);
 expRouter.use(requireAuth());
 
 expRouter.get("/:expId", getExp);
 
-expRouter.post("/new", postExp);
 expRouter.post("/:splitId/remind", remind);
 
 expRouter.put("/:splitId/settle", settleSplit);

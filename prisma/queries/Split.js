@@ -7,8 +7,8 @@ class Split {
         data: {
           name,
           groupId: Number(groupId),
-          debtorId: Number(debtorId),
-          creditorId: Number(creditorId),
+          debtorId: debtorId,
+          creditorId: creditorId,
           amount: Number(amount),
         },
       });

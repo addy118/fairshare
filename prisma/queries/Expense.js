@@ -7,7 +7,7 @@ class Expense {
       // checks whether the user present in the expense is part of the group or not
       for (const payer of payersArr) {
         const isMember = await Group.isMember(
-          Number(payer.payerId),
+          payer.payerId,
           Number(exp.groupId)
         );
 
@@ -17,6 +17,10 @@ class Expense {
           );
         }
       }
+
+      splitsArr.map((split) => {
+        console.log(split);
+      });
 
       const res = await db.expense.create({
         data: {
@@ -29,7 +33,7 @@ class Expense {
           payers: {
             create: payersArr.map((payer) => ({
               paidAmt: Number(payer.paidAmt),
-              payer: { connect: { id: Number(payer.payerId) } },
+              payer: { connect: { id: payer.payerId } },
             })),
           },
 
@@ -41,9 +45,9 @@ class Expense {
               // connect to mainGroup
               mainGroup: { connect: { id: Number(exp.groupId) } },
               // connect to debtor
-              debtor: { connect: { id: Number(split.debitorId) } },
+              debtor: { connect: { id: split.debitorId } },
               // connect to creditor
-              creditor: { connect: { id: Number(split.creditorId) } },
+              creditor: { connect: { id: split.creditorId } },
             })),
           },
         },

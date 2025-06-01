@@ -146,7 +146,7 @@ class Group {
         where: {
           groupId_memberId: {
             groupId: Number(groupId),
-            memberId,
+            memberId: memberId,
           },
         },
       });

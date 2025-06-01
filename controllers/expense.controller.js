@@ -5,10 +5,10 @@ const { createBalance, calculateSplits } = require("./util");
 
 exports.postExp = async (req, res) => {
   try {
-    // console.log("Hit /exp/new");
+    console.log("Hit /exp/new");
 
     const expense = req.body;
-    // console.log("Request body:", expense);
+    console.log("Request body:", expense);
 
     const balance = createBalance(expense);
     const splits = calculateSplits(balance);
@@ -18,10 +18,12 @@ exports.postExp = async (req, res) => {
       paidAmt: payer.amount,
     }));
 
+    console.log(splits);
+
     const splitsArr = splits.map((split) => ({
       name: expense.name,
-      debitorId: Number(split[0]),
-      creditorId: Number(split[1]),
+      debitorId: split[0],
+      creditorId: split[1],
       amount: Number(split[2]),
       groupId: expense.groupId,
     }));
