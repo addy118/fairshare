@@ -35,7 +35,7 @@ export default function GroupPage() {
   } = useGetGroupInfoQuery(groupId, {
     skip: !groupId,
   });
-  console.log(group?.members);
+  // console.log(group?.members);
 
   const { isLoading: isLoadingBalances } = useGetGroupBalancesQuery(
     { groupId },
@@ -59,50 +59,6 @@ export default function GroupPage() {
   const [newMembers, setNewMembers] = useState([]);
   const [newMemberOpen, setNewMemberOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  // const handleCreateGroup = async (e) => {
-  //   e.preventDefault();
-
-  //   if (newMembers.length === 0) {
-  //     toast.success("Please add at least one member to the group.");
-  //     return;
-  //   }
-
-  //   try {
-  //     for (const user of newMembers) {
-  //       setIsLoading(true);
-  //       await api.post(`/grp/${groupId}/member/new`, {
-  //         username: user.username,
-  //       });
-  //       setIsLoading(false);
-  //     }
-
-  //     setNewMemberOpen(false);
-  //     setNewMembers([]);
-  //     navigate(`/groups/${groupId}`);
-  //   } catch (err) {
-  //     console.error("Failed to create a group: ", err);
-  //   }
-  // };
-
-  // const addMemberField = () => {
-  //   const newId = newMembers?.length
-  //     ? Math.max(...newMembers.map((m) => m.id)) + 1
-  //     : 1;
-  //   setNewMembers([...newMembers, { id: newId, username: "" }]);
-  // };
-
-  // const removeMemberField = (id) => {
-  //   setNewMembers((prev) => prev.filter((member) => member.id !== id));
-  // };
-
-  // const updateMemberUsername = (id, value) => {
-  //   setNewMembers((prev) =>
-  //     prev.map((member) =>
-  //       member.id === id ? { ...member, username: value } : member
-  //     )
-  //   );
-  // };
 
   const handleLeaveGroup = async () => {
     try {
@@ -158,12 +114,6 @@ export default function GroupPage() {
               <span>{group.memberCount} members</span>
               <span>·</span>
               <span>{group.expenses.length} expenses</span>
-              {group.totalExpenses > 0 && (
-                <>
-                  <span>·</span>
-                  <span>₹{group.totalExpenses.toFixed(2)} total</span>
-                </>
-              )}
             </div>
           </div>
 

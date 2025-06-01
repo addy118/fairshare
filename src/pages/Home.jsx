@@ -27,6 +27,7 @@ export default function Home() {
     const fetchBalances = async () => {
       try {
         const response = await api.get(`user/${user.id}/balance`);
+        console.log(response.data);
         setBalances(response.data);
 
         const upiRes = await api.get(`user/${user.id}/upi`);
