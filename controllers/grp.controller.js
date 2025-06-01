@@ -7,10 +7,10 @@ exports.postGrp = async (req, res) => {
   try {
     const { name } = req.body;
     const group = await Group.create(name);
-    res.json({ msg: "success", group });
+    res.json({ message: "success", group });
   } catch (err) {
-    console.error("ERROR in postGrp:", err);
-    res.status(400).json({ msg: "Failed to create group" });
+    console.error("Error in postGrp:", err);
+    res.status(400).json({ message: "Failed to create group" });
   }
 };
 
@@ -18,10 +18,10 @@ exports.postDelGrp = async (req, res) => {
   try {
     const { groupId } = req.params;
     await Group.delete(Number(groupId));
-    res.json({ msg: "success" });
+    res.json({ message: "success" });
   } catch (err) {
-    console.error("ERROR in postDelGrp:", err);
-    res.status(400).json({ msg: "Failed to delete group" });
+    console.error("Error in postDelGrp:", err);
+    res.status(400).json({ message: "Failed to delete group" });
   }
 };
 
@@ -33,11 +33,11 @@ exports.postMember = async (req, res) => {
     const userId = await User.getIdbyUserName(username);
     console.log(userId);
     await Group.join(userId, Number(groupId));
-    res.json({ msg: "success" });
+    res.json({ message: "success" });
   } catch (err) {
     console.error("Error in postMember():", err.message);
     console.error(err.stack);
-    res.status(400).json({ msg: err.message });
+    res.status(400).json({ message: err.message });
   }
 };
 
@@ -45,10 +45,10 @@ exports.deleteMember = async (req, res) => {
   try {
     const { groupId, memberId } = req.params;
     await Group.leave(Number(memberId), Number(groupId));
-    res.json({ msg: "success" });
+    res.json({ message: "success" });
   } catch (err) {
-    console.error("ERROR in deleteMember:", err);
-    res.status(400).json({ msg: "Failed to remove member from group" });
+    console.error("Error in deleteMember:", err);
+    res.status(400).json({ message: "Failed to remove member from group" });
   }
 };
 
@@ -58,8 +58,8 @@ exports.getGrpInfo = async (req, res) => {
     const group = await Group.getById(Number(grpId));
     res.json(group);
   } catch (err) {
-    console.error("ERROR in getGrpInfo:", err);
-    res.status(400).json({ msg: "Failed to retrieve group information" });
+    console.error("Error in getGrpInfo:", err);
+    res.status(400).json({ message: "Failed to retrieve group information" });
   }
 };
 
@@ -69,8 +69,8 @@ exports.getAllExpenses = async (req, res) => {
     const group = await Group.expenses(Number(grpId));
     res.json(group);
   } catch (err) {
-    console.error("ERROR in getAllExpenses:", err);
-    res.status(400).json({ msg: "Failed to retrieve group expenses" });
+    console.error("Error in getAllExpenses:", err);
+    res.status(400).json({ message: "Failed to retrieve group expenses" });
   }
 };
 
@@ -91,8 +91,8 @@ exports.getGrpBalance = async (req, res) => {
 
     res.json(balance);
   } catch (err) {
-    console.error("ERROR in getGrpBalance:", err);
-    res.status(400).json({ msg: "Failed to calculate group balance" });
+    console.error("Error in getGrpBalance:", err);
+    res.status(400).json({ message: "Failed to calculate group balance" });
   }
 };
 
@@ -102,8 +102,8 @@ exports.getSplits = async (req, res) => {
     const splits = await Group.splits(Number(grpId));
     res.json(splits);
   } catch (err) {
-    console.error("ERROR in getSplits:", err);
-    res.status(400).json({ msg: "Failed to retrieve splits information" });
+    console.error("Error in getSplits:", err);
+    res.status(400).json({ message: "Failed to retrieve splits information" });
   }
 };
 
@@ -131,10 +131,10 @@ exports.getMinSplits = async (req, res) => {
 
     res.json(minSplits);
   } catch (err) {
-    console.error("ERROR in getMinSplits:", err);
+    console.error("Error in getMinSplits:", err);
     res
       .status(400)
-      .json({ msg: "Failed to calculate and update optimized splits" });
+      .json({ message: "Failed to calculate and update optimized splits" });
   }
 };
 
@@ -188,7 +188,7 @@ exports.getGrpHistory = async (req, res) => {
 
     res.json(timeline);
   } catch (err) {
-    console.error("ERROR in getGrpHistory:", err);
-    res.status(400).json({ msg: "Failed to retrieve group history" });
+    console.error("Error in getGrpHistory:", err);
+    res.status(400).json({ message: "Failed to retrieve group history" });
   }
 };

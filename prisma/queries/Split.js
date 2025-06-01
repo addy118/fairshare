@@ -13,8 +13,9 @@ class Split {
         },
       });
     } catch (error) {
-      console.error("Error creating split: ", error.stack);
-      throw new Error("Failed to create split.");
+      console.error("Error in Split.create(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to create split.");
     }
   }
 
@@ -24,8 +25,9 @@ class Split {
         data: splits,
       });
     } catch (error) {
-      console.error("Error creating multiple splits: ", error.stack);
-      throw new Error("Failed to create multiple splits.");
+      console.error("Error in Split.createMany(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to create multiple splits.");
     }
   }
 
@@ -68,8 +70,9 @@ class Split {
         },
       });
     } catch (error) {
-      console.error("Error fetching split: ", error.stack);
-      throw new Error("Failed to fetch split.");
+      console.error("Error in Split.get(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch split.");
     }
   }
 
@@ -79,8 +82,9 @@ class Split {
         where: { id },
       });
     } catch (error) {
-      console.error("Error deleting split: ", error.stack);
-      throw new Error("Failed to delete split.");
+      console.error("Error in Split.delete(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to delete split.");
     }
   }
 
@@ -92,8 +96,11 @@ class Split {
         },
       });
     } catch (error) {
-      console.error("Error deleting all unsettled splits: ", error.stack);
-      throw new Error("Failed to delete all unsettled splits for the group.");
+      console.error("Error in Split.deleteAll(): ", error.message);
+      console.error(error.stack);
+      throw new Error(
+        error.message || "Failed to delete all unsettled splits for the group."
+      );
     }
   }
 }

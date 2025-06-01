@@ -7,8 +7,9 @@ class Group {
         data: { name },
       });
     } catch (error) {
-      console.error("Error creating group: ", error.stack);
-      throw new Error("Failed to create group.");
+      console.error("Error in Group.create(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to create group.");
     }
   }
 
@@ -18,8 +19,9 @@ class Group {
         where: { id: Number(groupId) },
       });
     } catch (error) {
-      console.error("Error deleting group: ", error.stack);
-      throw new Error("Failed to delete group.");
+      console.error("Error in Group.delete(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to delete group.");
     }
   }
 
@@ -48,8 +50,9 @@ class Group {
         },
       });
     } catch (error) {
-      console.error("Error fetching group by ID: ", error.stack);
-      throw new Error("Failed to fetch group by ID.");
+      console.error("Error in Group.getById(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch group by ID.");
     }
   }
 
@@ -96,8 +99,9 @@ class Group {
 
       return expenses[0];
     } catch (error) {
-      console.error("Error fetching group expenses: ", error.stack);
-      throw new Error("Failed to fetch group expenses.");
+      console.error("Error in Group.expenses(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch group expenses.");
     }
   }
 
@@ -124,8 +128,9 @@ class Group {
 
       return splits[0].splits;
     } catch (error) {
-      console.error("Error fetching group splits: ", error.stack);
-      throw new Error("Failed to fetch group splits.");
+      console.error("Error in Group.splits(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch group splits.");
     }
   }
 
@@ -135,8 +140,9 @@ class Group {
         data: { memberId, groupId: Number(groupId) },
       });
     } catch (error) {
-      console.error("Error adding member to group: ", error.stack);
-      throw new Error("Failed to add member to group.");
+      console.error("Error in Group.join(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to add member to group.");
     }
   }
 
@@ -151,8 +157,9 @@ class Group {
         },
       });
     } catch (error) {
-      console.error("Error removing member from group: ", error.stack);
-      throw new Error("Failed to remove member from group.");
+      console.error("Error in Group.leave(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to remove member from group.");
     }
   }
 
@@ -170,8 +177,9 @@ class Group {
       // returns null if not a member
       return isMember;
     } catch (error) {
-      console.error("Error checking group membership: ", error.stack);
-      throw new Error("Failed to check group membership.");
+      console.error("Error in Group.isMember(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to check group membership.");
     }
   }
 
@@ -192,8 +200,9 @@ class Group {
         },
       });
     } catch (error) {
-      console.error("Error fetching group members: ", error.stack);
-      throw new Error("Failed to fetch group members.");
+      console.error("Error in Group.members(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch group members.");
     }
   }
 
@@ -224,8 +233,9 @@ class Group {
         orderBy: { createdAt: "asc" },
       });
     } catch (error) {
-      console.error("Error fetching expense history: ", error.stack);
-      throw new Error("Failed to fetch expense history.");
+      console.error("Error in Group.expenseHistory(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch expense history.");
     }
   }
 
@@ -259,8 +269,9 @@ class Group {
         orderBy: { updatedAt: "asc" },
       });
     } catch (error) {
-      console.error("Error fetching splits history: ", error.stack);
-      throw new Error("Failed to fetch splits history.");
+      console.error("Error in Group.splitsHistory(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch splits history.");
     }
   }
 }

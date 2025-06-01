@@ -55,7 +55,8 @@ class Expense {
 
       return res;
     } catch (error) {
-      console.error("Error creating expense: ", error.stack);
+      console.error("Error in Expense.create(): ", error.message);
+      console.error(error.stack);
       throw new Error(error.message || "Failed to create expense.");
     }
   }
@@ -94,8 +95,9 @@ class Expense {
 
       return res;
     } catch (error) {
-      console.error("Error fetching expense: ", error.stack);
-      throw new Error("Failed to fetch expense details.");
+      console.error("Error in Expense.get(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch expense details.");
     }
   }
 
@@ -106,8 +108,9 @@ class Expense {
         data: { settled: true },
       });
     } catch (error) {
-      console.error("Error settling split: ", error.stack);
-      throw new Error("Failed to settle split.");
+      console.error("Error in Expense.settle(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to settle split.");
     }
   }
 
@@ -118,8 +121,9 @@ class Expense {
         data: { settled: true, confirmed: true },
       });
     } catch (error) {
-      console.error("Error confirming split: ", error.stack);
-      throw new Error("Failed to confirm split.");
+      console.error("Error in Expense.confirm(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to confirm split.");
     }
   }
 
@@ -130,8 +134,9 @@ class Expense {
         data: { settled: false, confirmed: false },
       });
     } catch (error) {
-      console.error("Error not confirming split: ", error.stack);
-      throw new Error("Failed to confirm split.");
+      console.error("Error in Expense.notConfirm(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to confirm split.");
     }
   }
 }

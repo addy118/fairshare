@@ -1,5 +1,6 @@
 const { verifyWebhook } = require("@clerk/express/webhooks");
 const db = require("../config/prismaClient");
+const User = require("../prisma/queries/User");
 
 exports.postClerkUser = async (req, res) => {
   try {
@@ -12,56 +13,62 @@ exports.postClerkUser = async (req, res) => {
     // );
 
     if (eventType === "user.created") {
-      try {
-        await db.user.create({
-          data: {
-            id: user.id,
-            name: `${user.first_name} ${user.last_name}`,
-            username: user.username,
-            email: user.email_addresses[0].email_address,
-            createdAt: new Date(user.created_at),
-            updatedAt: new Date(user.updated_at),
-            pfp: user.image_url,
-          },
-        });
-      } catch (error) {
-        console.error("Error creating user: ", error.stack);
-        if (error.code === "P2002") {
-          // Handling unique constraint violation
-          throw new Error(
-            "A user with this email, phone or username already exists."
-          );
-        }
-        throw new Error("Failed to create user.");
-      }
+      await User.create(user);
+      // try {
+      //   await db.user.create({
+      //     data: {
+      //       id: user.id,
+      //       name: `${user.first_name} ${user.last_name}`,
+      //       username: user.username,
+      //       email: user.email_addresses[0].email_address,
+      //       createdAt: new Date(user.created_at),
+      //       updatedAt: new Date(user.updated_at),
+      //       pfp: user.image_url,
+      //     },
+      //   });
+      // } catch (error) {
+      //   console.error("Error creating user: ", error.stack);
+      //   if (error.code === "P2002") {
+      //     // Handling unique constraint violation
+      //     throw new Error(
+      //       "A user with this email, phone or username already exists."
+      //     );
+      //   }
+      //   throw new Error("Failed to create user.");
+      // }
     } else if (eventType === "user.updated") {
-      try {
-        await db.user.update({
-          where: { id: user.id },
-          data: {
-            name: `${user.first_name} ${user.last_name}`,
-            username: user.username,
-            email: user.email_addresses[0].email_address,
-            updatedAt: new Date(user.updated_at),
-            pfp: user.image_url,
-          },
-        });
-      } catch (err) {
-        console.error("Error updating user:", err);
-      }
+      await User.update(user);
+      // try {
+      //   await db.user.update({
+      //     where: { id: user.id },
+      //     data: {
+      //       name: `${user.first_name} ${user.last_name}`,
+      //       username: user.username,
+      //       email: user.email_addresses[0].email_address,
+      //       updatedAt: new Date(user.updated_at),
+      //       pfp: user.image_url,
+      //     },
+      //   });
+      // } catch (err) {
+      //   console.error("Error updating user:", err);
+      // }
     } else if (eventType === "user.deleted") {
-      try {
-        await db.user.delete({
-          where: { id: user.id },
-        });
-      } catch (err) {
-        console.error("Error deleting user:", err);
-      }
+      await User.delete(user);
+      // try {
+      //   await db.user.delete({
+      //     where: { id: user.id },
+      //   });
+      // } catch (err) {
+      //   console.error("Error deleting user:", err);
+      // }
     }
 
-    res.status(200).send("Webhook processed successfully!");
+    res.status(200).json({ msg: "Webhook processed successfully!" });
   } catch (err) {
-    console.error("Error verifying webhook:", err);
-    return res.status(400).send("Error verifying webhook");
+    console.error("Error verifying webhook:", err.message);
+    console.error(err.stack);
+    return res
+      .status(400)
+      .json({ message: err.message || "Error verifying webhook" });
   }
 };

@@ -1,21 +1,54 @@
 const db = require("../../config/prismaClient");
 
 class User {
-  static async create(name, username, phone, email, password) {
+  static async create(clerkUser) {
     try {
-      const user = await db.user.create({
-        data: { name, username, phone, email, password },
+      return await db.user.create({
+        data: {
+          id: clerkUser.id,
+          name: `${clerkUser.first_name} ${clerkUser.last_name}`,
+          username: clerkUser.username,
+          email: clerkUser.email_addresses[0].email_address,
+          createdAt: new Date(clerkUser.created_at),
+          updatedAt: new Date(clerkUser.updated_at),
+          pfp: clerkUser.image_url,
+        },
       });
-      return user;
     } catch (error) {
-      console.error("Error creating user: ", error.stack);
+      console.error("Error in User.create(): ", error.message);
+      console.error(error.stack);
       if (error.code === "P2002") {
-        // Handling unique constraint violation
+        // handling unique constraint violation
         throw new Error(
-          "A user with this email, phone or username already exists."
+          error.message || "A user with this email or username already exists."
         );
       }
-      throw new Error("Failed to create user.");
+      throw new Error(error.message || "Failed to create user.");
+    }
+  }
+
+  static async update(clerkUser) {
+    try {
+      return await db.user.update({
+        where: { id: clerkUser.id },
+        data: {
+          name: `${clerkUser.first_name} ${clerkUser.last_name}`,
+          username: clerkUser.username,
+          email: clerkUser.email_addresses[0].email_address,
+          updatedAt: new Date(clerkUser.updated_at),
+          pfp: clerkUser.image_url,
+        },
+      });
+    } catch (error) {
+      console.error("Error in User.update(): ", error.message);
+      console.error(error.stack);
+      if (error.code === "P2002") {
+        // handling unique constraint violation
+        throw new Error(
+          error.message || "A user with this email or username already exists."
+        );
+      }
+      throw new Error(error.message || "Failed to create user.");
     }
   }
 
@@ -33,8 +66,9 @@ class User {
         },
       });
     } catch (error) {
-      console.error("Error fetching user info: ", error.stack);
-      throw new Error("Failed to fetch user info.");
+      console.error("Error in User.getBasicInfo(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch user info.");
     }
   }
 
@@ -80,8 +114,11 @@ class User {
       });
       return user;
     } catch (error) {
-      console.error("Error fetching user by email/username: ", error.stack);
-      throw new Error("Failed to fetch user by email/username.");
+      console.error("Error in User.get(): ", error.message);
+      console.error(error.stack);
+      throw new Error(
+        error.message || "Failed to fetch user by email/username."
+      );
     }
   }
 
@@ -93,8 +130,9 @@ class User {
       });
       return user.name;
     } catch (error) {
-      console.error("Error fetching name by ID: ", error.stack);
-      throw new Error("Failed to fetch name by ID.");
+      console.error("Error in User.getNameById(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch name by ID.");
     }
   }
 
@@ -106,8 +144,9 @@ class User {
       });
       return user.pfp;
     } catch (error) {
-      console.error("Error fetching pfp by ID: ", error.stack);
-      throw new Error("Failed to fetch pfp by ID.");
+      console.error("Error in User.getPfpById(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch pfp by ID.");
     }
   }
 
@@ -118,11 +157,13 @@ class User {
         select: { id: true },
       });
       if (!userId) {
-        throw new Error("No user found with the given username.");
+        throw new Error(
+          error.message || "No user found with the given username."
+        );
       }
       return userId.id;
     } catch (error) {
-      console.error("Error in query getIdbyUserName(): ", error.message);
+      console.error("Error in getIdbyUserName(): ", error.message);
       console.error(error.stack);
       throw new Error(error.message || "Failed to fetch ID by username.");
     }
@@ -168,8 +209,9 @@ class User {
       });
       return user;
     } catch (error) {
-      console.error("Error fetching user by ID: ", error.stack);
-      throw new Error("Failed to fetch user by ID.");
+      console.error("Error in User.getById(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch user by ID.");
     }
   }
 
@@ -206,8 +248,9 @@ class User {
       });
       return response.groups;
     } catch (error) {
-      console.error("Error fetching user by ID: ", error.stack);
-      throw new Error("Failed to fetch user by ID.");
+      console.error("Error in User.group(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch user by ID.");
     }
   }
 
@@ -238,8 +281,9 @@ class User {
       });
       return balance;
     } catch (error) {
-      console.error("Error fetching balance: ", error.stack);
-      throw new Error("Failed to fetch balance.");
+      console.error("Error in User.balance(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch balance.");
     }
   }
 
@@ -250,8 +294,9 @@ class User {
         data: { upi },
       });
     } catch (err) {
-      console.error("Error updating upi: ", err.stack);
-      throw new Error("Failed to update UPI");
+      console.error("Error in User.putUpi(): ", err.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to update UPI");
     }
   }
 
@@ -262,19 +307,21 @@ class User {
         select: { upi: true },
       });
     } catch (err) {
-      console.error("Error fetching upi: ", err.stack);
-      throw new Error("Failed to fetch UPI");
+      console.error("Error in User.getUpi(): ", err.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch UPI");
     }
   }
 
-  static async delete(userId) {
+  static async delete(clerkUser) {
     try {
       await db.user.delete({
-        where: { id: userId },
+        where: { id: clerkUser.id },
       });
     } catch (error) {
-      console.error("Error deleting user: ", error.stack);
-      throw new Error("Failed to delete user.");
+      console.error("Error in User.delete(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to delete user.");
     }
   }
 }

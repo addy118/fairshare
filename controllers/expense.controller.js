@@ -32,8 +32,8 @@ exports.postExp = async (req, res) => {
 
     res.json({ exp });
   } catch (err) {
-    console.error("ERROR in /exp/new:", err);
-    res.status(400).json({ msg: "Internal server error" });
+    console.error("Error in /exp/new:", err);
+    res.status(400).json({ message: "Internal server error" });
   }
 };
 
@@ -44,8 +44,8 @@ exports.getExp = async (req, res) => {
     const exp = await Expense.get(Number(expId));
     res.json({ exp });
   } catch (err) {
-    console.error("ERROR in getExp:", err);
-    res.status(400).json({ msg: "Failed to retrieve expense" });
+    console.error("Error in getExp:", err);
+    res.status(400).json({ message: "Failed to retrieve expense" });
   }
 };
 
@@ -53,10 +53,10 @@ exports.settleSplit = async (req, res) => {
   try {
     const { splitId } = req.params;
     await Expense.settle(Number(splitId));
-    res.json({ msg: "success" });
+    res.json({ message: "success" });
   } catch (err) {
-    console.error("ERROR in settleSplit:", err);
-    res.status(400).json({ msg: "Failed to settle split" });
+    console.error("Error in settleSplit:", err);
+    res.status(400).json({ message: "Failed to settle split" });
   }
 };
 
@@ -64,10 +64,10 @@ exports.confirmSplit = async (req, res) => {
   try {
     const { splitId } = req.params;
     await Expense.confirm(Number(splitId));
-    res.json({ msg: "success" });
+    res.json({ message: "success" });
   } catch (err) {
-    console.error("ERROR in confirmSplit:", err);
-    res.status(400).json({ msg: "Failed to confirm split" });
+    console.error("Error in confirmSplit:", err);
+    res.status(400).json({ message: "Failed to confirm split" });
   }
 };
 
@@ -75,10 +75,10 @@ exports.notConfirmSplit = async (req, res) => {
   try {
     const { splitId } = req.params;
     await Expense.notConfirm(Number(splitId));
-    res.json({ msg: "success" });
+    res.json({ message: "success" });
   } catch (err) {
-    console.error("ERROR in notConfirmSplit:", err);
-    res.status(400).json({ msg: "Failed to not confirm split" });
+    console.error("Error in notConfirmSplit:", err);
+    res.status(400).json({ message: "Failed to not confirm split" });
   }
 };
 
@@ -100,10 +100,12 @@ exports.remind = async (req, res) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error("Error sending email:", error);
-      res.status(400).json({ msg: "Error sending reminder mail." });
+      res.status(400).json({ message: "Error sending reminder mail." });
     } else {
       // console.log("Email sent:", info.response);
-      res.status(200).json({ msg: "Reminder email was sent successfully!" });
+      res
+        .status(200)
+        .json({ message: "Reminder email was sent successfully!" });
     }
   });
 };
