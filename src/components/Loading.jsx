@@ -8,6 +8,24 @@ export default function Loading({
   thickness = 2,
   bg = "gray-700",
 }) {
+  // map size and thickness to Tailwind classes
+  const sizeClass = {
+    2: "h-2 w-2",
+    4: "h-4 w-4",
+    6: "h-6 w-6",
+    8: "h-8 w-8",
+    10: "h-10 w-10",
+    12: "h-12 w-12",
+  }[size] || "h-4 w-4";
+
+  const thicknessClass = {
+    2: "border-2",
+    4: "border-4",
+    8: "border-8",
+  }[thickness] || "border-2";
+
+  const bgClass = `border-${bg}`;
+
   return (
     <div
       className={`flex h-full items-center justify-center gap-2 bg-[#111828] text-[#4cdede] ${className}`}
@@ -16,7 +34,7 @@ export default function Loading({
         {action} {item}
       </span>
       <span
-        className={`h-${size} w-${size} animate-spin rounded-full border-${thickness} border-${bg} border-t-teal-400`}
+        className={`${sizeClass} animate-spin rounded-full ${thicknessClass} ${bgClass} border-t-teal-400`}
       ></span>
     </div>
   );

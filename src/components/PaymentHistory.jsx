@@ -22,11 +22,7 @@ import { useParams } from "react-router-dom";
 export default function PaymentHistory() {
   const { id: groupId } = useParams();
   const group = useSelector(selectCurrentGroup);
-  const [expandedItems, setExpandedItems] = useState({
-    26: true,
-    27: true,
-    28: true,
-  });
+  const [expandedItems, setExpandedItems] = useState({});
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const pdfRef = useRef(null);

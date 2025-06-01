@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -22,18 +22,6 @@ import { Input } from "@/components/ui/input";
 import api from "@/axiosInstance";
 import { useUser } from "@clerk/clerk-react";
 import formatUser from "@/utils/formatUser";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  selectSelectedItem,
-  selectDetailsOpen,
-  selectCurrentGroup,
-  selectBalances,
-  selectExpenses,
-  selectSettlements,
-  selectHistory,
-  setSelectedItem,
-  setDetailsOpen,
-} from "@/store/slices/groupSlice";
 import {
   useGetGroupInfoQuery,
   useGetGroupBalancesQuery,
@@ -44,19 +32,9 @@ import {
 
 export default function GroupPage() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { user: clerkUser } = useUser();
   const user = formatUser(clerkUser);
   const { id: groupId } = useParams();
-
-  // Redux selectors
-  const selectedItem = useSelector(selectSelectedItem);
-  const detailsOpen = useSelector(selectDetailsOpen);
-  const currentGroup = useSelector(selectCurrentGroup);
-  const balances = useSelector(selectBalances);
-  const expenses = useSelector(selectExpenses);
-  const settlements = useSelector(selectSettlements);
-  const history = useSelector(selectHistory);
 
   // RTK Query hooks with proper skip conditions
   const {
@@ -146,7 +124,7 @@ export default function GroupPage() {
     }
   };
 
-  // Show loading state while initial data is being fetched
+  // show loading state while initial data is being fetched
   if (
     isLoadingGroup ||
     isLoadingBalances ||
@@ -158,7 +136,7 @@ export default function GroupPage() {
     return <Loading item="group" />;
   }
 
-  // Show error state
+  // show error state
   if (groupError) {
     return (
       <div className="flex min-h-[200px] items-center justify-center">
@@ -169,7 +147,7 @@ export default function GroupPage() {
     );
   }
 
-  // Show not found state
+  // show not found state
   if (!group) {
     return (
       <div className="flex min-h-[200px] items-center justify-center">

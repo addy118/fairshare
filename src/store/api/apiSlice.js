@@ -5,14 +5,10 @@ const axiosBaseQuery = () => async (args) => {
   try {
     let result;
     if (typeof args === "string") {
-      // If args is a string, treat it as a GET request URL
+      // treat string as a GET request URL
       result = await api.get(args);
     } else {
       const { url, method = "GET", data, params } = args;
-      console.log("Request URL:", url);
-      console.log("Request Method:", method);
-      console.log("Request Data:", JSON.stringify(data, null, 2));
-
       result = await api({
         url,
         method,
@@ -37,12 +33,10 @@ export const fsApi = createApi({
   reducerPath: "fsApi",
   baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
-    // Group endpoints
+    // group endpoints
     getGroupInfo: builder.query({
       query: (groupId) => `/grp/${groupId}/info`,
       transformResponse: (response) => {
-        // console.log("Raw group response:", response);
-
         if (!response) {
           return null;
         }
@@ -57,7 +51,7 @@ export const fsApi = createApi({
           createdAt: response.createdAt,
         };
 
-        // Safely transform members if they exist
+        // safely transform members if they exist
         if (response.members && Array.isArray(response.members)) {
           transformed.members = response.members.map((memberObj) => {
             const member = memberObj.member || memberObj;
@@ -70,7 +64,7 @@ export const fsApi = createApi({
           });
         }
 
-        // Safely calculate total expenses if they exist
+        // safely calculate total expenses if they exist
         if (response.expenses && Array.isArray(response.expenses)) {
           transformed.totalExpenses = response.expenses.reduce(
             (sum, exp) => sum + (Number(exp.totalAmt) || 0),
@@ -78,7 +72,6 @@ export const fsApi = createApi({
           );
         }
 
-        // console.log("Transformed group data:", transformed);
         return transformed;
       },
       providesTags: ["Group"],
@@ -87,15 +80,11 @@ export const fsApi = createApi({
     getGroupBalances: builder.query({
       query: ({ groupId }) => `/grp/${groupId}/balance`,
       transformResponse: (response) => {
-        // console.log("Raw balance response:", response);
-
         if (!response) {
-          console.log("No balance data received");
           return [];
         }
 
         const transformed = response.map(({ user, amount }) => {
-          // console.log("Processing balance entry:", { user, amount });
           return {
             id: user.id,
             name: user.name,
@@ -103,7 +92,6 @@ export const fsApi = createApi({
           };
         });
 
-        // console.log("Transformed balance data:", transformed);
         return transformed;
       },
       providesTags: ["Balances"],
@@ -116,40 +104,6 @@ export const fsApi = createApi({
 
     getGroupHistory: builder.query({
       query: (groupId) => `/grp/${groupId}/history`,
-      // transformResponse: (response) => {
-      //   console.log("Raw history response:", response);
-        
-      //   if (!response) {
-      //     console.log("No history data received");
-      //     return [];
-      //   }
-
-      //   const transformed = response.map((entry) => {
-      //     console.log("Processing history entry:", entry);
-      //     return {
-      //       id: entry.id,
-      //       balance: entry.balance,
-      //       type: entry.type, 
-      //       name: entry.name,
-      //       totalAmt: entry.totalAmt,
-      //       timestamp: entry.timestamp,
-      //       payers: entry.payers?.map((payer) => {
-      //         console.log("Processing payer:", payer);
-      //         return {
-      //           payer: {
-      //             id: payer.payer.id,
-      //             name: payer.payer.name,
-      //             pfp: payer.payer.pfp,
-      //           },
-      //           paidAmt: payer.paidAmt || 0,
-      //         };
-      //       }) || [],
-      //     };
-      //   });
-
-      //   console.log("Transformed history data:", transformed);
-      //   return transformed;
-      // },
       providesTags: ["History"],
     }),
 
@@ -181,7 +135,7 @@ export const fsApi = createApi({
       invalidatesTags: ["Group", "Balances"],
     }),
 
-    // Settlement endpoints
+    // settlement endpoints
     optimizeSettlements: builder.mutation({
       query: (groupId) => ({
         url: `/grp/${groupId}/splits/min`,
@@ -213,7 +167,7 @@ export const fsApi = createApi({
       }),
     }),
 
-    // Expense endpoints
+    // expense endpoints
     createExpense: builder.mutation({
       query: (expenseData) => ({
         url: "/exp/new",

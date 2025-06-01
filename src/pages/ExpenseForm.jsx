@@ -19,8 +19,6 @@ import {
 import { Trash, Plus } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loading from "@/components/Loading";
-import { useSelector } from "react-redux";
-import { selectCurrentGroup } from "@/store/slices/groupSlice";
 import {
   useGetGroupInfoQuery,
   useCreateExpenseMutation,
@@ -36,21 +34,21 @@ export default function ExpenseForm() {
 
   const users = group?.members || [];
 
-  const [expenseName, setExpenseName] = useState("Demo Expense");
-  const [totalAmount, setTotalAmount] = useState("50");
+  const [expenseName, setExpenseName] = useState("");
+  const [totalAmount, setTotalAmount] = useState("");
 
-  const initExpense = [
-    {
-      id: Date.now(),
-      payerId: "user_29w83sxmDNGwOuEthce5gg56FcC",
-      amount: "50",
-    },
-    {
-      id: Date.now() + 1,
-      payerId: "user_2xr6Vz2hPcAvh0HmMGacSHaBwsm",
-      amount: "0",
-    },
-  ];
+  // const initExpense = [
+  //   {
+  //     id: Date.now(),
+  //     payerId: "user_29w83sxmDNGwOuEthce5gg56FcC",
+  //     amount: "50",
+  //   },
+  //   {
+  //     id: Date.now() + 1,
+  //     payerId: "user_2xr6Vz2hPcAvh0HmMGacSHaBwsm",
+  //     amount: "0",
+  //   },
+  // ];
   const [payers, setPayers] = useState([]);
   const [payersTotal, setPayersTotal] = useState(50);
 
@@ -130,7 +128,6 @@ export default function ExpenseForm() {
       })),
       groupId,
     };
-    console.log(expense);
 
     handleCreateExpense(expense);
   };

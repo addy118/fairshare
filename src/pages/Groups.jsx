@@ -10,10 +10,10 @@ import {
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import format from "@/utils/formatGroup";
+import formatGroup from "@/utils/formatGroup";
 import formatDate from "@/utils/formatDate";
-import { useUser } from "@clerk/clerk-react";
 import formatUser from "@/utils/formatUser";
+import { useUser } from "@clerk/clerk-react";
 import Loading from "@/components/Loading";
 import api from "@/axiosInstance";
 
@@ -22,7 +22,6 @@ export default function GroupsPage() {
 
   const { user: clerkUser, isSignedIn, isLoaded } = useUser();
   const user = formatUser(clerkUser);
-  // console.log(user);
   const [groups, setGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -32,15 +31,8 @@ export default function GroupsPage() {
 
     const fetchGroups = async () => {
       try {
-        // console.log("started...");
-        // console.log(`/user/${user.id}/groups`);
         const response = await api.post(`/user/${user.id}/groups`);
-        // console.log("done!");
-
-        // console.log(response.data);
-        const formatRes = format.groups(response.data);
-
-        // console.log(formatRes);
+        const formatRes = formatGroup.groups(response.data);
         setGroups(formatRes);
       } catch (err) {
         console.error(
@@ -57,8 +49,6 @@ export default function GroupsPage() {
 
   if (!isLoaded) return <Loading item="user" />;
   if (isLoading) return <Loading item="groups" />;
-
-  // console.log(groups);
 
   return (
     <div className="mx-auto max-w-4xl px-4">
@@ -82,10 +72,7 @@ export default function GroupsPage() {
             <Card
               key={group.id}
               className="glass-dark hover-lift cursor-pointer border border-gray-700/50 shadow-lg transition-all duration-300"
-              onClick={() => {
-                navigate(`${group.id}`);
-                // console.log(group.id);
-              }}
+              onClick={() => navigate(`${group.id}`)}
             >
               <CardHeader>
                 <CardTitle className="gradient-text">{group.name}</CardTitle>

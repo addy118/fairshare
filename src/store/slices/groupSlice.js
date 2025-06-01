@@ -20,16 +20,18 @@ export const groupSlice = createSlice({
     setSelectedItem: (state, action) => {
       state.selectedItem = action.payload;
     },
+
     setDetailsOpen: (state, action) => {
       state.detailsOpen = action.payload;
     },
+
     clearGroupData: (state) => {
       return initialState;
     },
   },
   extraReducers: (builder) => {
     builder
-      // Handle group data fetching
+      // handle group data fetching
       .addMatcher(fsApi.endpoints.getGroupInfo.matchPending, (state) => {
         state.isLoading = true;
       })
@@ -48,28 +50,28 @@ export const groupSlice = createSlice({
           state.error = error.message;
         }
       )
-      // Handle balances fetching
+      // handle balances fetching
       .addMatcher(
         fsApi.endpoints.getGroupBalances.matchFulfilled,
         (state, { payload }) => {
           state.balances = payload;
         }
       )
-      // Handle expenses fetching
+      // handle expenses fetching
       .addMatcher(
         fsApi.endpoints.getGroupExpenses.matchFulfilled,
         (state, { payload }) => {
           state.expenses = payload;
         }
       )
-      // Handle settlements fetching
+      // handle settlements fetching
       .addMatcher(
         fsApi.endpoints.getGroupSettlements.matchFulfilled,
         (state, { payload }) => {
           state.settlements = payload;
         }
       )
-      // Handle history fetching
+      // handle history fetching
       .addMatcher(
         fsApi.endpoints.getGroupHistory.matchFulfilled,
         (state, { payload }) => {

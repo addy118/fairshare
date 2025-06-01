@@ -20,7 +20,6 @@ export default function GrpBalances() {
   const user = formatUser(clerkUser);
   const group = useSelector(selectCurrentGroup);
   const members = group?.members;
-  console.log("UI Members: ", members);
 
   const { data: balances = [] } = useGetGroupBalancesQuery(
     { groupId },
@@ -29,7 +28,6 @@ export default function GrpBalances() {
     }
   );
 
-  console.log("UI balances: ", balances);
   return (
     <Card className="glass-dark hover-lift border border-gray-700/50 shadow-lg transition-all duration-300">
       <CardHeader>

@@ -10,7 +10,7 @@ export default function LandingPage() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Add a small delay to ensure smooth initial animations
+    // small delay to ensure smooth initial animations
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 100);

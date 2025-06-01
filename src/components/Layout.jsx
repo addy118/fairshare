@@ -247,13 +247,8 @@ export default function Layout() {
 
                 <SignedOut>
                   <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none">
-                    {/* <SignInButton /> */}
                     <Link to="/login">Sign In</Link>
                   </DropdownMenuItem>
-
-                  {/* <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none">
-                    <SignInButton />
-                  </DropdownMenuItem> */}
                 </SignedOut>
               </DropdownMenuContent>
             </DropdownMenu>
