@@ -74,8 +74,8 @@ export default function Layout() {
       setNewGroupName("");
       setNewMembers([]);
       navigate("/groups");
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to create group");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to create group");
     } finally {
       setLoading(false);
     }

@@ -43,8 +43,8 @@ export default function Settlements() {
       setIsOptimizing(true);
       await optimizeSettlements();
       setIsOptimizing(false);
-    } catch (err) {
-      console.error("Failed to optimize splits: ", err);
+    } catch (error) {
+      console.error("Failed to optimize splits: ", error);
     }
   };
 
@@ -69,9 +69,9 @@ export default function Settlements() {
       await remindSettlement(settlementId);
       toast.dismiss();
       toast.success(`Reminded to ${fromUser}`);
-    } catch (err) {
+    } catch (error) {
       toast.dismiss();
-      console.error("Failed to settle transaction:", err);
+      console.error("Failed to settle transaction:", error);
       toast.error("Failed to remind the user");
     }
   };

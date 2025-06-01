@@ -32,8 +32,8 @@ export default function Home() {
 
         const upiRes = await api.get(`user/${user.id}/upi`);
         setUpi(upiRes.data?.upi);
-      } catch (err) {
-        console.error("Failed to fetch balances:", err);
+      } catch (error) {
+        console.error("Failed to fetch balances:", error);
       } finally {
         setIsLoading(false);
       }

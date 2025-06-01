@@ -34,10 +34,10 @@ export default function GroupsPage() {
         const response = await api.post(`/user/${user.id}/groups`);
         const formatRes = formatGroup.groups(response.data);
         setGroups(formatRes);
-      } catch (err) {
+      } catch (error) {
         console.error(
           "Failed to fetch groups:",
-          err?.response?.data || err.message || err
+          error?.response?.data || error.message || error
         );
       } finally {
         setIsLoading(false);

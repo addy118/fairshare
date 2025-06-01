@@ -45,8 +45,8 @@ export default function NewGroupDialog({
       setNewMemberOpen(false);
       setNewMembers([]);
       navigate(`/groups/${groupId}`);
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to add members");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to add members");
     } finally {
       setIsLoading(false);
     }

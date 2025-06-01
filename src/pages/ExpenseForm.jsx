@@ -84,9 +84,9 @@ export default function ExpenseForm() {
       await createExpense(expense).unwrap();
       toast.success("Expense created successfully!");
       navigate(`/groups/${Number(groupId)}`);
-    } catch (err) {
-      console.error("Failed to create an expense: ", err);
-      toast.error("Failed to create expense: " + err.message);
+    } catch (error) {
+      console.error("Failed to create an expense: ", error);
+      toast.error("Failed to create expense: " + error.message);
     }
   };
 

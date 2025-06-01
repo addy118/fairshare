@@ -66,9 +66,9 @@ export default function GroupPage() {
       await api.delete(`/grp/${groupId}/member/${user.id}`);
       setIsLoading(false);
       navigate("/groups");
-    } catch (err) {
-      console.error("Error leaving group: ", err);
-      toast.success("Error leaving the group ", err);
+    } catch (error) {
+      console.error("Error leaving group: ", error);
+      toast.success("Error leaving the group ", error);
     }
   };
 

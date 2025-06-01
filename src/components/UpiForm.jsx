@@ -33,9 +33,9 @@ export default function UpiForm() {
       SetIsLoading(false);
       toast.success("UPI added successfully!");
       navigate("/");
-    } catch (err) {
-      console.error("Error adding UPI: ", err);
-      toast.error(err.message || err || "Failed to add UPI");
+    } catch (error) {
+      console.error("Error adding UPI: ", error);
+      toast.error(error.message || error || "Failed to add UPI");
     } finally {
       SetIsLoading(false);
     }
