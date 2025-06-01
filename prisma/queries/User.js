@@ -17,12 +17,14 @@ class User {
     } catch (error) {
       console.error("Error in User.create(): ", error.message);
       console.error(error.stack);
+
       if (error.code === "P2002") {
         // handling unique constraint violation
         throw new Error(
           error.message || "A user with this email or username already exists."
         );
       }
+
       throw new Error(error.message || "Failed to create user.");
     }
   }

@@ -142,6 +142,11 @@ class Group {
     } catch (error) {
       console.error("Error in Group.join(): ", error.message);
       console.error(error.stack);
+
+      // unique constraint violation
+      if (error.code === "P2002")
+        throw new Error("Member is already in the group.");
+
       throw new Error(error.message || "Failed to add member to group.");
     }
   }

@@ -57,6 +57,13 @@ class Expense {
     } catch (error) {
       console.error("Error in Expense.create(): ", error.message);
       console.error(error.stack);
+
+      // unique constraint violation
+      if (error.code === "P2002")
+        throw new Error(
+          "A single participant can't pay multiple times for a single expense."
+        );
+
       throw new Error(error.message || "Failed to create expense.");
     }
   }
