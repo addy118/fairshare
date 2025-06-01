@@ -24,18 +24,27 @@ import Loading from "@/components/Loading";
 
 export default function ExpenseForm() {
   const navigate = useNavigate();
-  const { id } = useParams();
-  const { group } = useGroupData(Number(id));
+  const { id: groupId } = useParams();
+  const { group } = useGroupData(Number(groupId));
   // console.log(group);
   const users = group?.members || [];
   // console.log(users);
 
-  const [expenseName, setExpenseName] = useState("");
-  const [totalAmount, setTotalAmount] = useState("");
+  const [expenseName, setExpenseName] = useState("Demo Expense");
+  const [totalAmount, setTotalAmount] = useState("50");
   const [payers, setPayers] = useState([
-    { id: Date.now(), payerId: "", amount: "" },
+    {
+      id: Date.now(),
+      payerId: "user_29w83sxmDNGwOuEthce5gg56FcC",
+      amount: "50",
+    },
+    {
+      id: Date.now() + 1,
+      payerId: "user_2xr6Vz2hPcAvh0HmMGacSHaBwsm",
+      amount: "0",
+    },
   ]);
-  const [payersTotal, setPayersTotal] = useState(0);
+  const [payersTotal, setPayersTotal] = useState(50);
 
   const [loading, setLoading] = useState(false);
 
@@ -115,11 +124,12 @@ export default function ExpenseForm() {
       name: expenseName,
       totalAmt: Number.parseFloat(totalAmount),
       payers: payers.map(({ payerId, amount }) => ({
-        payerId: Number(payerId),
+        payerId: payerId,
         amount: Number.parseFloat(amount),
       })),
       groupId,
     };
+    console.log(expense);
 
     handleCreateExpense(expense);
   };

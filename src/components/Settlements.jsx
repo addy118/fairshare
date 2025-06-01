@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Avatar } from "./ui/avatar";
+import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { GroupContext } from "@/pages/Group";
