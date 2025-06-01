@@ -14,6 +14,15 @@ import {
   useConfirmSettlementMutation,
   useRemindSettlementMutation,
 } from "@/store/api/apiSlice";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
+import { isMobile } from "react-device-detect";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function Settlements() {
   const { user: clerkUser } = useUser();
@@ -67,6 +76,9 @@ export default function Settlements() {
     }
   };
 
+  // Modal state
+  const [openModalId, setOpenModalId] = useState(null);
+
   return (
     <div className="space-y-6">
       {settlements?.length === 0 ? (
@@ -94,112 +106,195 @@ export default function Settlements() {
               )}
             </Button>
             {settlements?.map((settlement) => (
-              <Card
-                key={settlement.id}
-                className={`${settlement.confirmed ? "opacity-50" : ""} glass-dark rounded-sm border border-gray-700/50`}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      {/* source */}
-                      <Avatar className="border border-gray-700">
-                        <AvatarImage src={settlement.from.pfp} />
-                        <AvatarFallback className="bg-gray-400">
-                          {settlement.from.name
-                            ?.split(" ")
-                            .map((n) => n[0])
-                            .join("")
-                            .slice(0, 2)
-                            .toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
+              <React.Fragment key={settlement.id}>
+                <Card
+                  className={`${settlement.confirmed ? "opacity-50" : ""} glass-dark rounded-sm border border-gray-700/50`}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        {/* source */}
+                        <Avatar className="border border-gray-700">
+                          <AvatarImage src={settlement.from.pfp} />
+                          <AvatarFallback className="bg-gray-400">
+                            {settlement.from.name
+                              ?.split(" ")
+                              .map((n) => n[0])
+                              .join("")
+                              .slice(0, 2)
+                              .toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
 
-                      <div className="flex flex-col">
-                        <span className="font-medium text-gray-300">
-                          {settlement.from.name}
+                        <div className="flex flex-col">
+                          <span className="font-medium text-gray-300">
+                            {settlement.from.name}
+                          </span>
+                        </div>
+
+                        <span className="text-sm text-gray-400">
+                          {settlement.confirmed ? "paid" : "needs to pay"}
                         </span>
+
+                        {/* destination */}
+                        <Avatar className="border border-gray-700">
+                          <AvatarImage src={settlement.to.pfp} />
+                          <AvatarFallback className="bg-gray-400">
+                            {settlement.to.name
+                              ?.split(" ")
+                              .map((n) => n[0])
+                              .join("")
+                              .slice(0, 2)
+                              .toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col">
+                          <span className="font-medium text-gray-300">
+                            {settlement.to.name}
+                          </span>
+                        </div>
                       </div>
 
-                      <span className="text-sm text-gray-400">owes</span>
-
-                      {/* destination */}
-                      <Avatar className="border border-gray-700">
-                        <AvatarImage src={settlement.to.pfp} />
-                        <AvatarFallback className="bg-gray-400">
-                          {settlement.to.name
-                            ?.split(" ")
-                            .map((n) => n[0])
-                            .join("")
-                            .slice(0, 2)
-                            .toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col">
-                        <span className="font-medium text-gray-300">
-                          {settlement.to.name}
+                      {/* amount */}
+                      <div className="flex items-center gap-4">
+                        <span className="font-bold text-teal-400">
+                          ₹{settlement.amount.toFixed(2)}
                         </span>
-                      </div>
-                    </div>
 
-                    {/* amount */}
-                    <div className="flex items-center gap-4">
-                      <span className="font-bold text-teal-400">
-                        ₹{settlement.amount.toFixed(2)}
-                      </span>
+                        {/* status */}
+                        {settlement.confirmed ? (
+                          <span className="flex items-center text-green-600">
+                            <Check className="mr-1 h-4 w-4" />
+                            Settled
+                          </span>
+                        ) : settlement.from.id === user.id &&
+                          settlement.settled ? (
+                          <span className="text-yellow-500">Waiting</span>
+                        ) : settlement.to.id === user.id &&
+                          settlement.settled ? (
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700"
+                              onClick={() => handleConfirm(settlement.id, true)}
+                            >
+                              Received
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="border-gray-700 hover:bg-gray-700/70 hover:text-red-400"
+                              onClick={() =>
+                                handleConfirm(settlement.id, false)
+                              }
+                            >
+                              Didn't receive
+                            </Button>
+                          </div>
+                        ) : settlement.from.id === user.id &&
+                          !settlement.settled ? (
+                          <>
+                            <Button
+                              size="sm"
+                              className="bg-teal-500 hover:bg-teal-600"
+                              onClick={() => setOpenModalId(settlement.id)}
+                            >
+                              Settle
+                            </Button>
 
-                      {/* status */}
-                      {settlement.confirmed ? (
-                        <span className="flex items-center text-green-600">
-                          <Check className="mr-1 h-4 w-4" />
-                          Settled
-                        </span>
-                      ) : settlement.from.id === user.id &&
-                        settlement.settled ? (
-                        <span className="text-yellow-500">Waiting</span>
-                      ) : settlement.to.id === user.id && settlement.settled ? (
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            className="bg-green-600 hover:bg-green-700"
-                            onClick={() => handleConfirm(settlement.id, true)}
-                          >
-                            Received
-                          </Button>
+                            {/* Modal for Settle */}
+                            <Dialog
+                              open={openModalId === settlement.id}
+                              onOpenChange={() => setOpenModalId(null)}
+                            >
+                              <DialogContent className="border border-gray-700/70 bg-[#111828]">
+                                <DialogHeader>
+                                  <DialogTitle className="text-teal-400">
+                                    Settle Payment
+                                  </DialogTitle>
+                                  <DialogDescription className="text-gray-400">
+                                    Pay{" "}
+                                    <span className="font-bold text-teal-400">
+                                      ₹{settlement.amount.toFixed(2)}
+                                    </span>{" "}
+                                    to{" "}
+                                    <span className="font-semibold">
+                                      {settlement.to.name}
+                                    </span>
+                                  </DialogDescription>
+                                </DialogHeader>
+
+                                <div className="mt-4 flex flex-col items-center gap-4">
+                                  {settlement.to.upi && (
+                                    <QRCodeSVG
+                                      value={`upi://pay?pa=${settlement.to.upi || ""}&pn=${encodeURIComponent(settlement.to.name)}&am=${settlement.amount}&cu=INR&tn=${settlement.name || `Settle debt from Fairshare`}`}
+                                      size={200}
+                                      bgColor="#14b8a6"
+                                      fgColor="#111828"
+                                    />
+                                  )}
+
+                                  <Button
+                                    variant="outline"
+                                    className="w-full border-teal-500 text-teal-400 hover:bg-teal-600/10"
+                                    onClick={() => {
+                                      if (
+                                        isMobile &&
+                                        settlement.to.upi &&
+                                        settlement.from.upi
+                                      ) {
+                                        window.open(
+                                          `upi://pay?pa=${settlement.to.upi || ""}&pn=${encodeURIComponent(settlement.to.name)}&am=${settlement.amount}&cu=INR`,
+                                          "_blank"
+                                        );
+                                      } else if (!settlement.to.upi) {
+                                        toast.message(
+                                          "The receiver don't have a UPI ID set!"
+                                        );
+                                      } else if (!settlement.from.upi) {
+                                        toast.message(
+                                          "You don't have a UPI ID set! Please set it from the home page to proceed!"
+                                        );
+                                      } else {
+                                        toast.message(
+                                          "Please use a mobile device to directly use your UPI App!"
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    Pay via UPI App
+                                  </Button>
+                                  <Button
+                                    className="w-full bg-teal-500 text-white hover:bg-teal-600"
+                                    onClick={async () => {
+                                      await handleSettle(settlement.id);
+                                      setOpenModalId(null);
+                                    }}
+                                  >
+                                    Payment Done
+                                  </Button>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                          </>
+                        ) : settlement.to.id === user.id &&
+                          !settlement.settled ? (
                           <Button
                             size="sm"
                             variant="outline"
-                            className="border-gray-700 hover:bg-gray-700/70 hover:text-red-400"
-                            onClick={() => handleConfirm(settlement.id, false)}
+                            className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
+                            onClick={() =>
+                              handleRemind(settlement.id, settlement.from.name)
+                            }
                           >
-                            Didn't receive
+                            Remind
                           </Button>
-                        </div>
-                      ) : settlement.from.id === user.id &&
-                        !settlement.settled ? (
-                        <Button
-                          size="sm"
-                          className="bg-teal-500 hover:bg-teal-600"
-                          onClick={() => handleSettle(settlement.id)}
-                        >
-                          Settle
-                        </Button>
-                      ) : settlement.to.id === user.id &&
-                        !settlement.settled ? (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
-                          onClick={() =>
-                            handleRemind(settlement.id, settlement.from.name)
-                          }
-                        >
-                          Remind
-                        </Button>
-                      ) : null}
+                        ) : null}
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </React.Fragment>
             ))}
           </>
         </div>

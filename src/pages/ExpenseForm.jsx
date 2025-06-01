@@ -23,6 +23,7 @@ import {
   useGetGroupInfoQuery,
   useCreateExpenseMutation,
 } from "@/store/api/apiSlice";
+import { toast } from "sonner";
 
 export default function ExpenseForm() {
   const navigate = useNavigate();
@@ -81,11 +82,11 @@ export default function ExpenseForm() {
   const handleCreateExpense = async (expense) => {
     try {
       await createExpense(expense).unwrap();
-      alert("Expense submitted successfully!");
+      toast.success("Expense created successfully!");
       navigate(`/groups/${Number(groupId)}`);
     } catch (err) {
       console.error("Failed to create an expense: ", err);
-      alert("Failed to create expense: " + err.message);
+      toast.error("Failed to create expense: " + err.message);
     }
   };
 
@@ -93,12 +94,12 @@ export default function ExpenseForm() {
     e.preventDefault();
 
     if (!expenseName.trim()) {
-      alert("Please enter an expense name");
+      toast.error("Please enter an expense name");
       return;
     }
 
     if (!totalAmount || Number.parseFloat(totalAmount) < 0) {
-      alert("Please enter a valid total amount");
+      toast.error("Please enter a valid total amount");
       return;
     }
 
@@ -106,12 +107,12 @@ export default function ExpenseForm() {
       (payer) => !payer.payerId || !payer.amount
     );
     if (invalidPayers) {
-      alert("Please fill in all payer details");
+      toast.error("Please fill in all payer details");
       return;
     }
 
     if (Math.abs(Number.parseFloat(totalAmount) - payersTotal) > 0.01) {
-      alert(
+      toast.error(
         `Payer amounts total (${payersTotal.toFixed(2)}) doesn't match expense total (${Number.parseFloat(
           totalAmount
         ).toFixed(2)})`

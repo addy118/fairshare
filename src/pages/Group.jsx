@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -36,6 +36,7 @@ export default function GroupPage() {
   const user = formatUser(clerkUser);
   const { id: groupId } = useParams();
 
+
   // RTK Query hooks with proper skip conditions
   const {
     data: group,
@@ -44,6 +45,7 @@ export default function GroupPage() {
   } = useGetGroupInfoQuery(groupId, {
     skip: !groupId,
   });
+  console.log(group?.members);
 
   const { isLoading: isLoadingBalances } = useGetGroupBalancesQuery(
     { groupId },

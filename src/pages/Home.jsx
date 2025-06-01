@@ -6,15 +6,15 @@ import UserBalance from "@/components/UserBalance";
 import Loading from "@/components/Loading";
 import { Card, CardContent } from "@/components/ui/card";
 import formatUser from "@/utils/formatUser";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function Home() {
   const { isSignedIn, isLoaded, user: clerkUser } = useUser();
-  const { getToken } = useAuth();
-
   const user = formatUser(clerkUser);
   // console.log(user);
 
   const [balances, setBalances] = useState({ owed: [], owes: [] });
+  const [upi, setUpi] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   // fetch user balance
@@ -25,7 +25,9 @@ export default function Home() {
       try {
         const response = await api.get(`user/${user.id}/balance`);
         setBalances(response.data);
-        console.log(response.data);
+
+        const upiRes = await api.get(`user/${user.id}/upi`);
+        setUpi(upiRes.data.upi);
       } catch (err) {
         console.error("Failed to fetch balances:", err);
       } finally {
@@ -64,8 +66,24 @@ export default function Home() {
                     <h1 className="gradient-text text-2xl font-bold">
                       {user.name}
                     </h1>
-                    <p className="text-gray-300">{user.email}</p>
+                    <p className="text-white">{upi || ""}</p>
+                    <p className="text-gray-300">{user.username}</p>
                   </div>
+                </div>
+
+                <div>
+                  <a
+                    href={`upi://pay?pa=${upi}&pn=${encodeURIComponent(user.name)}&cu=INR`}
+                  >
+                    <QRCodeSVG
+                      value={`upi://pay?pa=${upi}&pn=${encodeURIComponent(user.name)}&cu=INR`}
+                      size={100}
+                      // bgColor="#111828"
+                      // fgColor="#14b8a6"
+                      bgColor="#14b8a6"
+                      fgColor="#111828"
+                    />
+                  </a>
                 </div>
               </div>
             </CardContent>

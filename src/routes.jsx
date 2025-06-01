@@ -1,6 +1,7 @@
 import React, { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import GroupPage from "./pages/Group";
+import UpiForm from "./components/UpiForm";
 const App = lazy(() => import("./App"));
 const Layout = lazy(() => import("./components/Layout"));
 const ErrorPage = lazy(() => import("./pages/ErrorPage"));
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
       {
         Component: ProtectedRoute,
         children: [
+          { path: "upi", Component: UpiForm },
           { path: "profile", Component: Profile },
           { path: "groups", Component: GroupsPage },
           { path: "groups/:id", Component: GroupPage },

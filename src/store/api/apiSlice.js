@@ -60,6 +60,7 @@ export const fsApi = createApi({
               name: member.name || "Unknown Member",
               username: member.username,
               pfp: member.pfp,
+              upi: member.upi || "",
             };
           });
         }
@@ -88,6 +89,7 @@ export const fsApi = createApi({
           return {
             id: user.id,
             name: user.name,
+            pfp: user.pfp || "",
             balance: amount,
           };
         });
