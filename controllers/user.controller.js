@@ -53,7 +53,33 @@ exports.getUserBal = async (req, res) => {
     const { userId } = req.params;
 
     const balance = await User.balance(userId);
-    res.json(balance);
+
+    // merge logic for debtor
+    const mergedDebtor = {};
+    balance.debtor.forEach((item) => {
+      const id = item.creditor.id;
+      if (mergedDebtor[id]) {
+        mergedDebtor[id].amount += item.amount;
+      } else {
+        mergedDebtor[id] = { ...item };
+      }
+    });
+
+    // merge logic for creditor
+    const mergedCreditor = {};
+    balance.creditor.forEach((item) => {
+      const id = item.debtor.id;
+      if (mergedCreditor[id]) {
+        mergedCreditor[id].amount += item.amount;
+      } else {
+        mergedCreditor[id] = { ...item };
+      }
+    });
+
+    res.json({
+      debtor: Object.values(mergedDebtor),
+      creditor: Object.values(mergedCreditor),
+    });
   } catch (err) {
     console.error("Error in getUserBal:", err);
     res.status(400).json({ message: "Failed to retrieve user balance" });
@@ -77,7 +103,7 @@ exports.getUserUpi = async (req, res) => {
     const { userId } = req.params;
 
     const upi = await User.getUpi(userId);
-    console.log(upi);
+    // console.log(upi);
     return res.status(200).json(upi);
   } catch (err) {
     console.error("Error in getUserUpi: ", err);
