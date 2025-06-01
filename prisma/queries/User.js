@@ -295,8 +295,8 @@ class User {
         where: { id: userId },
         data: { upi },
       });
-    } catch (err) {
-      console.error("Error in User.putUpi(): ", err.message);
+    } catch (error) {
+      console.error("Error in User.putUpi(): ", error.message);
       console.error(error.stack);
       throw new Error(error.message || "Failed to update UPI");
     }
@@ -308,8 +308,8 @@ class User {
         where: { id: userId },
         select: { upi: true },
       });
-    } catch (err) {
-      console.error("Error in User.getUpi(): ", err.message);
+    } catch (error) {
+      console.error("Error in User.getUpi(): ", error.message);
       console.error(error.stack);
       throw new Error(error.message || "Failed to fetch UPI");
     }

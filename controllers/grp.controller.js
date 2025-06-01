@@ -8,9 +8,12 @@ exports.postGrp = async (req, res) => {
     const { name } = req.body;
     const group = await Group.create(name);
     res.json({ message: "success", group });
-  } catch (err) {
-    console.error("Error in postGrp:", err);
-    res.status(400).json({ message: "Failed to create group" });
+  } catch (error) {
+    console.error("Error in postGrp(): ", error.message);
+    console.error(error.stack);
+    res
+      .status(400)
+      .json({ message: error.message || "Failed to create group" });
   }
 };
 
@@ -19,9 +22,12 @@ exports.postDelGrp = async (req, res) => {
     const { groupId } = req.params;
     await Group.delete(Number(groupId));
     res.json({ message: "success" });
-  } catch (err) {
-    console.error("Error in postDelGrp:", err);
-    res.status(400).json({ message: "Failed to delete group" });
+  } catch (error) {
+    console.error("Error in postDelGrp(): ", error.message);
+    console.error(error.stack);
+    res
+      .status(400)
+      .json({ message: error.message || "Failed to delete group" });
   }
 };
 
@@ -34,10 +40,12 @@ exports.postMember = async (req, res) => {
     console.log(userId);
     await Group.join(userId, Number(groupId));
     res.json({ message: "success" });
-  } catch (err) {
-    console.error("Error in postMember():", err.message);
-    console.error(err.stack);
-    res.status(400).json({ message: err.message });
+  } catch (error) {
+    console.error("Error in postMember()(): ", error.message);
+    console.error(error.stack);
+    res
+      .status(400)
+      .json({ message: error.message || "Failed to add user to group." });
   }
 };
 
@@ -46,9 +54,12 @@ exports.deleteMember = async (req, res) => {
     const { groupId, memberId } = req.params;
     await Group.leave(Number(memberId), Number(groupId));
     res.json({ message: "success" });
-  } catch (err) {
-    console.error("Error in deleteMember:", err);
-    res.status(400).json({ message: "Failed to remove member from group" });
+  } catch (error) {
+    console.error("Error in deleteMember(): ", error.message);
+    console.error(error.stack);
+    res
+      .status(400)
+      .json({ message: error.message || "Failed to remove member from group" });
   }
 };
 
@@ -57,9 +68,12 @@ exports.getGrpInfo = async (req, res) => {
     const { grpId } = req.params;
     const group = await Group.getById(Number(grpId));
     res.json(group);
-  } catch (err) {
-    console.error("Error in getGrpInfo:", err);
-    res.status(400).json({ message: "Failed to retrieve group information" });
+  } catch (error) {
+    console.error("Error in getGrpInfo(): ", error.message);
+    console.error(error.stack);
+    res.status(400).json({
+      message: error.message || "Failed to retrieve group information",
+    });
   }
 };
 
@@ -68,9 +82,12 @@ exports.getAllExpenses = async (req, res) => {
     const { grpId } = req.params;
     const group = await Group.expenses(Number(grpId));
     res.json(group);
-  } catch (err) {
-    console.error("Error in getAllExpenses:", err);
-    res.status(400).json({ message: "Failed to retrieve group expenses" });
+  } catch (error) {
+    console.error("Error in getAllExpenses(): ", error.message);
+    console.error(error.stack);
+    res
+      .status(400)
+      .json({ message: error.message || "Failed to retrieve group expenses" });
   }
 };
 
@@ -90,9 +107,12 @@ exports.getGrpBalance = async (req, res) => {
     );
 
     res.json(balance);
-  } catch (err) {
-    console.error("Error in getGrpBalance:", err);
-    res.status(400).json({ message: "Failed to calculate group balance" });
+  } catch (error) {
+    console.error("Error in getGrpBalance(): ", error.message);
+    console.error(error.stack);
+    res
+      .status(400)
+      .json({ message: error.message || "Failed to calculate group balance" });
   }
 };
 
@@ -101,9 +121,12 @@ exports.getSplits = async (req, res) => {
     const { grpId } = req.params;
     const splits = await Group.splits(Number(grpId));
     res.json(splits);
-  } catch (err) {
-    console.error("Error in getSplits:", err);
-    res.status(400).json({ message: "Failed to retrieve splits information" });
+  } catch (error) {
+    console.error("Error in getSplits(): ", error.message);
+    console.error(error.stack);
+    res.status(400).json({
+      message: error.message || "Failed to retrieve splits information",
+    });
   }
 };
 
@@ -130,11 +153,13 @@ exports.getMinSplits = async (req, res) => {
     const minSplits = await Group.splits(Number(grpId));
 
     res.json(minSplits);
-  } catch (err) {
-    console.error("Error in getMinSplits:", err);
-    res
-      .status(400)
-      .json({ message: "Failed to calculate and update optimized splits" });
+  } catch (error) {
+    console.error("Error in getMinSplits(): ", error.message);
+    console.error(error.stack);
+    res.status(400).json({
+      message:
+        error.message || "Failed to calculate and update optimized splits",
+    });
   }
 };
 
@@ -187,8 +212,11 @@ exports.getGrpHistory = async (req, res) => {
     }
 
     res.json(timeline);
-  } catch (err) {
-    console.error("Error in getGrpHistory:", err);
-    res.status(400).json({ message: "Failed to retrieve group history" });
+  } catch (error) {
+    console.error("Error in getGrpHistory(): ", error.message);
+    console.error(error.stack);
+    res
+      .status(400)
+      .json({ message: error.message || "Failed to retrieve group history" });
   }
 };

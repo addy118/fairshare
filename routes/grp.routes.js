@@ -29,9 +29,9 @@ grpRouter.post("/:groupId/member/new", postMember);
 grpRouter.delete("/:groupId/member/:memberId", deleteMember);
 grpRouter.delete("/:groupId/delete", postDelGrp);
 
-grpRouter.use((err, req, res, next) => {
-  console.error(err.message);
-  console.error(err.stack);
+grpRouter.use((error, req, res, next) => {
+  console.error(error.message);
+  console.error(error.stack);
   res.send("Something broke in group routes");
 });
 

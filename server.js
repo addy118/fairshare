@@ -39,9 +39,9 @@ app.get("/", (req, res) => {
   res.json("Welcome to our app Fair Share! You are an unauthenticated user!");
 });
 
-app.use((err, req, res, next) => {
-  console.error(err.message);
-  console.error(err.stack);
+app.use((error, req, res, next) => {
+  console.error(error.message);
+  console.error(error.stack);
   res.send("Something broke in server!");
 });
 

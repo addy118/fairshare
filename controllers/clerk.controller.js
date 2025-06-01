@@ -49,8 +49,8 @@ exports.postClerkUser = async (req, res) => {
       //       pfp: user.image_url,
       //     },
       //   });
-      // } catch (err) {
-      //   console.error("Error updating user:", err);
+      // } catch (error) {
+      //   console.error("Error updating user:", error);
       // }
     } else if (eventType === "user.deleted") {
       await User.delete(user);
@@ -58,17 +58,17 @@ exports.postClerkUser = async (req, res) => {
       //   await db.user.delete({
       //     where: { id: user.id },
       //   });
-      // } catch (err) {
-      //   console.error("Error deleting user:", err);
+      // } catch (error) {
+      //   console.error("Error deleting user:", error);
       // }
     }
 
     res.status(200).json({ msg: "Webhook processed successfully!" });
-  } catch (err) {
-    console.error("Error verifying webhook:", err.message);
-    console.error(err.stack);
+  } catch (error) {
+    console.error("Error verifying webhook:", error.message);
+    console.error(error.stack);
     return res
       .status(400)
-      .json({ message: err.message || "Error verifying webhook" });
+      .json({ message: error.message || "Error verifying webhook" });
   }
 };
