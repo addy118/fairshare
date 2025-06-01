@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -9,37 +9,33 @@ import {
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Clock } from "lucide-react";
-import { GroupContext } from "@/pages/Group";
 import formatDate from "@/utils/formatDate";
-import { fetchHistory } from "@/utils/fetchGroupData";
-import { useParams } from "react-router-dom";
 import Loading from "./Loading";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
+import { selectCurrentGroup } from "@/store/slices/groupSlice";
+import { useGetGroupHistoryQuery } from "@/store/api/apiSlice";
+import { useParams } from "react-router-dom";
 
 export default function PaymentHistory() {
   const { id: groupId } = useParams();
-  const { group } = useContext(GroupContext);
-  const [expandedItems, setExpandedItems] = useState({});
-  const { history, setHistory } = useContext(GroupContext);
+  const group = useSelector(selectCurrentGroup);
+  const [expandedItems, setExpandedItems] = useState({
+    26: true,
+    27: true,
+    28: true,
+  });
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const pdfRef = useRef(null);
 
-  // refresh history
-  useEffect(() => {
-    const refreshHistory = async () => {
-      const newHistory = await fetchHistory(groupId);
-      setHistory(newHistory);
-    };
-    refreshHistory();
-  }, [groupId]);
+  const { data: history = [] } = useGetGroupHistoryQuery(groupId, {
+    pollingInterval: 30000, // Refresh every 30 seconds
+  });
 
   const toggleAll = () => {
-    // console.log("clicked toggle all");
-
-    // toggle the deciding flag
     const newState = !isExpanded;
     setIsExpanded(newState);
 
@@ -56,16 +52,6 @@ export default function PaymentHistory() {
       [id]: !prev[id],
     }));
   };
-
-  if (!history || history.length === 0) {
-    return (
-      <Card className="glass-dark border border-gray-700/50 shadow-lg">
-        <CardContent className="pt-6 text-center">
-          <p className="text-gray-400">No payment history available.</p>
-        </CardContent>
-      </Card>
-    );
-  }
 
   // Update the handleExport function to add margins and improve color handling
   const handleExport = async () => {
@@ -238,6 +224,18 @@ export default function PaymentHistory() {
     }
   };
 
+  if (!history?.length) {
+    return (
+      <Card className="glass-dark hover-lift border border-gray-700/50 shadow-lg transition-all duration-300">
+        <CardContent className="pt-6">
+          <p className="text-center text-gray-300">
+            No payment history available.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <>
       <Card className="glass-dark mx-auto mb-20 max-w-4xl border border-gray-700/50 px-4 shadow-lg">
@@ -311,16 +309,17 @@ export default function PaymentHistory() {
                 {/* payment details ( expense / split ) */}
                 {expandedItems?.[item.id] && (
                   <CardContent>
-                    <h3 className="mb-3 font-medium text-purple-400">
-                      Expense per person:{" "}
-                      <span className="text-gray-300">
-                        ₹
-                        {Math.floor(
-                          (item.totalAmt?.toFixed(2) ||
-                            item.amount?.toFixed(2)) / item.payers?.length
-                        )}
-                      </span>
-                    </h3>
+                    {item.type == "expense" && (
+                      <h3 className="mb-3 font-medium text-purple-400">
+                        Expense per person:
+                        <span className="text-gray-300">
+                          ₹
+                          {Math.floor(
+                            item.totalAmt?.toFixed(2) / item.payers?.length
+                          )}
+                        </span>
+                      </h3>
+                    )}
 
                     <div className="flex items-start space-x-12">
                       {item.type == "expense" ? (
@@ -337,7 +336,7 @@ export default function PaymentHistory() {
                               >
                                 <div className="flex items-center gap-4">
                                   <Avatar className="h-6 w-6 border border-gray-700">
-                                    <AvatarImage src={payer.pfp} />
+                                    <AvatarImage src={payer.payer.pfp} />
                                   </Avatar>
 
                                   <span className="text-gray-300">
@@ -365,10 +364,10 @@ export default function PaymentHistory() {
                             <div className="flex items-center justify-between text-sm">
                               <div className="flex items-center gap-4">
                                 <Avatar className="h-6 w-6 border border-gray-700">
-                                  <AvatarImage src={item.debtor.pfp} />
+                                  <AvatarImage src={item.debtor?.pfp} />
                                 </Avatar>
                                 <span className="text-gray-300">
-                                  {item.debtor.name}
+                                  {item.debtor?.name}
                                 </span>
                               </div>
                               <span className="font-medium text-red-500/90">
@@ -385,10 +384,10 @@ export default function PaymentHistory() {
                             <div className="flex items-center justify-between text-sm">
                               <div className="flex items-center gap-4">
                                 <Avatar className="h-6 w-6 border border-gray-700">
-                                  <AvatarImage src={item.creditor.pfp} />
+                                  <AvatarImage src={item.creditor?.pfp} />
                                 </Avatar>
                                 <span className="text-gray-300">
-                                  {item.creditor.name}
+                                  {item.creditor?.name}
                                 </span>
                               </div>
                               <span className="font-medium text-green-600">

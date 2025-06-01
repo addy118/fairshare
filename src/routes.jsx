@@ -1,10 +1,12 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import GroupPage from "./pages/Group";
 const App = lazy(() => import("./App"));
 const Layout = lazy(() => import("./components/Layout"));
 const ErrorPage = lazy(() => import("./pages/ErrorPage"));
 const GroupsPage = lazy(() => import("./pages/Groups"));
-const GroupPage = lazy(() => import("./pages/Group"));
+// const GroupPage = lazy(() => import("./pages/Group"));
+
 const ExpenseForm = lazy(() => import("./pages/ExpenseForm"));
 const SignInPage = lazy(() => import("./pages/SignInPage"));
 const ProtectedRoute = lazy(() => import("./ProtectedRoute"));

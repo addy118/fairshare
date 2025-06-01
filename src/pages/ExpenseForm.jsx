@@ -18,21 +18,28 @@ import {
 } from "@/components/ui/select";
 import { Trash, Plus } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import useGroupData from "@/utils/useGroup";
-import api from "@/axiosInstance";
 import Loading from "@/components/Loading";
+import { useSelector } from "react-redux";
+import { selectCurrentGroup } from "@/store/slices/groupSlice";
+import {
+  useGetGroupInfoQuery,
+  useCreateExpenseMutation,
+} from "@/store/api/apiSlice";
 
 export default function ExpenseForm() {
   const navigate = useNavigate();
   const { id: groupId } = useParams();
-  const { group } = useGroupData(Number(groupId));
-  // console.log(group);
+
+  // Use RTK Query hooks
+  const { data: group } = useGetGroupInfoQuery(groupId);
+  const [createExpense, { isLoading }] = useCreateExpenseMutation();
+
   const users = group?.members || [];
-  // console.log(users);
 
   const [expenseName, setExpenseName] = useState("Demo Expense");
   const [totalAmount, setTotalAmount] = useState("50");
-  const [payers, setPayers] = useState([
+
+  const initExpense = [
     {
       id: Date.now(),
       payerId: "user_29w83sxmDNGwOuEthce5gg56FcC",
@@ -43,10 +50,9 @@ export default function ExpenseForm() {
       payerId: "user_2xr6Vz2hPcAvh0HmMGacSHaBwsm",
       amount: "0",
     },
-  ]);
+  ];
+  const [payers, setPayers] = useState([]);
   const [payersTotal, setPayersTotal] = useState(50);
-
-  const [loading, setLoading] = useState(false);
 
   // calculate total whenever payers change
   useEffect(() => {
@@ -76,17 +82,12 @@ export default function ExpenseForm() {
 
   const handleCreateExpense = async (expense) => {
     try {
-      setLoading(true);
-      await api.post("/exp/new", expense, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      setLoading(false);
+      await createExpense(expense).unwrap();
       alert("Expense submitted successfully!");
       navigate(`/groups/${Number(groupId)}`);
     } catch (err) {
       console.error("Failed to create an expense: ", err);
+      alert("Failed to create expense: " + err.message);
     }
   };
 
@@ -142,7 +143,6 @@ export default function ExpenseForm() {
 
       <Card className="glass-dark border border-gray-700/50 shadow-lg">
         <CardHeader>
-          {/* <CardTitle className="text-white">Create New Expense</CardTitle> */}
           <CardDescription className="text-gray-300">
             Add a new expense with multiple participants
           </CardDescription>
@@ -254,7 +254,7 @@ export default function ExpenseForm() {
                         updatePayer(payer.id, "amount", e.target.value)
                       }
                       required
-                      className="mt-1 appearance-none border-gray-700 bg-gray-800/50 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                      className="appearance-none border-gray-700 bg-gray-800/50 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     />
                   </div>
 
@@ -293,9 +293,10 @@ export default function ExpenseForm() {
           <CardFooter>
             <Button
               type="submit"
+              disabled={isLoading}
               className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-400 text-white shadow-lg transition-all duration-300 hover:from-teal-400 hover:to-teal-500 hover:shadow-teal-500/25"
             >
-              {loading ? (
+              {isLoading ? (
                 <Loading action="Creating" item="expense" />
               ) : (
                 "Create Expense"

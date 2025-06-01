@@ -1,44 +1,39 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
-import { GroupContext } from "@/pages/Group";
 import { Check } from "lucide-react";
-import api from "@/axiosInstance";
-import {
-  fetchBalances,
-  fetchExpensesAndSettlments,
-} from "@/utils/fetchGroupData";
-import { useParams } from "react-router-dom";
 import Loading from "./Loading";
 import { toast } from "sonner";
 import { useUser } from "@clerk/clerk-react";
 import formatUser from "@/utils/formatUser";
+import { useSelector } from "react-redux";
+import {
+  useOptimizeSettlementsMutation,
+  useSettlePaymentMutation,
+  useConfirmSettlementMutation,
+  useRemindSettlementMutation,
+} from "@/store/api/apiSlice";
 
 export default function Settlements() {
-  const { id: groupId } = useParams();
   const { user: clerkUser } = useUser();
   const user = formatUser(clerkUser);
-  const { settlements, setSettlements, setBalances } = useContext(GroupContext);
-  const [loading, setLoading] = useState(false);
+  const [isOptimizing, setIsOptimizing] = useState(false);
+
+  // Get settlements from Redux store
+  const settlements = useSelector((state) => state.group.settlements);
+
+  // RTK Query mutations
+  const [optimizeSettlements] = useOptimizeSettlementsMutation();
+  const [settlePayment] = useSettlePaymentMutation();
+  const [confirmSettlement] = useConfirmSettlementMutation();
+  const [remindSettlement] = useRemindSettlementMutation();
 
   const handleOptimization = async () => {
     try {
-      // console.log("optimizing splits...");
-
-      setLoading(true);
-      await api.get(`grp/${groupId}/splits/min`);
-      setLoading(false);
-
-      // fetch new optimized splits
-      const { settlementsData } = await fetchExpensesAndSettlments(groupId);
-
-      // update settlements
-      setSettlements(settlementsData);
-
-      // refresh balances after settlement
-      const balanceData = await fetchBalances(groupId, user.id);
-      setBalances(balanceData);
+      setIsOptimizing(true);
+      await optimizeSettlements();
+      setIsOptimizing(false);
     } catch (err) {
       console.error("Failed to optimize splits: ", err);
     }
@@ -46,16 +41,7 @@ export default function Settlements() {
 
   const handleSettle = async (settlementId) => {
     try {
-      await api.put(`/exp/${settlementId}/settle`);
-
-      const { settlementsData } = await fetchExpensesAndSettlments(groupId);
-
-      // update settlements
-      setSettlements(settlementsData);
-
-      // refresh balances after settlement
-      const balanceData = await fetchBalances(groupId, user.id);
-      setBalances(balanceData);
+      await settlePayment(settlementId);
     } catch (error) {
       console.error("Failed to settle transaction:", error);
     }
@@ -63,18 +49,7 @@ export default function Settlements() {
 
   const handleConfirm = async (settlementId, status) => {
     try {
-      await api.put(
-        `/exp/${settlementId}/${status ? "confirm" : "not-confirm"}`
-      );
-
-      const { settlementsData } = await fetchExpensesAndSettlments(groupId);
-
-      // update settlements
-      setSettlements(settlementsData);
-
-      // refresh balances after settlement
-      const balanceData = await fetchBalances(groupId, user.id);
-      setBalances(balanceData);
+      await confirmSettlement({ settlementId, status });
     } catch (error) {
       console.error("Failed to settle transaction:", error);
     }
@@ -82,11 +57,7 @@ export default function Settlements() {
 
   const handleRemind = async (settlementId, fromUser) => {
     try {
-      // // console.log("remind user " + fromUser);
-
-      const remindRes = await api.post(`/exp/${Number(settlementId)}/remind`);
-      if (remindRes.status != 200) throw new Error("Unexpected error!");
-
+      await remindSettlement(settlementId);
       toast.dismiss();
       toast.success(`Reminded to ${fromUser}`);
     } catch (err) {
@@ -116,7 +87,7 @@ export default function Settlements() {
               onClick={handleOptimization}
               style={{ letterSpacing: "0.5em", textTransform: "uppercase" }}
             >
-              {loading ? (
+              {isOptimizing ? (
                 <Loading action="Optimizing" item="splits" />
               ) : (
                 "Optimize Splits"

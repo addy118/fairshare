@@ -8,6 +8,8 @@ import { Toaster } from "./components/ui/sonner";
 import { ClerkProvider } from "@clerk/clerk-react";
 import AxiosInterceptor from "./AxiosInterceptor";
 import Loading from "./components/Loading";
+import { Provider } from "react-redux";
+import { store } from "./store";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -29,7 +31,7 @@ const clerkAppearance = {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <>
+    <Provider store={store}>
       <ClerkProvider
         publishableKey={PUBLISHABLE_KEY}
         appearance={clerkAppearance}
@@ -43,6 +45,6 @@ createRoot(document.getElementById("root")).render(
           <RouterProvider router={router} />
         </Suspense>
       </ClerkProvider>
-    </>
+    </Provider>
   </StrictMode>
 );
