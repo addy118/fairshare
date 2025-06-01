@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function UserBalance({ balances, isCreditor }) {
   const list = isCreditor ? balances.creditor : balances.debtor;
@@ -49,6 +49,16 @@ export default function UserBalance({ balances, isCreditor }) {
                         isCreditor ? balance.debtor.pfp : balance.creditor.pfp
                       }
                     />
+                    <AvatarFallback className="bg-gray-400">
+                      {isCreditor
+                        ? balance.debtor.name
+                        : balance.creditor.name
+                            ?.split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .slice(0, 2)
+                            .toUpperCase()}
+                    </AvatarFallback>
                   </Avatar>
                   <span className="text-gray-300">
                     {isCreditor ? balance.debtor.name : balance.creditor.name}

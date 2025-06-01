@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Check } from "lucide-react";
@@ -104,6 +104,14 @@ export default function Settlements() {
                       {/* source */}
                       <Avatar className="border border-gray-700">
                         <AvatarImage src={settlement.from.pfp} />
+                        <AvatarFallback className="bg-gray-400">
+                          {settlement.from.name
+                            ?.split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .slice(0, 2)
+                            .toUpperCase()}
+                        </AvatarFallback>
                       </Avatar>
 
                       <div className="flex flex-col">
@@ -117,6 +125,14 @@ export default function Settlements() {
                       {/* destination */}
                       <Avatar className="border border-gray-700">
                         <AvatarImage src={settlement.to.pfp} />
+                        <AvatarFallback className="bg-gray-400">
+                          {settlement.to.name
+                            ?.split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .slice(0, 2)
+                            .toUpperCase()}
+                        </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col">
                         <span className="font-medium text-gray-300">

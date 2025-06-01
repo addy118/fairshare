@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import api from "@/axiosInstance";
 import UserBalance from "@/components/UserBalance";
@@ -25,6 +25,7 @@ export default function Home() {
       try {
         const response = await api.get(`user/${user.id}/balance`);
         setBalances(response.data);
+        console.log(response.data);
       } catch (err) {
         console.error("Failed to fetch balances:", err);
       } finally {
@@ -49,6 +50,14 @@ export default function Home() {
                 <div className="mb-4 flex items-center gap-4 md:mb-0">
                   <Avatar className="h-16 w-16 border border-teal-500/30">
                     <AvatarImage src={user.pfp} />
+                    <AvatarFallback className="bg-gray-400">
+                      {user.name
+                        ?.split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase()}
+                    </AvatarFallback>
                   </Avatar>
 
                   <div>

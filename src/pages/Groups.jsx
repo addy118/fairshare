@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import formatGroup from "@/utils/formatGroup";
@@ -16,6 +15,7 @@ import formatUser from "@/utils/formatUser";
 import { useUser } from "@clerk/clerk-react";
 import Loading from "@/components/Loading";
 import api from "@/axiosInstance";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function GroupsPage() {
   const navigate = useNavigate();
@@ -85,6 +85,14 @@ export default function GroupsPage() {
                   {group.members?.slice(0, 5).map((member, index) => (
                     <Avatar key={index} className="border-1 border-teal-800">
                       <AvatarImage src={member.pfp} />
+                      <AvatarFallback className="bg-gray-400">
+                        {member.name
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .slice(0, 2)
+                          .toUpperCase()}
+                      </AvatarFallback>
                     </Avatar>
                   ))}
                   {group.memberCount > 5 && (

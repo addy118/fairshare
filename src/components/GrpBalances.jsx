@@ -13,6 +13,7 @@ import { useGetGroupBalancesQuery } from "@/store/api/apiSlice";
 import { useParams } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import formatUser from "@/utils/formatUser";
+import { AvatarFallback } from "@radix-ui/react-avatar";
 
 export default function GrpBalances() {
   const { id: groupId } = useParams();
@@ -48,6 +49,14 @@ export default function GrpBalances() {
                   <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8 border border-gray-700">
                       <AvatarImage src={member.pfp} />
+                      <AvatarFallback>
+                        {member.name
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .slice(0, 2)
+                          .toUpperCase()}
+                      </AvatarFallback>
                     </Avatar>
                     <span className="text-gray-300">{member.name}</span>
 
@@ -74,6 +83,14 @@ export default function GrpBalances() {
                     <div className="flex items-center gap-2">
                       <Avatar className="h-8 w-8 border border-gray-700">
                         <AvatarImage src={member.pfp} />
+                        {/* <AvatarFallback className="bg-gray-400">
+                          {member.name
+                            ?.split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .slice(0, 2)
+                            .toUpperCase()}
+                        </AvatarFallback> */}
                       </Avatar>
                       <span className="text-gray-300">{member.name}</span>
 

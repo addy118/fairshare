@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Clock } from "lucide-react";
 import formatDate from "@/utils/formatDate";
@@ -332,7 +332,15 @@ export default function PaymentHistory() {
                               >
                                 <div className="flex items-center gap-4">
                                   <Avatar className="h-6 w-6 border border-gray-700">
-                                    <AvatarImage src={payer.payer.pfp} />
+                                    <AvatarImage src={payer.payer?.pfp} />
+                                    <AvatarFallback className="bg-gray-400">
+                                      {payer.payer.name
+                                        ?.split(" ")
+                                        .map((n) => n[0])
+                                        .join("")
+                                        .slice(0, 2)
+                                        .toUpperCase()}
+                                    </AvatarFallback>
                                   </Avatar>
 
                                   <span className="text-gray-300">
@@ -361,6 +369,14 @@ export default function PaymentHistory() {
                               <div className="flex items-center gap-4">
                                 <Avatar className="h-6 w-6 border border-gray-700">
                                   <AvatarImage src={item.debtor?.pfp} />
+                                  <AvatarFallback className="bg-gray-400">
+                                    {item.debtor?.name
+                                      ?.split(" ")
+                                      .map((n) => n[0])
+                                      .join("")
+                                      .slice(0, 2)
+                                      .toUpperCase()}
+                                  </AvatarFallback>
                                 </Avatar>
                                 <span className="text-gray-300">
                                   {item.debtor?.name}
@@ -381,6 +397,14 @@ export default function PaymentHistory() {
                               <div className="flex items-center gap-4">
                                 <Avatar className="h-6 w-6 border border-gray-700">
                                   <AvatarImage src={item.creditor?.pfp} />
+                                  <AvatarFallback className="bg-gray-400">
+                                    {item.creditor?.name
+                                      ?.split(" ")
+                                      .map((n) => n[0])
+                                      .join("")
+                                      .slice(0, 2)
+                                      .toUpperCase()}
+                                  </AvatarFallback>
                                 </Avatar>
                                 <span className="text-gray-300">
                                   {item.creditor?.name}
@@ -408,6 +432,14 @@ export default function PaymentHistory() {
                               <div className="flex items-center gap-3">
                                 <Avatar className="h-6 w-6 border border-gray-700">
                                   <AvatarImage src={balance.user.pfp} />
+                                  <AvatarFallback className="bg-gray-400">
+                                    {balance.user?.name
+                                      ?.split(" ")
+                                      .map((n) => n[0])
+                                      .join("")
+                                      .slice(0, 2)
+                                      .toUpperCase()}
+                                  </AvatarFallback>
                                 </Avatar>
                                 <span className="text-gray-300">
                                   {balance.user.name}
