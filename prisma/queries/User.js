@@ -90,6 +90,19 @@ class User {
     }
   }
 
+  static async getPfpById(id) {
+    try {
+      const user = await db.user.findUnique({
+        where: { id },
+        select: { pfp: true },
+      });
+      return user.pfp;
+    } catch (error) {
+      console.error("Error fetching pfp by ID: ", error.stack);
+      throw new Error("Failed to fetch pfp by ID.");
+    }
+  }
+
   static async getIdbyUserName(username) {
     try {
       const userId = await db.user.findFirst({
