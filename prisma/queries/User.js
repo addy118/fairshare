@@ -117,10 +117,14 @@ class User {
         where: { username },
         select: { id: true },
       });
-      return Number(userId.id);
+      if (!userId) {
+        throw new Error("No user found with the given username.");
+      }
+      return userId.id;
     } catch (error) {
-      console.error("Error fetching ID by username: ", error.stack);
-      throw new Error("Failed to fetch ID by username.");
+      console.error("Error in query getIdbyUserName(): ", error.message);
+      console.error(error.stack);
+      throw new Error(error.message || "Failed to fetch ID by username.");
     }
   }
 

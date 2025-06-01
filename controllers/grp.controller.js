@@ -1,11 +1,7 @@
 const Group = require("../prisma/queries/Group");
 const Split = require("../prisma/queries/Split");
 const User = require("../prisma/queries/User");
-const {
-  calculateSplits,
-  mergeChrono,
-  getGroupBalance,
-} = require("./util");
+const { calculateSplits, mergeChrono, getGroupBalance } = require("./util");
 
 exports.postGrp = async (req, res) => {
   try {
@@ -35,11 +31,13 @@ exports.postMember = async (req, res) => {
     const { username } = req.body;
 
     const userId = await User.getIdbyUserName(username);
+    console.log(userId);
     await Group.join(userId, Number(groupId));
     res.json({ msg: "success" });
   } catch (err) {
-    console.error("ERROR in postMember:", err);
-    res.status(400).json({ msg: "Failed to add member to group" });
+    console.error("Error in postMember():", err.message);
+    console.error(err.stack);
+    res.status(400).json({ msg: err.message });
   }
 };
 
