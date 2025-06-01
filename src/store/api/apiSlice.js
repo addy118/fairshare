@@ -176,14 +176,20 @@ export const fsApi = createApi({
         method: "POST",
         data: expenseData,
       }),
-      invalidatesTags: ["Expenses", "Group", "Balances", "History"],
+      invalidatesTags: [
+        "Expenses",
+        "Group",
+        "Balances",
+        "History",
+        "Settlements",
+      ],
     }),
   }),
 
   tagTypes: [
     "Expenses",
-    "Groups",
-    "Users",
+    // "Groups",
+    // "Users",
     "Group",
     "Balances",
     "History",
