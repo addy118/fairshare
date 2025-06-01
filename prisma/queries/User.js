@@ -202,12 +202,14 @@ class User {
         where: { id },
         select: {
           debtor: {
+            where: { confirmed: false }, // only pending splits
             select: {
               creditor: { select: { id: true, name: true } },
               amount: true,
             },
           },
           creditor: {
+            where: { confirmed: false }, // onnly pending splits
             select: {
               debtor: { select: { id: true, name: true } },
               amount: true,

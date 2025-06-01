@@ -51,8 +51,9 @@ exports.getUserInfo = async (req, res) => {
 exports.getUserBal = async (req, res) => {
   try {
     const { userId } = req.params;
-    // console.log(userId);
+    console.log(userId);
     const balance = await User.balance(userId);
+    console.log(balance);
     res.json(balance);
   } catch (err) {
     console.error("ERROR in getUserBal:", err);
