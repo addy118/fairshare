@@ -32,6 +32,7 @@ import {
   useUser,
 } from "@clerk/clerk-react";
 import formatUser from "@/utils/formatUser";
+import { toast } from "sonner";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -46,11 +47,11 @@ export default function Layout() {
   const handleCreateGroup = async (e) => {
     e.preventDefault();
     if (!newGroupName.trim()) {
-      alert("Group name cannot be empty.");
+      toast.error("Group name cannot be empty.");
       return;
     }
     if (newMembers.length === 0) {
-      alert("Please add at least one member to the group.");
+      toast.error("Please add at least one member to the group.");
       return;
     }
 
@@ -74,7 +75,9 @@ export default function Layout() {
       setNewMembers([]);
       navigate("/groups");
     } catch (err) {
-      console.error("Failed to create a group: ", err);
+      toast.error(err.response?.data?.msg || "Failed to create group");
+    } finally {
+      setLoading(false);
     }
   };
 
