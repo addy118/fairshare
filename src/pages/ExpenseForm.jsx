@@ -85,12 +85,13 @@ export default function ExpenseForm() {
       toast.success("Expense created successfully!");
       navigate(`/groups/${Number(groupId)}`);
     } catch (error) {
-      console.error("Failed to create an expense: ", error);
-      toast.error("Failed to create expense: " + error.message);
+      console.log(error.response?.data?.message);
+      console.log(error.message);
+      toast.error(error.response?.data?.message || "Failed to create expense.");
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!expenseName.trim()) {
@@ -130,7 +131,8 @@ export default function ExpenseForm() {
       groupId,
     };
 
-    handleCreateExpense(expense);
+    await handleCreateExpense(expense);
+    navigate(`/groups/${groupId}`);
   };
 
   return (
