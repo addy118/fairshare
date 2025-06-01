@@ -71,16 +71,21 @@ class Expense {
           totalAmt: true,
           payers: {
             select: {
-              payer: { select: { id: true, name: true } },
+              payer: { select: { id: true, name: true, pfp: true, upi: true } },
               paidAmt: true,
             },
           },
           splits: {
             select: {
-              debtor: { select: { id: true, name: true } },
-              creditor: { select: { id: true, name: true } },
+              debtor: {
+                select: { id: true, name: true, pfp: true, upi: true },
+              },
+              creditor: {
+                select: { id: true, name: true, pfp: true, upi: true },
+              },
               amount: true,
               settled: true,
+              confirmed: true,
             },
           },
           _count: { select: { payers: true, splits: true } },

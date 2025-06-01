@@ -33,7 +33,13 @@ class Group {
           members: {
             select: {
               member: {
-                select: { id: true, name: true, username: true, pfp: true },
+                select: {
+                  id: true,
+                  name: true,
+                  username: true,
+                  pfp: true,
+                  upi: true,
+                },
               },
             },
           },
@@ -59,7 +65,9 @@ class Group {
               totalAmt: true,
               payers: {
                 select: {
-                  payer: { select: { id: true, name: true, pfp: true } },
+                  payer: {
+                    select: { id: true, name: true, pfp: true, upi: true },
+                  },
                   paidAmt: true,
                 },
               },
@@ -70,8 +78,12 @@ class Group {
             select: {
               id: true,
               mainGroup: { select: { id: true, name: true } },
-              debtor: { select: { id: true, name: true, pfp: true } },
-              creditor: { select: { id: true, name: true, pfp: true } },
+              debtor: {
+                select: { id: true, name: true, pfp: true, upi: true },
+              },
+              creditor: {
+                select: { id: true, name: true, pfp: true, upi: true },
+              },
               amount: true,
               settled: true,
               confirmed: true,
@@ -98,8 +110,12 @@ class Group {
             where: { confirmed: false },
             select: {
               id: true,
-              debtor: { select: { id: true, name: true, pfp: true } },
-              creditor: { select: { id: true, name: true, pfp: true } },
+              debtor: {
+                select: { id: true, name: true, pfp: true, upi: true },
+              },
+              creditor: {
+                select: { id: true, name: true, pfp: true, upi: true },
+              },
               amount: true,
             },
           },
@@ -146,7 +162,7 @@ class Group {
         where: {
           groupId_memberId: {
             groupId: Number(groupId),
-            memberId: memberId,
+            memberId,
           },
         },
       });
@@ -163,7 +179,17 @@ class Group {
     try {
       return await db.member.findMany({
         where: { groupId: Number(groupId) },
-        include: { member: { select: { id: true, name: true, pfp: true } } },
+        include: {
+          member: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+              pfp: true,
+              upi: true,
+            },
+          },
+        },
       });
     } catch (error) {
       console.error("Error fetching group members: ", error.stack);
@@ -182,7 +208,15 @@ class Group {
           createdAt: true,
           payers: {
             select: {
-              payer: { select: { id: true, name: true, pfp: true } },
+              payer: {
+                select: {
+                  id: true,
+                  name: true,
+                  username: true,
+                  pfp: true,
+                  upi: true,
+                },
+              },
               paidAmt: true,
             },
           },
@@ -201,8 +235,24 @@ class Group {
         where: { groupId: Number(groupId), confirmed: true },
         select: {
           id: true,
-          debtor: { select: { id: true, name: true, pfp: true } },
-          creditor: { select: { id: true, name: true, pfp: true } },
+          debtor: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+              pfp: true,
+              upi: true,
+            },
+          },
+          creditor: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+              pfp: true,
+              upi: true,
+            },
+          },
           amount: true,
           updatedAt: true,
         },

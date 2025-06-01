@@ -51,9 +51,8 @@ exports.getUserInfo = async (req, res) => {
 exports.getUserBal = async (req, res) => {
   try {
     const { userId } = req.params;
-    console.log(userId);
+
     const balance = await User.balance(userId);
-    console.log(balance);
     res.json(balance);
   } catch (err) {
     console.error("ERROR in getUserBal:", err);
@@ -65,10 +64,36 @@ exports.getUserGroups = async (req, res) => {
   try {
     const { userId } = req.params;
     const response = await User.groups(userId);
-    // console.log(response);
+
     return res.status(200).json(response);
   } catch (err) {
     console.error("ERROR in getUserGroups:", err);
     res.status(400).json({ msg: "Failed to retrieve user groups" });
+  }
+};
+
+exports.getUserUpi = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const upi = await User.getUpi(userId);
+    console.log(upi);
+    return res.status(200).json(upi);
+  } catch (err) {
+    console.error("ERROR in getUserUpi: ", err);
+    res.status(400).json({ msg: "Failed to fetch the user's UPI" });
+  }
+};
+
+exports.putUserUpi = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { upi } = req.body;
+
+    await User.putUpi(userId, upi);
+    return res.status(200).json({ msg: "User UPI updated successfully!" });
+  } catch (err) {
+    console.error("ERROR in putUserUpi: ", err);
+    res.status(400).json({ msg: "Failed to update the user's UPI" });
   }
 };

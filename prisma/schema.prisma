@@ -13,6 +13,7 @@ model User {
   name      String?  @db.VarChar(255)
   username  String?  @unique @db.VarChar(255)
   email     String?
+  upi       String?
   pfp       String?
   createdAt DateTime
   updatedAt DateTime

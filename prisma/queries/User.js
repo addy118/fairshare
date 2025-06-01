@@ -29,6 +29,7 @@ class User {
           username: true,
           email: true,
           pfp: true,
+          upi: true,
         },
       });
     } catch (error) {
@@ -49,6 +50,7 @@ class User {
           name: true,
           username: true,
           email: true,
+          upi: true,
           groups: {
             select: {
               group: {
@@ -58,7 +60,13 @@ class User {
                   members: {
                     select: {
                       member: {
-                        select: { id: true, name: true, username: true },
+                        select: {
+                          id: true,
+                          name: true,
+                          username: true,
+                          upi: true,
+                          pfp: true,
+                        },
                       },
                     },
                   },
@@ -126,6 +134,7 @@ class User {
           name: true,
           username: true,
           email: true,
+          upi: true,
           groups: {
             select: {
               group: {
@@ -140,6 +149,7 @@ class User {
                           name: true,
                           username: true,
                           pfp: true,
+                          upi: true,
                         },
                       },
                     },
@@ -178,6 +188,7 @@ class User {
                           name: true,
                           username: true,
                           pfp: true,
+                          upi: true,
                         },
                       },
                     },
@@ -204,14 +215,18 @@ class User {
           debtor: {
             where: { confirmed: false }, // only pending splits
             select: {
-              creditor: { select: { id: true, name: true } },
+              creditor: {
+                select: { id: true, name: true, pfp: true, upi: true },
+              },
               amount: true,
             },
           },
           creditor: {
-            where: { confirmed: false }, // onnly pending splits
+            where: { confirmed: false }, // only pending splits
             select: {
-              debtor: { select: { id: true, name: true } },
+              debtor: {
+                select: { id: true, name: true, pfp: true, upi: true },
+              },
               amount: true,
             },
           },
@@ -221,6 +236,30 @@ class User {
     } catch (error) {
       console.error("Error fetching balance: ", error.stack);
       throw new Error("Failed to fetch balance.");
+    }
+  }
+
+  static async putUpi(userId, upi) {
+    try {
+      await db.user.update({
+        where: { id: userId },
+        data: { upi },
+      });
+    } catch (err) {
+      console.error("Error updating upi: ", err.stack);
+      throw new Error("Failed to update UPI");
+    }
+  }
+
+  static async getUpi(userId) {
+    try {
+      return await db.user.findFirst({
+        where: { id: userId },
+        select: { upi: true },
+      });
+    } catch (err) {
+      console.error("Error fetching upi: ", err.stack);
+      throw new Error("Failed to fetch UPI");
     }
   }
 

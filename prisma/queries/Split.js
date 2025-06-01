@@ -45,6 +45,8 @@ class Split {
               email: true,
               phone: true,
               username: true,
+              pfp: true,
+              upi: true,
             },
           },
           creditor: {
@@ -54,6 +56,8 @@ class Split {
               email: true,
               phone: true,
               username: true,
+              pfp: true,
+              upi: true,
             },
           },
           amount: true,
