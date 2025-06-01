@@ -181,6 +181,7 @@ exports.getGrpHistory = async (req, res) => {
           user: {
             id: userId,
             name: await User.getNameById(userId),
+            pfp: await User.getPfpById(userId),
           },
           amount: Number(amount),
         }))
