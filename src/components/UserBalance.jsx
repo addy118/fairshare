@@ -10,7 +10,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function UserBalance({ balances, isCreditor }) {
-  const list = isCreditor ? balances.creditor : balances.debtor;
+  const list = isCreditor ? balances?.creditor : balances?.debtor;
   const title = isCreditor ? "Money Owed to You" : "Money You Owe";
   const description = isCreditor
     ? "People who need to pay you back"

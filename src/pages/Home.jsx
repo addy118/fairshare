@@ -7,11 +7,14 @@ import Loading from "@/components/Loading";
 import { Card, CardContent } from "@/components/ui/card";
 import formatUser from "@/utils/formatUser";
 import { QRCodeSVG } from "qrcode.react";
+import UpiForm from "@/components/UpiForm";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const { isSignedIn, isLoaded, user: clerkUser } = useUser();
   const user = formatUser(clerkUser);
-  // console.log(user);
+  const navigate = useNavigate();
 
   const [balances, setBalances] = useState({ owed: [], owes: [] });
   const [upi, setUpi] = useState("");
@@ -27,7 +30,7 @@ export default function Home() {
         setBalances(response.data);
 
         const upiRes = await api.get(`user/${user.id}/upi`);
-        setUpi(upiRes.data.upi);
+        setUpi(upiRes.data?.upi);
       } catch (err) {
         console.error("Failed to fetch balances:", err);
       } finally {
@@ -72,9 +75,7 @@ export default function Home() {
                 </div>
 
                 <div>
-                  <a
-                    href={`upi://pay?pa=${upi}&pn=${encodeURIComponent(user.name)}&cu=INR`}
-                  >
+                  {upi ? (
                     <QRCodeSVG
                       value={`upi://pay?pa=${upi}&pn=${encodeURIComponent(user.name)}&cu=INR`}
                       size={100}
@@ -83,7 +84,16 @@ export default function Home() {
                       bgColor="#14b8a6"
                       fgColor="#111828"
                     />
-                  </a>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        navigate("/upi");
+                      }}
+                    >
+                      Add UPI ID
+                    </Button>
+                  )}
                 </div>
               </div>
             </CardContent>

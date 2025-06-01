@@ -13,7 +13,7 @@ const token = {
 };
 
 const login = {
-  msg: "Login Successful!",
+  message: "Login Successful!",
   accessToken:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6Ikhlcm1pb25lIiwidXNlcm5hbWUiOiJoZXJtaW9uZSIsImVtYWlsIjoiaGVybWlvbmVAaG9nd2FydHMuZWR1IiwicGhvbmUiOiIrOTE5OTk5OTk5OTExIiwiaWF0IjoxNzQ0MTc4MTM4LCJleHAiOjE3NDQxNzg3Mzh9.Vfqfiypr18nPCqh5zGFs7ion4nKhoEWqAakqLUYHYJc",
   user: {

@@ -70,7 +70,7 @@ export default function UpiForm() {
               {isLoading ? (
                 <Loading action="Creating" item="expense" />
               ) : (
-                "Add UPI"
+                "Add UPI ID"
               )}
             </Button>
           </CardFooter>
