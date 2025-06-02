@@ -20,8 +20,10 @@ if (!PUBLISHABLE_KEY) {
 const clerkAppearance = {
   variables: {
     colorPrimary: "#4cdede", // accent color (buttons, links, etc.)
+
     colorTextSecondary: "#b4b4b4",
-    colorInputBackground: "#E9FCFF",
+    colorInputBackground: "#2c313c",
+
     colorBackground: "#111828", // background for cards/forms
     colorText: "#ffffff", // text color
     colorTextOnPrimaryBackground: "#111828", // text on buttons

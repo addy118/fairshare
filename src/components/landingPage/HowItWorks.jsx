@@ -182,7 +182,7 @@ export default function HowItWorks() {
           className="mt-8 text-center opacity-0"
           ref={(el) => (stepsRef.current[steps.length + 1] = el)}
         >
-          <Link to="/signup">
+          <Link to="/login">
             <button className="animate-bounce-subtle rounded-md bg-gradient-to-r from-teal-500 to-cyan-400 px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:from-teal-400 hover:to-cyan-500 hover:shadow-teal-500/25">
               Get Started Now
             </button>

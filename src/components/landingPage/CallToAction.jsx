@@ -96,7 +96,7 @@ export default function CallToAction() {
                 </p>
 
                 <form className="space-y-3">
-                  <Link to={"/signup"}>
+                  <Link to="/login">
                     <button className="glow-button w-full rounded-md bg-gradient-to-r from-purple-600 to-purple-500 px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:from-purple-500 hover:to-purple-600 hover:shadow-purple-500/30">
                       Sign Up Now
                     </button>
