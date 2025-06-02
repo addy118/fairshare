@@ -51,41 +51,44 @@ export default function GroupsPage() {
   if (isLoading) return <Loading item="groups" />;
 
   return (
-    <div className="mx-auto max-w-4xl px-4">
-      {/* <h1 className="mb-8 text-2xl font-bold text-white">My Groups</h1> */}
-
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       {groups?.length === 0 ? (
-        <Card className="glass-dark border border-gray-700/50 py-12 text-center shadow-lg">
+        <Card className="glass-dark border border-gray-700/50 py-8 text-center shadow-lg sm:py-12">
           <CardContent>
-            <Users className="mx-auto h-12 w-12 text-teal-400" />
-            <h2 className="mt-4 text-xl font-semibold text-gray-300">
+            <Users className="mx-auto h-10 w-10 text-teal-400 sm:h-12 sm:w-12" />
+            <h2 className="mt-4 text-lg font-semibold text-gray-300 sm:text-xl">
               No Groups Yet
             </h2>
-            <p className="mt-2 text-gray-300">
+            <p className="mt-2 text-sm text-gray-300 sm:text-base">
               Create a group to start splitting expenses with friends.
             </p>
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
           {groups?.map((group) => (
             <Card
               key={group.id}
               className="glass-dark hover-lift cursor-pointer border border-gray-700/50 shadow-lg transition-all duration-300"
               onClick={() => navigate(`${group.id}`)}
             >
-              <CardHeader>
-                <CardTitle className="gradient-text">{group.name}</CardTitle>
-                <CardDescription className="text-gray-300">
+              <CardHeader className="pb-3">
+                <CardTitle className="gradient-text text-lg sm:text-xl">
+                  {group.name}
+                </CardTitle>
+                <CardDescription className="text-sm text-gray-300 sm:text-base">
                   {group.memberCount} members
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pb-3">
                 <div className="flex -space-x-2 overflow-hidden">
-                  {group.members?.slice(0, 5).map((member, index) => (
-                    <Avatar key={index} className="border-1 border-teal-800">
-                      <AvatarImage src={member.pfp} />
-                      <AvatarFallback className="bg-gray-400">
+                  {group.members?.slice(0, 4).map((member, index) => (
+                    <Avatar
+                      key={index}
+                      className="h-8 w-8 border-1 border-teal-800 sm:h-10 sm:w-10"
+                    >
+                      <AvatarImage src={member.pfp || "/placeholder.svg"} />
+                      <AvatarFallback className="bg-gray-400 text-xs sm:text-sm">
                         {member.name
                           ?.split(" ")
                           .map((n) => n[0])
@@ -95,17 +98,17 @@ export default function GroupsPage() {
                       </AvatarFallback>
                     </Avatar>
                   ))}
-                  {group.memberCount > 5 && (
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-700 bg-gray-800 text-xs font-medium">
-                      +{group.memberCount - 5}
+                  {group.memberCount > 4 && (
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-700 bg-gray-800 text-xs font-medium sm:h-10 sm:w-10">
+                      +{group.memberCount - 4}
                     </div>
                   )}
                 </div>
               </CardContent>
-              <CardFooter>
-                <div className="flex w-full items-center justify-between text-sm">
-                  <span className="text-gray-400">Created on: </span>
-                  <span className="text-xs text-gray-300">
+              <CardFooter className="pt-3">
+                <div className="flex w-full flex-col gap-1 text-xs sm:flex-row sm:items-center sm:justify-between sm:text-sm">
+                  <span className="text-gray-400">Created:</span>
+                  <span className="text-gray-300">
                     {formatDate(group.createdAt)}
                   </span>
                 </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { User, Users, PlusCircle, Trash, Plus } from "lucide-react";
+import { User, Users, PlusCircle, Trash, Plus, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DropdownMenu,
@@ -43,6 +43,7 @@ export default function Layout() {
   const [newMembers, setNewMembers] = useState([]);
   const [newGroupOpen, setNewGroupOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleCreateGroup = async (e) => {
     e.preventDefault();
@@ -102,27 +103,38 @@ export default function Layout() {
 
   const currentYear = new Date().getFullYear();
 
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800 font-sans text-white">
       <div className="sticky top-0 z-50 w-full border-b border-gray-800 bg-gray-900/90 shadow-lg backdrop-blur-md">
-        <header className="mx-auto flex h-16 items-center justify-between px-4 md:px-12 lg:h-20">
+        <header className="mx-auto flex h-16 items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 xl:h-20">
           <Logo />
 
-          <div className="flex items-center space-x-4 text-white">
+          {/* Desktop Navigation */}
+          <div className="hidden items-center space-x-2 text-white md:flex lg:space-x-4">
             <SignedIn>
-              <Button onClick={() => navigate("groups")} variant="ghost">
-                <Users className="mr-2 h-4 w-4" />
-                My Groups
+              <Button
+                onClick={() => navigate("groups")}
+                variant="ghost"
+                className="text-sm lg:text-base"
+              >
+                <Users className="mr-1 h-4 w-4 lg:mr-2" />
+                <span className="hidden sm:inline">My Groups</span>
+                <span className="sm:hidden">Groups</span>
               </Button>
 
               <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
                 <DialogTrigger asChild>
-                  <Button variant="ghost">
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Create Group
+                  <Button variant="ghost" className="text-sm lg:text-base">
+                    <PlusCircle className="mr-1 h-4 w-4 lg:mr-2" />
+                    <span className="hidden sm:inline">Create Group</span>
+                    <span className="sm:hidden">Create</span>
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="glass-dark border border-gray-700">
+                <DialogContent className="glass-dark mx-4 max-w-md border border-gray-700 sm:max-w-lg">
                   <DialogHeader className="text-teal-400">
                     <DialogTitle>Create New Group</DialogTitle>
                     <DialogDescription>
@@ -130,7 +142,7 @@ export default function Layout() {
                     </DialogDescription>
                   </DialogHeader>
                   <form onSubmit={handleCreateGroup}>
-                    <CardContent className="space-y-6">
+                    <CardContent className="space-y-4 sm:space-y-6">
                       <div className="space-y-2">
                         <Label htmlFor="group-name" className="mb-3 text-white">
                           Group Name
@@ -145,7 +157,7 @@ export default function Layout() {
                         />
                       </div>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <Label className="text-white">Group members</Label>
                           <Button
                             type="button"
@@ -160,7 +172,7 @@ export default function Layout() {
                         {newMembers?.map((member) => (
                           <div
                             key={member.id}
-                            className="flex items-center gap-2"
+                            className="flex flex-col gap-2 sm:flex-row sm:items-center"
                           >
                             <div className="flex-1">
                               <Label
@@ -188,7 +200,7 @@ export default function Layout() {
                               size="icon"
                               onClick={() => removeMemberField(member.id)}
                               disabled={newMembers.length === 1}
-                              className="mt-6 hover:text-red-400"
+                              className="mt-6 hover:text-red-400 sm:mt-6"
                             >
                               <Trash className="h-4 w-4 text-red-500/90" />
                             </Button>
@@ -217,10 +229,10 @@ export default function Layout() {
               <DropdownMenuTrigger className="cursor-pointer">
                 <Button
                   variant="ghost"
-                  className="gap-2 text-white transition-colors hover:text-teal-400"
+                  className="gap-1 text-white transition-colors hover:text-teal-400 lg:gap-2"
                 >
-                  <User className="h-5 w-5" />
-                  Account
+                  <User className="h-4 w-4 lg:h-5 lg:w-5" />
+                  <span className="text-sm lg:text-base">Account</span>
                 </Button>
               </DropdownMenuTrigger>
 
@@ -256,16 +268,105 @@ export default function Layout() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+
+          {/* Mobile Hamburger Menu */}
+          <div className="md:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-white"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </Button>
+          </div>
         </header>
+
+        {/* Mobile Menu Overlay */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-40 bg-gray-900/95 backdrop-blur-md md:hidden">
+            <div className="flex h-full flex-col px-4 pt-20">
+              <div className="space-y-4">
+                <SignedIn>
+                  <Button
+                    onClick={() => {
+                      navigate("groups");
+                      closeMobileMenu();
+                    }}
+                    variant="ghost"
+                    className="w-full justify-start text-left text-lg text-white hover:text-teal-400"
+                  >
+                    <Users className="mr-3 h-5 w-5" />
+                    My Groups
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      setNewGroupOpen(true);
+                      closeMobileMenu();
+                    }}
+                    variant="ghost"
+                    className="w-full justify-start text-left text-lg text-white hover:text-teal-400"
+                  >
+                    <PlusCircle className="mr-3 h-5 w-5" />
+                    Create Group
+                  </Button>
+
+                  <div className="border-t border-gray-700 pt-4">
+                    <Button
+                      onClick={() => {
+                        navigate("/profile");
+                        closeMobileMenu();
+                      }}
+                      variant="ghost"
+                      className="w-full justify-start text-left text-lg text-white hover:text-teal-400"
+                    >
+                      <User className="mr-3 h-5 w-5" />
+                      Profile
+                    </Button>
+
+                    <div className="mt-4">
+                      <SignOutButton>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start text-left text-lg text-red-300 hover:text-red-400"
+                        >
+                          Sign Out
+                        </Button>
+                      </SignOutButton>
+                    </div>
+                  </div>
+                </SignedIn>
+
+                <SignedOut>
+                  <Button
+                    onClick={() => {
+                      navigate("/login");
+                      closeMobileMenu();
+                    }}
+                    variant="ghost"
+                    className="w-full justify-start text-left text-lg text-white hover:text-teal-400"
+                  >
+                    Sign In
+                  </Button>
+                </SignedOut>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="flex-1 py-16">
+      <div className="flex-1 py-8 sm:py-12 lg:py-16">
         <Outlet />
       </div>
 
-      <footer className="relative overflow-hidden border-t border-gray-800 bg-gray-900/80 px-6 py-6 backdrop-blur-sm md:py-8">
+      <footer className="relative overflow-hidden border-t border-gray-800 bg-gray-900/80 px-4 py-4 backdrop-blur-sm sm:px-6 sm:py-6 md:py-8">
         <div className="relative mx-auto max-w-6xl">
-          <div className="text-center text-sm text-gray-500">
+          <div className="text-center text-xs text-gray-500 sm:text-sm">
             <p>© {currentYear} FairShare. All rights reserved.</p>
           </div>
         </div>

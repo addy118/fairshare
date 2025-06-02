@@ -31,25 +31,27 @@ export default function GrpBalances() {
 
   return (
     <Card className="glass-dark hover-lift border border-gray-700/50 shadow-lg transition-all duration-300">
-      <CardHeader>
-        <CardTitle className="gradient-text">Group Balances</CardTitle>
-        <CardDescription className="text-gray-300">
+      <CardHeader className="pb-3 sm:pb-4">
+        <CardTitle className="gradient-text text-lg sm:text-xl">
+          Group Balances
+        </CardTitle>
+        <CardDescription className="text-sm text-gray-300 sm:text-base">
           Current balance for each member
         </CardDescription>
       </CardHeader>
 
       <CardContent>
-        <ul className="space-y-4">
+        <ul className="space-y-3 sm:space-y-4">
           {balances.length === 0
             ? members?.map((member) => (
                 <li
                   key={member.id}
                   className="flex items-center justify-between"
                 >
-                  <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8 border border-gray-700">
-                      <AvatarImage src={member.pfp} />
-                      <AvatarFallback>
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <Avatar className="h-6 w-6 border border-gray-700 sm:h-8 sm:w-8">
+                      <AvatarImage src={member.pfp || "/placeholder.svg"} />
+                      <AvatarFallback className="text-xs sm:text-sm">
                         {member.name
                           ?.split(" ")
                           .map((n) => n[0])
@@ -58,7 +60,9 @@ export default function GrpBalances() {
                           .toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="text-gray-300">{member.name}</span>
+                    <span className="text-sm text-gray-300 sm:text-base">
+                      {member.name}
+                    </span>
 
                     {member.id === user?.id && (
                       <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-teal-400">
@@ -68,7 +72,9 @@ export default function GrpBalances() {
                   </div>
 
                   {/* display 0 to all users */}
-                  <span className="font-medium text-gray-300">₹0.00</span>
+                  <span className="text-sm font-medium text-gray-300 sm:text-base">
+                    ₹0.00
+                  </span>
                 </li>
               ))
             : members?.map((member) => {
@@ -80,19 +86,13 @@ export default function GrpBalances() {
                     key={member.id}
                     className="flex items-center justify-between"
                   >
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8 border border-gray-700">
-                        <AvatarImage src={member.pfp} />
-                        {/* <AvatarFallback className="bg-gray-400">
-                          {member.name
-                            ?.split(" ")
-                            .map((n) => n[0])
-                            .join("")
-                            .slice(0, 2)
-                            .toUpperCase()}
-                        </AvatarFallback> */}
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <Avatar className="h-6 w-6 border border-gray-700 sm:h-8 sm:w-8">
+                        <AvatarImage src={member.pfp || "/placeholder.svg"} />
                       </Avatar>
-                      <span className="text-gray-300">{member.name}</span>
+                      <span className="text-sm text-gray-300 sm:text-base">
+                        {member.name}
+                      </span>
 
                       {isCurrentUser && (
                         <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-teal-400">
@@ -101,7 +101,7 @@ export default function GrpBalances() {
                       )}
                     </div>
                     <span
-                      className={`font-medium ${balance > 0 ? "text-green-600" : balance < 0 ? "text-red-500/90" : "text-gray-300"}`}
+                      className={`text-sm font-medium sm:text-base ${balance > 0 ? "text-green-600" : balance < 0 ? "text-red-500/90" : "text-gray-300"}`}
                     >
                       {balance > 0
                         ? `+₹${balance.toFixed(2)}`
@@ -112,7 +112,6 @@ export default function GrpBalances() {
                   </li>
                 );
               })}
-          ;
         </ul>
       </CardContent>
     </Card>

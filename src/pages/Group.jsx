@@ -35,7 +35,6 @@ export default function GroupPage() {
   } = useGetGroupInfoQuery(groupId, {
     skip: !groupId,
   });
-  // console.log(group?.members);
 
   const { isLoading: isLoadingBalances } = useGetGroupBalancesQuery(
     { groupId },
@@ -87,8 +86,8 @@ export default function GroupPage() {
   // show error state
   if (groupError) {
     return (
-      <div className="flex min-h-[200px] items-center justify-center">
-        <p className="text-red-500">
+      <div className="flex min-h-[200px] items-center justify-center px-4">
+        <p className="text-center text-red-500">
           Error loading group: {groupError.message}
         </p>
       </div>
@@ -98,32 +97,34 @@ export default function GroupPage() {
   // show not found state
   if (!group) {
     return (
-      <div className="flex min-h-[200px] items-center justify-center">
-        <p className="text-gray-500">Group not found</p>
+      <div className="flex min-h-[200px] items-center justify-center px-4">
+        <p className="text-center text-gray-500">Group not found</p>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4">
-      <div className="glass-dark mb-8 rounded-lg border border-gray-700/50 p-6 shadow-lg">
-        <div className="flex flex-col items-start justify-between md:flex-row md:items-center">
-          <div className="mb-4 md:mb-0">
-            <h1 className="gradient-text text-2xl font-bold">{group.name}</h1>
-            <div className="flex items-center gap-2 text-gray-300">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="glass-dark mb-6 rounded-lg border border-gray-700/50 p-4 shadow-lg sm:mb-8 sm:p-6">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="text-center lg:text-left">
+            <h1 className="gradient-text text-xl font-bold sm:text-2xl lg:text-3xl">
+              {group.name}
+            </h1>
+            <div className="mt-2 flex flex-col gap-1 text-sm text-gray-300 sm:flex-row sm:items-center sm:gap-2 sm:text-base">
               <span>{group.memberCount} members</span>
-              <span>·</span>
+              <span className="hidden sm:inline">·</span>
               <span>{group.expenses.length} expenses</span>
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
             <Button
               variant="outline"
               onClick={() => navigate(`/groups/${groupId}/expense/new`)}
-              className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
+              className="border-gray-700 text-sm hover:bg-gray-700/70 hover:text-teal-400 sm:text-base"
             >
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="mr-1 h-4 w-4 sm:mr-2" />
               Add Expense
             </Button>
 
@@ -138,9 +139,9 @@ export default function GroupPage() {
             <Button
               variant="destructive"
               onClick={handleLeaveGroup}
-              className="hover:bg-red-600/90"
+              className="text-sm hover:bg-red-600/90 sm:text-base"
             >
-              <Trash className="mr-2 h-4 w-4" />
+              <Trash className="mr-1 h-4 w-4 sm:mr-2" />
               {isLoading ? (
                 <Loading action="Leaving" item="group" />
               ) : (
@@ -155,36 +156,36 @@ export default function GroupPage() {
         <TabsList className="glass-dark grid w-full grid-cols-3 rounded-lg p-1">
           <TabsTrigger
             value="balances"
-            className="text-white-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
+            className="text-white-800 text-xs data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400 sm:text-sm"
           >
             Balances
           </TabsTrigger>
           <TabsTrigger
             value="settlements"
-            className="text-white-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
+            className="text-white-800 text-xs data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400 sm:text-sm"
           >
             Settle Debts
           </TabsTrigger>
           <TabsTrigger
             value="history"
-            className="text-white-800 data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400"
+            className="text-white-800 text-xs data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400 sm:text-sm"
           >
-            Payments History
+            History
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="balances" className="mt-6">
-          <div className="mb-20 grid gap-6 md:grid-cols-2">
+        <TabsContent value="balances" className="mt-4 sm:mt-6">
+          <div className="mb-20 grid gap-4 sm:gap-6 lg:grid-cols-2">
             <GrpBalances />
             <GrpSummary />
           </div>
         </TabsContent>
 
-        <TabsContent value="settlements" className="mt-6">
+        <TabsContent value="settlements" className="mt-4 sm:mt-6">
           <Settlements />
         </TabsContent>
 
-        <TabsContent value="history" className="mt-6">
+        <TabsContent value="history" className="mt-4 sm:mt-6">
           <PaymentHistory />
         </TabsContent>
       </Tabs>

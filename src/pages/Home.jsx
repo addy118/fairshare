@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { useAuth, useUser } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 import api from "@/axiosInstance";
 import UserBalance from "@/components/UserBalance";
 import Loading from "@/components/Loading";
 import { Card, CardContent } from "@/components/ui/card";
 import formatUser from "@/utils/formatUser";
 import { QRCodeSVG } from "qrcode.react";
-import UpiForm from "@/components/UpiForm";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -46,17 +45,17 @@ export default function Home() {
   if (isLoading) return <Loading item="profile" />;
 
   return (
-    <div className="mx-auto max-w-4xl px-4">
+    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
       {user && (
         <>
-          <Card className="glass-dark mb-8 shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex flex-col items-start justify-between md:flex-row md:items-center">
+          <Card className="glass-dark mb-6 shadow-lg sm:mb-8">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-between">
                 {/* user details */}
-                <div className="mb-4 flex items-center gap-4 md:mb-0">
-                  <Avatar className="h-16 w-16 border border-teal-500/30">
-                    <AvatarImage src={user.pfp} />
-                    <AvatarFallback className="bg-gray-400">
+                <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center">
+                  <Avatar className="h-16 w-16 border border-teal-500/30 sm:h-20 sm:w-20">
+                    <AvatarImage src={user.pfp || "/placeholder.svg"} />
+                    <AvatarFallback className="bg-gray-400 text-lg sm:text-xl">
                       {user.name
                         ?.split(" ")
                         .map((n) => n[0])
@@ -66,31 +65,48 @@ export default function Home() {
                     </AvatarFallback>
                   </Avatar>
 
-                  <div>
-                    <h1 className="gradient-text text-2xl font-bold">
+                  <div className="text-center sm:text-left">
+                    <h1 className="gradient-text text-xl font-bold sm:text-2xl">
                       {user.name}
                     </h1>
-                    <p className="text-white">{upi || ""}</p>
-                    <p className="text-gray-300">{user.username}</p>
+                    <p className="text-sm text-white sm:text-base">
+                      {upi || ""}
+                    </p>
+                    <p className="text-sm text-gray-300 sm:text-base">
+                      {user.username}
+                    </p>
                   </div>
                 </div>
 
-                <div>
+                {/* QR Code / UPI Button */}
+                <div className="flex flex-col items-center gap-2">
                   {upi ? (
-                    <QRCodeSVG
-                      value={`upi://pay?pa=${upi}&pn=${encodeURIComponent(user.name)}&cu=INR`}
-                      size={100}
-                      // bgColor="#111828"
-                      // fgColor="#14b8a6"
-                      bgColor="#14b8a6"
-                      fgColor="#111828"
-                    />
+                    <>
+                      <QRCodeSVG
+                        value={`upi://pay?pa=${upi}&pn=${encodeURIComponent(user.name)}&cu=INR`}
+                        size={80}
+                        bgColor="#14b8a6"
+                        fgColor="#111828"
+                        className="sm:hidden"
+                      />
+                      <QRCodeSVG
+                        value={`upi://pay?pa=${upi}&pn=${encodeURIComponent(user.name)}&cu=INR`}
+                        size={100}
+                        bgColor="#14b8a6"
+                        fgColor="#111828"
+                        className="hidden sm:block"
+                      />
+                      <p className="text-xs text-gray-400 sm:text-sm">
+                        Scan to pay
+                      </p>
+                    </>
                   ) : (
                     <Button
                       variant="outline"
                       onClick={() => {
                         navigate("/upi");
                       }}
+                      className="w-full sm:w-auto"
                     >
                       Add UPI ID
                     </Button>
@@ -100,7 +116,7 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
             {/* money you are owed */}
             <UserBalance balances={balances} isCreditor={true} />
 

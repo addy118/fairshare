@@ -18,38 +18,38 @@ export default function UserBalance({ balances, isCreditor }) {
 
   return (
     <Card className="glass-dark hover-lift border border-gray-700/50 shadow-lg transition-all duration-300">
-      <CardHeader>
+      <CardHeader className="pb-3 sm:pb-4">
         <CardTitle
-          className={isCreditor ? "gradient-text" : "gradient-text-purple"}
+          className={`text-lg sm:text-xl ${isCreditor ? "gradient-text" : "gradient-text-purple"}`}
         >
           {title}
         </CardTitle>
-        <CardDescription className="text-gray-300">
+        <CardDescription className="text-sm text-gray-300 sm:text-base">
           {description}
         </CardDescription>
       </CardHeader>
       <CardContent>
         {list?.length === 0 ? (
-          <p className="text-gray-400">
+          <p className="text-sm text-gray-400 sm:text-base">
             {isCreditor
               ? "No one owes you money right now."
               : "You don't owe anyone money right now."}
           </p>
         ) : (
-          <ul className="space-y-4">
+          <ul className="space-y-3 sm:space-y-4">
             {list?.map((balance) => (
               <li
                 key={isCreditor ? balance.debtor.id : balance.creditor.id}
                 className="flex items-center justify-between"
               >
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-8 w-8 border border-gray-700">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <Avatar className="h-6 w-6 border border-gray-700 sm:h-8 sm:w-8">
                     <AvatarImage
                       src={
                         isCreditor ? balance.debtor.pfp : balance.creditor.pfp
                       }
                     />
-                    <AvatarFallback className="bg-gray-400">
+                    <AvatarFallback className="bg-gray-400 text-xs sm:text-sm">
                       {isCreditor
                         ? balance.debtor.name
                         : balance.creditor.name
@@ -60,12 +60,12 @@ export default function UserBalance({ balances, isCreditor }) {
                             .toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-gray-300">
+                  <span className="text-sm text-gray-300 sm:text-base">
                     {isCreditor ? balance.debtor.name : balance.creditor.name}
                   </span>
                 </div>
                 <span
-                  className={`font-medium ${isCreditor ? "text-green-600" : "text-red-500/90"}`}
+                  className={`text-sm font-medium sm:text-base ${isCreditor ? "text-green-600" : "text-red-500/90"}`}
                 >
                   {isCreditor ? "+" : "-"}₹{balance.amount.toFixed(2)}
                 </span>
@@ -74,11 +74,13 @@ export default function UserBalance({ balances, isCreditor }) {
           </ul>
         )}
       </CardContent>
-      <CardFooter>
+      <CardFooter className="pt-3 sm:pt-4">
         <div className="flex w-full justify-between">
-          <span className="font-bold text-gray-300">Total</span>
+          <span className="text-sm font-bold text-gray-300 sm:text-base">
+            Total
+          </span>
           <span
-            className={`font-bold ${isCreditor ? "text-green-600" : "text-red-500/90"}`}
+            className={`text-sm font-bold sm:text-base ${isCreditor ? "text-green-600" : "text-red-500/90"}`}
           >
             {isCreditor ? "+" : "-"}₹
             {list?.reduce((sum, item) => sum + item.amount, 0).toFixed(2)}

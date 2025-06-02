@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, Clock } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import formatDate from "@/utils/formatDate";
 import Loading from "./Loading";
 import jsPDF from "jspdf";
@@ -49,37 +49,30 @@ export default function PaymentHistory() {
     }));
   };
 
-  // Update the handleExport function to add margins and improve color handling
   const handleExport = async () => {
     let originalExpandedState;
 
     try {
-      // console.log("Starting PDF export...");
       setIsExporting(true);
 
       // Save the current expanded state to restore later
       originalExpandedState = { ...expandedItems };
-      // console.log("Saved original expanded state:", originalExpandedState);
 
       // Expand all items
       setExpandedItems(
         history.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
       );
-      // console.log("All items expanded for PDF generation");
 
       // Wait for state update and DOM rendering
       await new Promise((resolve) => setTimeout(resolve, 500));
-      // console.log("Waiting for DOM update complete");
 
       if (!pdfRef.current) {
         console.error("PDF container reference is null");
         throw new Error("PDF container reference is null");
       }
-      // console.log("PDF reference element found");
 
       // Add a temporary class to use basic colors instead of oklch
       document.body.classList.add("pdf-export-mode");
-      // console.log("Added PDF export mode class to body");
 
       // Wait for styles to apply
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -103,17 +96,14 @@ export default function PaymentHistory() {
           pdf.internal.pageSize.getHeight(),
           "F"
         );
-        // console.log("Created jsPDF instance with background color");
 
         const container = pdfRef.current;
 
         // Generate canvas with simplified options
-        // console.log("Starting html2canvas conversion...");
         const canvas = await html2canvas(container, {
           scale: 1.5,
           useCORS: true,
           backgroundColor: "#111827", // Dark background matching the UI
-          // backgroundColor: "#ffffff",
           logging: false,
           ignoreElements: (element) => {
             return element.classList.contains("no-print");
@@ -143,7 +133,6 @@ export default function PaymentHistory() {
             });
           },
         });
-        // console.log("html2canvas conversion complete");
 
         // Get dimensions with margins
         const pageWidth = pdf.internal.pageSize.getWidth();
@@ -213,7 +202,6 @@ export default function PaymentHistory() {
       console.error("Outer error exporting PDF:", outerError);
       toast.error(`Failed to export PDF: ${outerError.message}`);
     } finally {
-      // console.log("Cleaning up...");
       document.body.classList.remove("pdf-export-mode");
       setExpandedItems(originalExpandedState || {});
       setIsExporting(false);
@@ -223,8 +211,8 @@ export default function PaymentHistory() {
   if (!history?.length) {
     return (
       <Card className="glass-dark hover-lift border border-gray-700/50 shadow-lg transition-all duration-300">
-        <CardContent className="pt-6">
-          <p className="text-center text-gray-300">
+        <CardContent className="pt-4 sm:pt-6">
+          <p className="text-center text-sm text-gray-300 sm:text-base">
             No payment history available.
           </p>
         </CardContent>
@@ -234,25 +222,27 @@ export default function PaymentHistory() {
 
   return (
     <>
-      <Card className="glass-dark mx-auto mb-20 max-w-4xl border border-gray-700/50 px-4 shadow-lg">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div className="space-y-2">
-            <CardTitle className="gradient-text">Payments History</CardTitle>
-            <CardDescription className="text-gray-300">{`All payments in the group ${group.name}`}</CardDescription>
+      <Card className="glass-dark mx-auto mb-20 max-w-6xl border border-gray-700/50 px-3 shadow-lg sm:px-4">
+        <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1 sm:space-y-2">
+            <CardTitle className="gradient-text text-lg sm:text-xl">
+              Payments History
+            </CardTitle>
+            <CardDescription className="text-sm text-gray-300 sm:text-base">{`All payments in the group ${group.name}`}</CardDescription>
           </div>
 
-          <div className="space-x-4">
+          <div className="flex flex-col gap-2 sm:flex-row sm:space-x-4">
             <Button
               variant="outline"
               onClick={toggleAll}
-              className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
+              className="border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:text-sm"
             >
               Toggle All
             </Button>
             <Button
               variant="outline"
               onClick={handleExport}
-              className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
+              className="border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:text-sm"
             >
               {isExporting ? (
                 <Loading action="Exporting" item="history" />
@@ -264,37 +254,40 @@ export default function PaymentHistory() {
         </CardHeader>
 
         <CardContent>
-          <div ref={pdfRef} className="payment-history-container space-y-4">
+          <div
+            ref={pdfRef}
+            className="payment-history-container space-y-3 sm:space-y-4"
+          >
             {history?.map((item) => (
               <Card
                 key={item.id}
                 className="payment-card glass-dark overflow-hidden border border-gray-700/50"
               >
-                <CardHeader className="pb-3">
+                <CardHeader className="pb-2 sm:pb-3">
                   <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="text-lg text-gray-300">
+                      <CardTitle className="text-base text-gray-300 sm:text-lg">
                         {item.name || "Settlement"}
                       </CardTitle>
-                      <CardDescription className="mt-1 flex items-center text-gray-400">
+                      <CardDescription className="mt-1 flex items-center text-xs text-gray-400 sm:text-sm">
                         {formatDate(item.timestamp)}
                       </CardDescription>
                     </div>
 
                     <div className="flex items-center">
-                      <span className="mr-2 font-bold text-teal-400">
+                      <span className="mr-2 text-sm font-bold text-teal-400 sm:text-base">
                         ₹{item.totalAmt?.toFixed(2) || item.amount?.toFixed(2)}
                       </span>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="no-print h-8 w-8 p-0 hover:text-teal-400"
+                        className="no-print h-6 w-6 p-0 hover:text-teal-400 sm:h-8 sm:w-8"
                         onClick={() => toggleExpand(item.id)}
                       >
                         {expandedItems?.[item.id] ? (
-                          <ChevronUp className="h-4 w-4" />
+                          <ChevronUp className="h-3 w-3 sm:h-4 sm:w-4" />
                         ) : (
-                          <ChevronDown className="h-4 w-4" />
+                          <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
                         )}
                       </Button>
                     </div>
@@ -303,10 +296,10 @@ export default function PaymentHistory() {
 
                 {/* payment details ( expense / split ) */}
                 {expandedItems?.[item.id] && (
-                  <CardContent>
+                  <CardContent className="pt-0">
                     {item.type == "expense" && (
-                      <h3 className="mb-3 font-medium text-purple-400">
-                        Expense per person:
+                      <h3 className="mb-3 text-sm font-medium text-purple-400 sm:text-base">
+                        Expense per person:{" "}
                         <span className="text-gray-300">
                           ₹
                           {Math.floor(
@@ -316,23 +309,27 @@ export default function PaymentHistory() {
                       </h3>
                     )}
 
-                    <div className="flex items-start space-x-12">
+                    <div className="flex flex-col space-y-6 lg:flex-row lg:space-y-0 lg:space-x-12">
                       {item.type == "expense" ? (
                         // type expense
                         <div className="flex-1">
-                          <h4 className="mb-3 font-medium text-teal-400">
+                          <h4 className="mb-3 text-sm font-medium text-teal-400 sm:text-base">
                             Participants
                           </h4>
-                          <div className="space-y-3">
+                          <div className="space-y-2 sm:space-y-3">
                             {item.payers?.map((payer, index) => (
                               <div
                                 key={index}
-                                className="flex items-center justify-between text-sm"
+                                className="flex items-center justify-between text-xs sm:text-sm"
                               >
-                                <div className="flex items-center gap-4">
-                                  <Avatar className="h-6 w-6 border border-gray-700">
-                                    <AvatarImage src={payer.payer?.pfp} />
-                                    <AvatarFallback className="bg-gray-400">
+                                <div className="flex items-center gap-2 sm:gap-4">
+                                  <Avatar className="h-5 w-5 border border-gray-700 sm:h-6 sm:w-6">
+                                    <AvatarImage
+                                      src={
+                                        payer.payer?.pfp || "/placeholder.svg"
+                                      }
+                                    />
+                                    <AvatarFallback className="bg-gray-400 text-xs">
                                       {payer.payer.name
                                         ?.split(" ")
                                         .map((n) => n[0])
@@ -358,17 +355,19 @@ export default function PaymentHistory() {
                         </div>
                       ) : (
                         // type split
-                        <div className="flex-1 space-y-6">
+                        <div className="flex-1 space-y-4 sm:space-y-6">
                           {/* debitor */}
                           <div>
-                            <h4 className="mb-3 font-medium text-teal-400">
+                            <h4 className="mb-2 text-sm font-medium text-teal-400 sm:mb-3 sm:text-base">
                               Debitor
                             </h4>
-                            <div className="flex items-center justify-between text-sm">
-                              <div className="flex items-center gap-4">
-                                <Avatar className="h-6 w-6 border border-gray-700">
-                                  <AvatarImage src={item.debtor?.pfp} />
-                                  <AvatarFallback className="bg-gray-400">
+                            <div className="flex items-center justify-between text-xs sm:text-sm">
+                              <div className="flex items-center gap-2 sm:gap-4">
+                                <Avatar className="h-5 w-5 border border-gray-700 sm:h-6 sm:w-6">
+                                  <AvatarImage
+                                    src={item.debtor?.pfp || "/placeholder.svg"}
+                                  />
+                                  <AvatarFallback className="bg-gray-400 text-xs">
                                     {item.debtor?.name
                                       ?.split(" ")
                                       .map((n) => n[0])
@@ -389,14 +388,18 @@ export default function PaymentHistory() {
 
                           {/* creditor */}
                           <div>
-                            <h4 className="mb-3 font-medium text-teal-400">
+                            <h4 className="mb-2 text-sm font-medium text-teal-400 sm:mb-3 sm:text-base">
                               Creditor
                             </h4>
-                            <div className="flex items-center justify-between text-sm">
-                              <div className="flex items-center gap-4">
-                                <Avatar className="h-6 w-6 border border-gray-700">
-                                  <AvatarImage src={item.creditor?.pfp} />
-                                  <AvatarFallback className="bg-gray-400">
+                            <div className="flex items-center justify-between text-xs sm:text-sm">
+                              <div className="flex items-center gap-2 sm:gap-4">
+                                <Avatar className="h-5 w-5 border border-gray-700 sm:h-6 sm:w-6">
+                                  <AvatarImage
+                                    src={
+                                      item.creditor?.pfp || "/placeholder.svg"
+                                    }
+                                  />
+                                  <AvatarFallback className="bg-gray-400 text-xs">
                                     {item.creditor?.name
                                       ?.split(" ")
                                       .map((n) => n[0])
@@ -419,19 +422,21 @@ export default function PaymentHistory() {
 
                       {/* balance post pay */}
                       <div className="flex-1">
-                        <h4 className="mb-3 font-medium text-teal-400">
+                        <h4 className="mb-2 text-sm font-medium text-teal-400 sm:mb-3 sm:text-base">
                           Balance After This Transaction
                         </h4>
-                        <div className="space-y-3">
+                        <div className="space-y-2 sm:space-y-3">
                           {item.balance?.map((balance, index) => (
                             <div
                               key={index}
-                              className="flex items-center justify-between text-sm"
+                              className="flex items-center justify-between text-xs sm:text-sm"
                             >
-                              <div className="flex items-center gap-3">
-                                <Avatar className="h-6 w-6 border border-gray-700">
-                                  <AvatarImage src={balance.user.pfp} />
-                                  <AvatarFallback className="bg-gray-400">
+                              <div className="flex items-center gap-2 sm:gap-3">
+                                <Avatar className="h-5 w-5 border border-gray-700 sm:h-6 sm:w-6">
+                                  <AvatarImage
+                                    src={balance.user.pfp || "/placeholder.svg"}
+                                  />
+                                  <AvatarFallback className="bg-gray-400 text-xs">
                                     {balance.user?.name
                                       ?.split(" ")
                                       .map((n) => n[0])
