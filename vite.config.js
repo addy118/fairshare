@@ -22,7 +22,7 @@ export default defineConfig({
         name: "Fairshare",
         short_name: "Fairshare",
         description: "A simple & effecient expense sharing app.",
-        theme_color: "#4cdede",
+        theme_color: "#111828",
         background_color: "#111828",
         display: "standalone",
         start_url: "/",
