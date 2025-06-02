@@ -38,7 +38,6 @@ export default function Layout() {
   const navigate = useNavigate();
   const { user: clerkUser } = useUser();
   const user = formatUser(clerkUser);
-
   const [newGroupName, setNewGroupName] = useState("");
   const [newMembers, setNewMembers] = useState([]);
   const [newGroupOpen, setNewGroupOpen] = useState(false);
@@ -47,30 +46,33 @@ export default function Layout() {
 
   const handleCreateGroup = async (e) => {
     e.preventDefault();
+
     if (!newGroupName.trim()) {
       toast.error("Group name cannot be empty.");
       return;
     }
+
     if (newMembers.length === 0) {
       toast.error("Please add at least one member to the group.");
       return;
     }
 
+    // add the current member (group creator) to the group
     const updatedUsers = [
       ...newMembers,
       { id: user.id, username: user.username },
     ];
-    setNewMembers(updatedUsers);
 
     try {
       setLoading(true);
       const groupRes = await api.post(`/grp/new`, { name: newGroupName });
+
       for (const user of updatedUsers) {
         await api.post(`/grp/${groupRes.data.group.id}/member/new`, {
           username: user.username,
         });
       }
-      setLoading(false);
+
       setNewGroupOpen(false);
       setNewGroupName("");
       setNewMembers([]);
@@ -134,6 +136,7 @@ export default function Layout() {
                     <span className="sm:hidden">Create</span>
                   </Button>
                 </DialogTrigger>
+
                 <DialogContent className="glass-dark mx-4 max-w-md border border-gray-700 sm:max-w-lg">
                   <DialogHeader className="text-teal-400">
                     <DialogTitle>Create New Group</DialogTitle>
@@ -141,24 +144,28 @@ export default function Layout() {
                       Enter a name for your new expense sharing group.
                     </DialogDescription>
                   </DialogHeader>
+
                   <form onSubmit={handleCreateGroup}>
                     <CardContent className="space-y-4 sm:space-y-6">
                       <div className="space-y-2">
                         <Label htmlFor="group-name" className="mb-3 text-white">
                           Group Name
                         </Label>
+
                         <Input
                           id="group-name"
                           placeholder="Roommates, Goa Trip, etc."
                           value={newGroupName}
                           onChange={(e) => setNewGroupName(e.target.value)}
                           required
-                          className="border-gray-700 bg-gray-800/50"
+                          className="border-gray-700 bg-[#0f1522]/50"
                         />
                       </div>
+
                       <div className="space-y-4">
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <Label className="text-white">Group members</Label>
+
                           <Button
                             type="button"
                             variant="outline"
@@ -169,6 +176,7 @@ export default function Layout() {
                             <Plus className="mr-1 h-4 w-4" /> Add Member
                           </Button>
                         </div>
+
                         {newMembers?.map((member) => (
                           <div
                             key={member.id}
@@ -181,12 +189,14 @@ export default function Layout() {
                               >
                                 Username
                               </Label>
+
                               <Input
                                 id={`member-${member.id}`}
                                 placeholder="Enter username"
                                 onChange={(e) =>
                                   updateMemberUsername(
                                     member.id,
+
                                     e.target.value
                                   )
                                 }
@@ -194,6 +204,7 @@ export default function Layout() {
                                 className="border-gray-700 bg-gray-800/50"
                               />
                             </div>
+
                             <Button
                               type="button"
                               variant="ghost"
@@ -208,6 +219,7 @@ export default function Layout() {
                         ))}
                       </div>
                     </CardContent>
+
                     <CardFooter>
                       <Button
                         type="submit"
@@ -246,6 +258,7 @@ export default function Layout() {
                   <DropdownMenuLabel className="px-2 py-1 text-sm text-gray-300">
                     My Account
                   </DropdownMenuLabel>
+
                   <DropdownMenuSeparator className="my-1 bg-gray-700" />
 
                   <DropdownMenuItem
@@ -277,20 +290,27 @@ export default function Layout() {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-white"
             >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {!mobileMenuOpen && <Menu className="h-6 w-6" />}
             </Button>
           </div>
         </header>
 
         {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
-          <div className="fixed inset-0 z-40 bg-gray-900/95 backdrop-blur-md md:hidden">
+          <div className="fixed inset-0 z-4 md:hidden">
+            <div className="absolute top-4 right-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={closeMobileMenu}
+                className="text-white hover:text-teal-400"
+              >
+                <X className="h-6 w-6" />
+              </Button>
+            </div>
+
             <div className="flex h-full flex-col px-4 pt-20">
-              <div className="space-y-4">
+              <div className="space-y-1 rounded-xl bg-[#151e32] px-1 py-4">
                 <SignedIn>
                   <Button
                     onClick={() => {
@@ -300,7 +320,7 @@ export default function Layout() {
                     variant="ghost"
                     className="w-full justify-start text-left text-lg text-white hover:text-teal-400"
                   >
-                    <Users className="mr-3 h-5 w-5" />
+                    <Users className="mr-1 h-5 w-5" />
                     My Groups
                   </Button>
 
@@ -310,13 +330,13 @@ export default function Layout() {
                       closeMobileMenu();
                     }}
                     variant="ghost"
-                    className="w-full justify-start text-left text-lg text-white hover:text-teal-400"
+                    className="mb-2 w-full justify-start text-left text-lg text-white hover:text-teal-400"
                   >
-                    <PlusCircle className="mr-3 h-5 w-5" />
+                    <PlusCircle className="mr-1 h-5 w-5" />
                     Create Group
                   </Button>
 
-                  <div className="border-t border-gray-700 pt-4">
+                  <div className="border-t border-gray-700 bg-[#151e32] pt-2">
                     <Button
                       onClick={() => {
                         navigate("/profile");
@@ -325,11 +345,11 @@ export default function Layout() {
                       variant="ghost"
                       className="w-full justify-start text-left text-lg text-white hover:text-teal-400"
                     >
-                      <User className="mr-3 h-5 w-5" />
+                      <User className="mr-1 h-5 w-5" />
                       Profile
                     </Button>
 
-                    <div className="mt-4">
+                    <div className="">
                       <SignOutButton>
                         <Button
                           variant="ghost"
@@ -346,6 +366,7 @@ export default function Layout() {
                   <Button
                     onClick={() => {
                       navigate("/login");
+
                       closeMobileMenu();
                     }}
                     variant="ghost"
