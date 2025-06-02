@@ -78,6 +78,9 @@ class Group {
             },
           },
           splits: {
+            // where: {
+            //   AND: [{ confirmed: false }, { settled: false }],
+            // },
             select: {
               id: true,
               mainGroup: { select: { id: true, name: true } },
@@ -97,6 +100,7 @@ class Group {
         },
       });
 
+      // console.log(expenses[0]);
       return expenses[0];
     } catch (error) {
       console.error("Error in Group.expenses(): ", error.message);
@@ -111,9 +115,12 @@ class Group {
         where: { id },
         select: {
           splits: {
-            where: { confirmed: false },
+            where: {
+              AND: [{ confirmed: false }, { settled: false }],
+            },
             select: {
               id: true,
+              name: true,
               debtor: {
                 select: { id: true, name: true, pfp: true, upi: true },
               },

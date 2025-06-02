@@ -17,10 +17,25 @@ function createBalance(expense) {
   return balance;
 }
 
-async function getGroupBalance(groupId) {
+async function getGroupBalance(groupId, isOptimizing = false) {
+  // get all the group members
   const members = await Group.members(Number(groupId));
+
+  // get all the group expenses and splits
   const { expenses, splits } = await Group.expenses(Number(groupId));
-  const settledSplits = splits.filter((split) => split.confirmed);
+
+  // filter the splits that needs to be optimized
+  // consider the settled splits also as done as they might have been really sent by the user
+  let settledSplits = splits.filter(
+    (split) => split.confirmed || split.settled
+  );
+
+  // only select the confirmed splits for actual balance display
+  if (!isOptimizing) {
+    settledSplits = splits.filter((split) => split.confirmed);
+  }
+
+  // console.log("Settle Splits: ", settledSplits);
 
   let balance = {};
   members.forEach((mem) => (balance[mem.member.id] = 0));
@@ -35,11 +50,19 @@ async function getGroupBalance(groupId) {
 
   // processing splits
   settledSplits.forEach((split) => {
-    if (split.confirmed) {
-      // IMPORTANT: amounts are always positive
-      // NOTE: BEWARE OF +VE/-VE SIGNS
-      balance[split.debtor.id] += split.amount;
-      balance[split.creditor.id] -= split.amount;
+    // include the settled splits as done when optimizing splits to prevent money loss
+    if (isOptimizing) {
+      if (split.confirmed || split.settled) {
+        // IMPORTANT: amounts are always positive
+        // NOTE: BEWARE OF +VE/-VE SIGNS
+        balance[split.debtor.id] += split.amount;
+        balance[split.creditor.id] -= split.amount;
+      }
+    } else {
+      if (split.confirmed) {
+        balance[split.debtor.id] += split.amount;
+        balance[split.creditor.id] -= split.amount;
+      }
     }
   });
 
@@ -61,7 +84,7 @@ function getSplitBalance(splits) {
 }
 
 function calculateSplits(balance) {
-  // Step 1: Separate positive (creditors) and negative (debtors) balances
+  // step 1: Separate positive (creditors) and negative (debtors) balances
   const creditors = [];
   const debtors = [];
 
@@ -76,7 +99,7 @@ function calculateSplits(balance) {
     }
   }
 
-  // Step 2: Sort both arrays by amount in descending order
+  // step 2: Sort both arrays by amount in descending order
   creditors.sort((a, b) => b.amount - a.amount);
   debtors.sort((a, b) => b.amount - a.amount);
 

@@ -92,7 +92,11 @@ class Split {
     try {
       await db.split.deleteMany({
         where: {
-          AND: [{ groupId: Number(grpId) }, { confirmed: false }],
+          AND: [
+            { groupId: Number(grpId) },
+            { confirmed: false },
+            { settled: false },
+          ],
         },
       });
     } catch (error) {

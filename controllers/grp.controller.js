@@ -134,10 +134,15 @@ exports.getMinSplits = async (req, res) => {
   try {
     const { grpId } = req.params;
 
-    const balance = await getGroupBalance(grpId);
-    const newSplits = calculateSplits(balance);
-    // // console.log(newSplits);
+    // get the current group balance for optimizing purpose
+    const balance = await getGroupBalance(grpId, true);
+    // console.log("Initial Balance: ", balance);
 
+    // THE CORE THING: get the splits based on the current group balance
+    const newSplits = calculateSplits(balance);
+    // console.log("Raw Optimized Splits: ", newSplits);
+
+    // transform the response to push in db
     const splitsArr = newSplits.map((split) => {
       return {
         name: "Optimized Split",
@@ -147,10 +152,17 @@ exports.getMinSplits = async (req, res) => {
         amount: Number(split[2]),
       };
     });
+    // console.log("Splits Array: ", splitsArr);
 
+    // delete all the previous "redundant splits"
     await Split.deleteAll(Number(grpId));
+
+    // push new optimized splits in db
     await Split.createMany(splitsArr);
+
+    // get the splits from the group with debtor & creditor details
     const minSplits = await Group.splits(Number(grpId));
+    // console.log("Final Optimized Splits: ", minSplits);
 
     res.json(minSplits);
   } catch (error) {
