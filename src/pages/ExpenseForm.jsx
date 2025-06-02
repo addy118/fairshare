@@ -50,7 +50,9 @@ export default function ExpenseForm() {
   //     amount: "0",
   //   },
   // ];
-  const [payers, setPayers] = useState([]);
+  const [payers, setPayers] = useState([
+    { id: Date.now(), payerId: "", amount: "0" },
+  ]);
   const [payersTotal, setPayersTotal] = useState(50);
 
   // calculate total whenever payers change
@@ -62,7 +64,18 @@ export default function ExpenseForm() {
   }, [payers]);
 
   const addPayer = () => {
-    setPayers([...payers, { id: Date.now(), payerId: "", amount: "" }]);
+    setPayers([...payers, { id: Date.now(), payerId: "", amount: "0" }]);
+  };
+
+  const addAll = () => {
+    const allMembers = [];
+
+    users.forEach((user, i) => {
+      allMembers.push({ id: Date.now() + i, payerId: user.id, amount: "0" });
+    });
+
+    console.log(allMembers);
+    setPayers([...payers, ...allMembers]);
   };
 
   const removePayer = (id) => {
@@ -185,17 +198,30 @@ export default function ExpenseForm() {
 
             {/* dynamic payers */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between space-x-2">
                 <Label className="text-white">Participants</Label>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={addPayer}
-                  className=""
-                >
-                  <Plus className="mr-1 h-4 w-4" /> Add Participant
-                </Button>
+
+                <div className="flex items-center justify-between space-x-1">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addAll}
+                    className=""
+                  >
+                    <Plus className="mr-1 h-4 w-4" /> Add All Members
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addPayer}
+                    className=""
+                  >
+                    <Plus className="mr-1 h-4 w-4" /> Add Participant
+                  </Button>
+                </div>
               </div>
 
               {payers.map((payer) => (
