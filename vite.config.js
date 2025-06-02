@@ -24,6 +24,34 @@ export default defineConfig({
         description: "A simple & effecient expense sharing app.",
         theme_color: "#4cdede",
         background_color: "#111828",
+        display: "standalone",
+        start_url: "/",
+        icons: [
+          {
+            src: "/android-chrome-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "/apple-touch-icon.png",
+            sizes: "180x180",
+            type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "/maskable_icon.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
+        ],
       },
 
       workbox: {
