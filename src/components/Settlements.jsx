@@ -168,11 +168,9 @@ export default function Settlements() {
                         {/* status */}
                         {settlement.confirmed ? (
                           <span className="flex items-center text-green-600">
-                            <Check className="mr-1 h-4 w-4" />
                             Settled
                           </span>
-                        ) : settlement.from.id === user.id &&
-                          settlement.settled ? (
+                        ) : settlement.settled ? (
                           <span className="text-yellow-500">Waiting</span>
                         ) : settlement.to.id === user.id &&
                           settlement.settled ? (

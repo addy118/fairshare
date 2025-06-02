@@ -277,7 +277,6 @@ export default function PaymentHistory() {
                         {item.name || "Settlement"}
                       </CardTitle>
                       <CardDescription className="mt-1 flex items-center text-gray-400">
-                        <Clock className="mr-1 h-3 w-3" />
                         {formatDate(item.timestamp)}
                       </CardDescription>
                     </div>
