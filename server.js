@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const allowedOrigins = [
+  "https://fairshare.adityakirti.tech",
   "https://fairsharee.netlify.app",
   "http://localhost:5173",
   "http://localhost:5174",
