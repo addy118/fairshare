@@ -37,7 +37,7 @@ app.use("/grp", grpRouter);
 app.use("/exp", expRouter);
 
 app.get("/", (req, res) => {
-  res.json("Welcome to our app Fair Share! You are an unauthenticated user!");
+  res.json("Welcome to our app Fairshare! You are an unauthenticated user!");
 });
 
 app.use((error, req, res, next) => {

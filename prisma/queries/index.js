@@ -37,3 +37,22 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
+// // delete db entirely
+// (async () => {
+//   try {
+//     await prisma.split.deleteMany();
+//     await prisma.expense.deleteMany();
+//     await prisma.payer.deleteMany();
+//     await prisma.member.deleteMany();
+//     await prisma.group.deleteMany();
+//     await prisma.user.deleteMany();
+
+//     console.log(`Database deletion succeeded!`);
+//   } catch (error) {
+//     console.error(`Database deletion failed: `, error.message);
+//     throw new Error(error.message);
+//   } finally {
+//     console.log("Query execution completed!");
+//   }
+// })();
