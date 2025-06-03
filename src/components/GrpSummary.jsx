@@ -15,8 +15,10 @@ export default function GrpSummary() {
   return (
     <Card className="glass-dark hover-lift border border-gray-700/50 shadow-lg transition-all duration-300">
       <CardHeader>
-        <CardTitle className="gradient-text-purple">Group Summary</CardTitle>
-        <CardDescription className="text-gray-300">
+        <CardTitle className="gradient-text-purple text-lg sm:text-xl">
+          Group Summary
+        </CardTitle>
+        <CardDescription className="text-sm text-gray-500 sm:text-base">
           Overview of group expenses
         </CardDescription>
       </CardHeader>
@@ -25,24 +27,30 @@ export default function GrpSummary() {
         <div className="space-y-4">
           {/* total of group expenses */}
           <div className="flex justify-between">
-            <span className="text-gray-300">Total Group Expenses</span>
-            <span className="font-bold text-teal-400">
+            <span className="text-sm text-gray-300 sm:text-base">
+              Total Group Expenses
+            </span>
+            <span className="text-sm font-bold text-teal-400 sm:text-base">
               ₹{group?.totalExpenses?.toFixed(2) || "0.00"}
             </span>
           </div>
 
           {/* number of expenses */}
           <div className="flex justify-between">
-            <span className="text-gray-300">Number of Expenses</span>
-            <span className="font-bold text-purple-400">
+            <span className="text-sm text-gray-300 sm:text-base">
+              Number of Expenses
+            </span>
+            <span className="text-sm font-bold text-purple-400 sm:text-base">
               {group?.expenses?.length}
             </span>
           </div>
 
           {/* group members */}
           <div className="flex justify-between">
-            <span className="text-gray-300">Group Members</span>
-            <span className="font-bold text-teal-400">
+            <span className="text-sm text-gray-300 sm:text-base">
+              Group Members
+            </span>
+            <span className="text-sm font-bold text-teal-400 sm:text-base">
               {group?.memberCount}
             </span>
           </div>

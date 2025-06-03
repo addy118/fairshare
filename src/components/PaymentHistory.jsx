@@ -223,7 +223,7 @@ export default function PaymentHistory() {
   return (
     <>
       <Card className="glass-dark mx-auto mb-20 max-w-6xl border border-gray-700/50 px-3 shadow-lg sm:px-4">
-        <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <CardHeader className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1 sm:space-y-2">
             <CardTitle className="gradient-text text-lg sm:text-xl">
               Payments History
@@ -231,18 +231,18 @@ export default function PaymentHistory() {
             <CardDescription className="text-sm text-gray-300 sm:text-base">{`All payments in the group ${group.name}`}</CardDescription>
           </div>
 
-          <div className="flex flex-col gap-2 sm:flex-row sm:space-x-4">
+          <div className="flex w-full flex-row items-center gap-2 md:w-auto">
             <Button
               variant="outline"
               onClick={toggleAll}
-              className="border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:text-sm"
+              className="h-8 flex-1 border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:h-10 sm:flex-auto sm:text-sm md:flex-auto"
             >
               Toggle All
             </Button>
             <Button
               variant="outline"
               onClick={handleExport}
-              className="border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:text-sm"
+              className="h-8 flex-1 border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:h-10 sm:flex-auto sm:text-sm md:flex-auto"
             >
               {isExporting ? (
                 <Loading action="Exporting" item="history" />

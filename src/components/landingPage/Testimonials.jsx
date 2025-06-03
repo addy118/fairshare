@@ -10,7 +10,7 @@ export default function Testimonials() {
   const testimonials = [
     {
       quote:
-        "FairShare has transformed the way we handle group expenses. It's easy and intuitive!",
+        "Fairshare has transformed the way we handle group expenses. It's easy and intuitive!",
       author: "Alex Johnson",
       role: "Frequent Traveler",
       avatar: "/placeholder.svg?height=80&width=80",
@@ -18,7 +18,7 @@ export default function Testimonials() {
     },
     {
       quote:
-        "No more awkward money conversations with roommates. FairShare makes it simple!",
+        "No more awkward money conversations with roommates. Fairshare makes it simple!",
       author: "Sarah Williams",
       role: "College Student",
       avatar: "/placeholder.svg?height=80&width=80",

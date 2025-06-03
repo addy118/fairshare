@@ -68,14 +68,14 @@ export default function CallToAction() {
               Ready to get started?
             </h2>
             <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-300">
-              Join FairShare today to simplify your group expenses and say
+              Join Fairshare today to simplify your group expenses and say
               goodbye to awkward money conversations!
             </p>
 
             <div className="mx-auto grid max-w-4xl items-center gap-8 md:grid-cols-2">
               <div className="space-y-4 text-left">
                 <h3 className="gradient-text-purple text-xl font-semibold">
-                  Why choose FairShare?
+                  Why choose Fairshare?
                 </h3>
                 <ul className="space-y-3">
                   {benefits.map((benefit, index) => (

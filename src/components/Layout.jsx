@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,10 +39,15 @@ export default function Layout() {
   const { user: clerkUser } = useUser();
   const user = formatUser(clerkUser);
   const [newGroupName, setNewGroupName] = useState("");
-  const [newMembers, setNewMembers] = useState([]);
+  const [newMembers, setNewMembers] = useState([""]);
   const [newGroupOpen, setNewGroupOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setNewGroupName("");
+    setNewMembers([""]);
+  }, [newGroupOpen]);
 
   const handleCreateGroup = async (e) => {
     e.preventDefault();
@@ -123,7 +128,7 @@ export default function Layout() {
                 variant="ghost"
                 className="text-sm lg:text-base"
               >
-                <Users className="mr-1 h-4 w-4 lg:mr-2" />
+                <Users className="h-4 w-4" />
                 <span className="hidden sm:inline">My Groups</span>
                 <span className="sm:hidden">Groups</span>
               </Button>
@@ -131,7 +136,7 @@ export default function Layout() {
               <Dialog open={newGroupOpen} onOpenChange={setNewGroupOpen}>
                 <DialogTrigger asChild>
                   <Button variant="ghost" className="text-sm lg:text-base">
-                    <PlusCircle className="mr-1 h-4 w-4 lg:mr-2" />
+                    <PlusCircle className="h-4 w-4" />
                     <span className="hidden sm:inline">Create Group</span>
                     <span className="sm:hidden">Create</span>
                   </Button>
@@ -192,7 +197,7 @@ export default function Layout() {
 
                               <Input
                                 id={`member-${member.id}`}
-                                placeholder="Enter username"
+                                placeholder="Enter the correct username"
                                 onChange={(e) =>
                                   updateMemberUsername(
                                     member.id,
@@ -388,7 +393,7 @@ export default function Layout() {
       <footer className="relative overflow-hidden border-t border-gray-800 bg-gray-900/80 px-4 py-4 backdrop-blur-sm sm:px-6 sm:py-6 md:py-8">
         <div className="relative mx-auto max-w-6xl">
           <div className="text-center text-xs text-gray-500 sm:text-sm">
-            <p>© {currentYear} FairShare. All rights reserved.</p>
+            <p>© {currentYear} Fairshare. All rights reserved.</p>
           </div>
         </div>
       </footer>

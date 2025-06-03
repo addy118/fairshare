@@ -62,7 +62,7 @@ export default function Navbar() {
                 strokeLinejoin="round"
               />
             </svg>
-            <span className="gradient-text">FairShare</span>
+            <span className="gradient-text">Fairshare</span>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -55,9 +55,13 @@ export default function GroupPage() {
   });
 
   const [activeTab, setActiveTab] = useState("balances");
-  const [newMembers, setNewMembers] = useState([]);
+  const [newMembers, setNewMembers] = useState([""]);
   const [newMemberOpen, setNewMemberOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setNewMembers([""]);
+  }, [newMemberOpen]);
 
   const handleLeaveGroup = async () => {
     try {
@@ -111,37 +115,34 @@ export default function GroupPage() {
             <h1 className="gradient-text text-xl font-bold sm:text-2xl lg:text-3xl">
               {group.name}
             </h1>
-            <div className="mt-2 flex flex-col gap-1 text-sm text-gray-300 sm:flex-row sm:items-center sm:gap-2 sm:text-base">
-              <span>{group.memberCount} members</span>
-              <span className="hidden sm:inline">·</span>
-              <span>{group.expenses.length} expenses</span>
-            </div>
           </div>
 
-          <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
+          <div className="flex w-full flex-row gap-2 sm:gap-3 lg:w-auto">
             <Button
               variant="outline"
               onClick={() => navigate(`/groups/${groupId}/expense/new`)}
-              className="border-gray-700 text-sm hover:bg-gray-700/70 hover:text-teal-400 sm:text-base"
+              className="h-8 flex-1 border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 lg:h-10 lg:flex-none lg:text-base"
             >
-              <Plus className="mr-1 h-4 w-4 sm:mr-2" />
-              Add Expense
+              <Plus className="h-4 w-4" />
+              Expense
             </Button>
 
-            <NewGroupDialog
-              newMemberOpen={newMemberOpen}
-              setNewMemberOpen={setNewMemberOpen}
-              newMembers={newMembers}
-              setNewMembers={setNewMembers}
-              groupId={groupId}
-            />
+            <div className="flex-1 lg:flex-none">
+              <NewGroupDialog
+                newMemberOpen={newMemberOpen}
+                setNewMemberOpen={setNewMemberOpen}
+                newMembers={newMembers}
+                setNewMembers={setNewMembers}
+                groupId={groupId}
+              />
+            </div>
 
             <Button
               variant="destructive"
               onClick={handleLeaveGroup}
-              className="text-sm hover:bg-red-600/90 sm:text-base"
+              className="h-8 flex-1 text-xs lg:h-10 lg:flex-none lg:text-base"
             >
-              <Trash className="mr-1 h-4 w-4 sm:mr-2" />
+              <Trash className="h-4 w-4" />
               {isLoading ? (
                 <Loading action="Leaving" item="group" />
               ) : (

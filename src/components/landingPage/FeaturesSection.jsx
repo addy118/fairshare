@@ -121,7 +121,7 @@ export default function FeaturesSection() {
             Everything You Need
           </h2>
           <p className="mx-auto max-w-2xl text-gray-300">
-            FairShare comes packed with all the tools you need to manage group
+            Fairshare comes packed with all the tools you need to manage group
             expenses effortlessly.
           </p>
         </div>

@@ -40,6 +40,7 @@ export default function ExpenseForm() {
 
   const [payers, setPayers] = useState([
     { id: Date.now(), payerId: "", amount: "0" },
+    { id: Date.now() + 18, payerId: "", amount: "0" },
   ]);
   const [payersTotal, setPayersTotal] = useState(0);
 
@@ -62,12 +63,11 @@ export default function ExpenseForm() {
       allMembers.push({ id: Date.now() + i, payerId: user.id, amount: "0" });
     });
 
-    console.log(allMembers);
-    setPayers([...payers, ...allMembers]);
+    setPayers([...allMembers]);
   };
 
   const removePayer = (id) => {
-    if (payers.length > 1) {
+    if (payers.length > 2) {
       setPayers(payers.filter((payer) => payer.id !== id));
     }
   };
@@ -101,7 +101,7 @@ export default function ExpenseForm() {
     }
 
     if (!totalAmount || Number.parseFloat(totalAmount) < 0) {
-      toast.error("Please enter a valid total amount");
+      toast.error("Please enter a valid total amount.");
       return;
     }
 
@@ -109,7 +109,24 @@ export default function ExpenseForm() {
       (payer) => !payer.payerId || !payer.amount
     );
     if (invalidPayers) {
-      toast.error("Please fill in all payer details");
+      toast.error("Please fill in all payer details.");
+      return;
+    }
+
+    if (payers.length < 2) {
+      toast.error("Please add at least two participants.");
+      return;
+    }
+
+    if (payers.length > users.length) {
+      toast.error("Please remove duplicate participants and retry.");
+      return;
+    }
+
+    const payerIds = payers.map((payer) => payer.payerId);
+    const hasDuplicates = new Set(payerIds).size !== payerIds.length;
+    if (hasDuplicates) {
+      toast.error("Please remove duplicate participants and retry.");
       return;
     }
 
@@ -197,16 +214,15 @@ export default function ExpenseForm() {
                   Participants
                 </Label>
 
-                <div className="flex flex-col gap-2 sm:flex-row sm:gap-1">
+                <div className="flex flex-row gap-1 w-full sm:w-auto">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={addAll}
-                    className="text-xs sm:text-sm"
+                    className="text-xs sm:text-sm flex-1 sm:flex-none w-full sm:w-auto"
                   >
-                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Add All
-                    Members
+                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Add All Members
                   </Button>
 
                   <Button
@@ -214,10 +230,9 @@ export default function ExpenseForm() {
                     variant="outline"
                     size="sm"
                     onClick={addPayer}
-                    className="text-xs sm:text-sm"
+                    className="text-xs sm:text-sm flex-1 sm:flex-none w-full sm:w-auto"
                   >
-                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Add
-                    Participant
+                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Add Participant
                   </Button>
                 </div>
               </div>
@@ -225,9 +240,10 @@ export default function ExpenseForm() {
               {payers.map((payer) => (
                 <div
                   key={payer.id}
-                  className="space-y-3 sm:flex sm:items-end sm:gap-2 sm:space-y-0"
+                  className="flex items-end gap-2 sm:items-end sm:gap-2"
                 >
-                  <div className="flex-1">
+                  {/* participant */}
+                  <div className="min-w-0 flex-1">
                     <Label
                       className="mb-2 block text-sm text-white sm:text-base"
                       htmlFor={`payer-${payer.id}`}
@@ -243,25 +259,29 @@ export default function ExpenseForm() {
                     >
                       <SelectTrigger
                         id={`payer-${payer.id}`}
-                        className="border-gray-700 bg-gray-800/50 text-sm text-teal-600 sm:text-base"
+                        className="truncate border-gray-700 bg-gray-800/50 text-sm text-teal-600 sm:text-base"
                       >
-                        <SelectValue placeholder="Select a participant" />
+                        <SelectValue
+                          placeholder="Select a participant"
+                          className="truncate"
+                        />
                       </SelectTrigger>
                       <SelectContent className="glass-dark border border-gray-700/50">
                         {users.map((user) => (
                           <SelectItem
                             key={user.id}
                             value={user.id.toString()}
-                            className="text-sm text-teal-400 sm:text-base"
+                            className="truncate text-sm text-teal-400 sm:text-base"
                           >
-                            {user.name}
+                            <span className="block truncate">{user.name}</span>
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
 
-                  <div className="flex-1">
+                  {/* amount */}
+                  <div className="w-24 sm:flex-1">
                     <Label
                       className="mb-2 block text-sm text-white sm:text-base"
                       htmlFor={`amount-${payer.id}`}
@@ -283,16 +303,19 @@ export default function ExpenseForm() {
                     />
                   </div>
 
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removePayer(payer.id)}
-                    disabled={payers.length === 1}
-                    className="hover:text-red-400 sm:mb-0"
-                  >
-                    <Trash className="h-4 w-4 text-red-500/90" />
-                  </Button>
+                  {/* delete button */}
+                  <div className="flex-shrink-0">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removePayer(payer.id)}
+                      disabled={payers.length <= 2}
+                      className="hover:text-red-400 sm:mb-0"
+                    >
+                      <Trash className="h-4 w-4 text-red-500/90" />
+                    </Button>
+                  </div>
                 </div>
               ))}
 

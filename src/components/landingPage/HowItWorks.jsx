@@ -103,7 +103,7 @@ export default function HowItWorks() {
             </span>
           </h2>
           <p className="mx-auto max-w-2xl text-gray-300">
-            FairShare makes expense splitting simple with just three easy steps
+            Fairshare makes expense splitting simple with just three easy steps
           </p>
         </div>
 

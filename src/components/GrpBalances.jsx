@@ -31,11 +31,11 @@ export default function GrpBalances() {
 
   return (
     <Card className="glass-dark hover-lift border border-gray-700/50 shadow-lg transition-all duration-300">
-      <CardHeader className="pb-3 sm:pb-4">
+      <CardHeader className="sm:pb-4">
         <CardTitle className="gradient-text text-lg sm:text-xl">
           Group Balances
         </CardTitle>
-        <CardDescription className="text-sm text-gray-300 sm:text-base">
+        <CardDescription className="text-gray-500 text-sm sm:text-base">
           Current balance for each member
         </CardDescription>
       </CardHeader>

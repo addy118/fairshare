@@ -74,9 +74,12 @@ export default function NewGroupDialog({
   return (
     <Dialog open={newMemberOpen} onOpenChange={setNewMemberOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="">
-          <Plus className="mr-2 h-4 w-4" />
-          Add New Member
+        <Button
+          variant="outline"
+          className="h-8 w-full text-xs lg:h-10 lg:w-auto lg:text-base"
+        >
+          <Plus className="h-4 w-4" />
+          New Member
         </Button>
       </DialogTrigger>
       <DialogContent className="glass-dark border border-gray-700">

@@ -49,7 +49,7 @@ export default function HeroSection() {
 
         <h1 className="animate-fade-in mb-4 text-4xl font-bold md:text-5xl lg:text-6xl">
           <span className="gradient-text glow-text">Split Smarter</span> with
-          FairShare
+          Fairshare
         </h1>
 
         <p className="animate-fade-in animation-delay-200 mx-auto mb-8 max-w-2xl text-lg text-gray-300 md:text-xl">

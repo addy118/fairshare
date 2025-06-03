@@ -31,8 +31,19 @@ export default function Settlements() {
   const user = formatUser(clerkUser);
   const [isOptimizing, setIsOptimizing] = useState(false);
 
-  // Get settlements from Redux store
-  const settlements = useSelector((state) => state.group.settlements);
+  // get settlements from Redux store in sorted form
+  const settlements = useSelector((state) => {
+    const arr = state.group.settlements || [];
+    return [...arr].sort((a, b) => {
+      // category: 0 = unsettled/unconfirmed, 1 = settled, 2 = confirmed
+      const getCategory = (s) => (s.confirmed ? 2 : s.settled ? 1 : 0);
+      const catA = getCategory(a);
+      const catB = getCategory(b);
+      if (catA !== catB) return catA - catB;
+      // sort by createdAt descending (latest first)
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+  });
 
   // RTK Query mutations
   const [optimizeSettlements] = useOptimizeSettlementsMutation();
@@ -113,11 +124,10 @@ export default function Settlements() {
                 <Card
                   className={`${settlement.confirmed ? "opacity-50" : ""} glass-dark rounded-sm border border-gray-700/50`}
                 >
-                  <CardContent className="p-3 sm:p-4">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <CardContent className="px-4 sm:px-4">
+                    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                       {/* Settlement participants */}
-                      <div className="flex items-center gap-2 sm:gap-4">
-                        {/* source */}
+                      <div className="flex flex-wrap items-center justify-center gap-2 lg:gap-4">
                         <Avatar className="h-8 w-8 border border-gray-700 sm:h-10 sm:w-10">
                           <AvatarImage
                             src={settlement.from.pfp || "/placeholder.svg"}
@@ -164,7 +174,7 @@ export default function Settlements() {
                       </div>
 
                       {/* Amount and actions */}
-                      <div className="flex items-center justify-between gap-2 sm:gap-4">
+                      <div className="flex items-center justify-center gap-2 lg:flex lg:justify-between lg:gap-4">
                         <span className="text-sm font-bold text-teal-400 sm:text-base">
                           ₹{settlement.amount.toFixed(2)}
                         </span>
@@ -174,16 +184,17 @@ export default function Settlements() {
                           <span className="flex items-center text-xs text-green-600 sm:text-sm">
                             Settled
                           </span>
-                        ) : settlement.settled ? (
+                        ) : settlement.settled &&
+                          settlement.to.id !== user.id ? (
                           <span className="text-xs text-yellow-500 sm:text-sm">
-                            Waiting
+                            Waiting for confirmation
                           </span>
                         ) : settlement.to.id === user.id &&
                           settlement.settled ? (
-                          <div className="flex flex-col gap-1 sm:flex-row sm:gap-2">
+                          <div className="flex flex-row gap-1">
                             <Button
                               size="sm"
-                              className="bg-green-600 text-xs hover:bg-green-700 sm:text-sm"
+                              className="h-6 bg-green-600 text-xs hover:bg-green-700 sm:h-8 sm:text-sm"
                               onClick={() => handleConfirm(settlement.id, true)}
                             >
                               Received
@@ -191,7 +202,7 @@ export default function Settlements() {
                             <Button
                               size="sm"
                               variant="outline"
-                              className="border-gray-700 text-xs hover:bg-gray-700/70 hover:text-red-400 sm:text-sm"
+                              className="h-6 border-gray-700 text-xs hover:bg-gray-700/70 hover:text-red-400 sm:h-8 sm:text-sm"
                               onClick={() =>
                                 handleConfirm(settlement.id, false)
                               }
@@ -204,7 +215,7 @@ export default function Settlements() {
                           <>
                             <Button
                               size="sm"
-                              className="bg-teal-500 text-xs hover:bg-teal-600 sm:text-sm"
+                              className="h-6 bg-teal-500 text-xs hover:bg-teal-600 sm:h-8 sm:text-sm"
                               onClick={() => setOpenModalId(settlement.id)}
                             >
                               Settle
@@ -291,7 +302,7 @@ export default function Settlements() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:text-sm"
+                            className="h-6 border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:h-8 sm:text-sm"
                             onClick={() =>
                               handleRemind(settlement.id, settlement.from.name)
                             }
