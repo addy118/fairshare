@@ -59,7 +59,7 @@ export default function GrpSummary() {
             <span className="text-sm text-gray-300 sm:text-base">
               Pending Settlements Amount
             </span>
-            <span className="text-sm font-bold text-teal-400 sm:text-base">
+            <span className="text-sm font-bold text-[#00bcff] sm:text-base">
               ₹{pendingBalance.toFixed(2) || "0.00"}
             </span>
           </div>
@@ -69,7 +69,7 @@ export default function GrpSummary() {
             <span className="text-sm text-gray-300 sm:text-base">
               Total Group Expenses
             </span>
-            <span className="text-sm font-bold text-teal-400 sm:text-base">
+            <span className="text-sm font-bold text-[#00bcff] sm:text-base">
               ₹{group?.totalExpenses?.toFixed(2) || "0.00"}
             </span>
           </div>

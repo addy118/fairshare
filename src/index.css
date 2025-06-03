@@ -190,6 +190,12 @@
   --border: #e5e7eb;
   --input: #e5e7eb;
   --ring: #a1a1aa;
+  --teal-400: #00bcff !important;
+  --gray-300: #d1d5db !important;
+  --gray-400: #9ca3af !important;
+  --gray-700: rgba(55, 65, 81, 0.5) !important;
+  --red-500: #ef4444 !important;
+  --green-600: #16a34a !important;
 }
 
 /* landing page animations */
@@ -268,20 +274,20 @@
 
 @keyframes ripple {
   0% {
-    box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4);
+    box-shadow: 0 0 0 0 rgba(0, 188, 255, 0.4);
   }
   100% {
-    box-shadow: 0 0 0 20px rgba(45, 212, 191, 0);
+    box-shadow: 0 0 0 20px rgba(0, 188, 255, 0);
   }
 }
 
 @keyframes glow {
   0%,
   100% {
-    filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0.7));
+    filter: drop-shadow(0 0 5px rgba(0, 188, 255, 0.7));
   }
   50% {
-    filter: drop-shadow(0 0 15px rgba(45, 212, 191, 0.9));
+    filter: drop-shadow(0 0 15px rgba(0, 188, 255, 0.9));
   }
 }
 
@@ -370,7 +376,7 @@
 }
 
 .glow-text {
-  text-shadow: 0 0 10px rgba(45, 212, 191, 0.5);
+  text-shadow: 0 0 10px rgba(0, 188, 255, 0.5);
 }
 
 .glow-button:hover {
@@ -378,14 +384,14 @@
 }
 
 .glow-teal:hover {
-  box-shadow: 0 0 20px rgba(45, 212, 191, 0.6);
+  box-shadow: 0 0 20px rgba(0, 188, 255, 0.6);
 }
 
 .gradient-text {
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  background-image: linear-gradient(to right, #2dd4bf, #67e8f9);
+  background-image: linear-gradient(to right, #00bcff, #00bcff);
 }
 
 .gradient-text-purple {
@@ -396,9 +402,7 @@
 }
 
 .hover-lift {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .hover-lift:hover {
@@ -407,10 +411,7 @@
 }
 
 .bg-grid-pattern {
-  background-image: linear-gradient(
-      rgba(255, 255, 255, 0.05) 1px,
-      transparent 1px
-    ),
+  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 20px 20px;
 }
@@ -428,7 +429,7 @@ input {
 /* Additional styles for PDF export */
 .pdf-export-mode {
   /* Replace oklch colors with hex/rgb equivalents */
-  --teal-400: #22d3ee !important;
+  --teal-400: #00bcff !important;
   --gray-300: #d1d5db !important;
   --gray-400: #9ca3af !important;
   --gray-700: rgba(55, 65, 81, 0.5) !important;
@@ -438,7 +439,7 @@ input {
 
 /* Override specific classes that use oklch colors */
 .pdf-export-mode .gradient-text {
-  background: linear-gradient(to right, #22d3ee, #3b82f6) !important;
+  background: linear-gradient(to right, #00bcff, #3b82f6) !important;
   background-clip: text !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
@@ -450,7 +451,7 @@ input {
 }
 
 .pdf-export-mode .text-teal-400 {
-  color: #22d3ee !important;
+  color: #00bcff !important;
 }
 
 .pdf-export-mode .text-gray-300 {
@@ -472,16 +473,3 @@ input {
 .pdf-export-mode .border-gray-700\/50 {
   border-color: rgba(55, 65, 81, 0.5) !important;
 }
-
-/* fix unwanted scroll/white space on mobile */
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden; /* prevents horizontal scroll */
-  background-color: #0f172a; /* optional: match your dark background */
-}
-
-/* new color: #00bcff */

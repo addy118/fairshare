@@ -55,7 +55,7 @@ export default function GroupsPage() {
       {groups?.length === 0 ? (
         <Card className="glass-dark border border-gray-700/50 py-8 text-center shadow-lg sm:py-12">
           <CardContent>
-            <Users className="mx-auto h-10 w-10 text-teal-400 sm:h-12 sm:w-12" />
+            <Users className="mx-auto h-10 w-10 text-[#00bcff] sm:h-12 sm:w-12" />
             <h2 className="mt-4 text-lg font-semibold text-gray-300 sm:text-xl">
               No Groups Yet
             </h2>

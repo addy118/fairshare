@@ -67,7 +67,7 @@ export default function Home() {
               <div className="flex items-center justify-between gap-4">
                 {/* user details */}
                 <div className="flex items-center gap-4 sm:items-center">
-                  <Avatar className="h-16 w-16 border border-teal-500/30 sm:h-20 sm:w-20">
+                  <Avatar className="h-16 w-16 border border-[#00a2ff]/30 sm:h-20 sm:w-20">
                     <AvatarImage src={user.pfp || "/placeholder.svg"} />
                     <AvatarFallback className="bg-gray-400 text-lg sm:text-xl">
                       {user.name

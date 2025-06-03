@@ -155,7 +155,7 @@ export default function ExpenseForm() {
 
   return (
     <div className="mx-auto mb-20 max-w-2xl px-4 sm:px-6 lg:px-8">
-      <h1 className="gradient-text mb-4 text-xl font-bold text-teal-400 sm:mb-6 sm:text-2xl">
+      <h1 className="gradient-text mb-4 text-xl font-bold text-[#00bcff] sm:mb-6 sm:text-2xl">
         Create Expense
       </h1>
 
@@ -214,15 +214,16 @@ export default function ExpenseForm() {
                   Participants
                 </Label>
 
-                <div className="flex flex-row gap-1 w-full sm:w-auto">
+                <div className="flex w-full flex-row gap-1 sm:w-auto">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={addAll}
-                    className="text-xs sm:text-sm flex-1 sm:flex-none w-full sm:w-auto"
+                    className="w-full flex-1 text-xs sm:w-auto sm:flex-none sm:text-sm"
                   >
-                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Add All Members
+                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Add All
+                    Members
                   </Button>
 
                   <Button
@@ -230,9 +231,10 @@ export default function ExpenseForm() {
                     variant="outline"
                     size="sm"
                     onClick={addPayer}
-                    className="text-xs sm:text-sm flex-1 sm:flex-none w-full sm:w-auto"
+                    className="w-full flex-1 text-xs sm:w-auto sm:flex-none sm:text-sm"
                   >
-                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Add Participant
+                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Add
+                    Participant
                   </Button>
                 </div>
               </div>
@@ -271,7 +273,7 @@ export default function ExpenseForm() {
                           <SelectItem
                             key={user.id}
                             value={user.id.toString()}
-                            className="truncate text-sm text-teal-400 sm:text-base"
+                            className="truncate text-sm text-[#00bcff] sm:text-base"
                           >
                             <span className="block truncate">{user.name}</span>
                           </SelectItem>
@@ -327,7 +329,7 @@ export default function ExpenseForm() {
                       Number.parseFloat(totalAmount || 0) - payersTotal
                     ) > 0.01
                       ? "font-medium text-red-500/90"
-                      : "font-medium text-teal-400"
+                      : "font-medium text-[#00bcff]"
                   }
                 >
                   ₹{payersTotal.toFixed(2)}
@@ -342,7 +344,7 @@ export default function ExpenseForm() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-400 text-sm text-white shadow-lg transition-all duration-300 hover:from-teal-400 hover:to-teal-500 hover:shadow-teal-500/25 sm:text-base"
+              className="mt-4 w-full bg-gradient-to-r from-[#00a2ff] to-[#00bcff] text-sm text-white shadow-lg transition-all duration-300 hover:from-[#00bcff] hover:to-[#00a2ff] hover:shadow-[#00a2ff]/25 sm:text-base"
             >
               {isLoading ? (
                 <Loading action="Creating" item="expense" />

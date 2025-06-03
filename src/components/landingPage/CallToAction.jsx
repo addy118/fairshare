@@ -43,7 +43,7 @@ export default function CallToAction() {
       {/* Background elements */}
       <div className="absolute top-0 left-0 h-full w-full">
         <div className="animate-pulse-subtle absolute top-1/3 left-1/4 h-64 w-64 rounded-full bg-purple-500/10 blur-3xl filter"></div>
-        <div className="animate-pulse-subtle animation-delay-500 absolute right-1/4 bottom-1/3 h-64 w-64 rounded-full bg-teal-500/10 blur-3xl filter"></div>
+        <div className="animate-pulse-subtle animation-delay-500 absolute right-1/4 bottom-1/3 h-64 w-64 rounded-full bg-[#00a2ff]]]]]]/10 blur-3xl filter"></div>
       </div>
 
       <div className="relative mx-auto max-w-5xl text-center">
@@ -54,8 +54,8 @@ export default function CallToAction() {
             <div className="absolute top-0 left-0 h-40 w-1 bg-gradient-to-b from-purple-500 to-transparent"></div>
           </div>
           <div className="absolute right-0 bottom-0 h-20 w-20 overflow-hidden">
-            <div className="absolute right-0 bottom-0 h-1 w-40 bg-gradient-to-l from-teal-500 to-transparent"></div>
-            <div className="absolute right-0 bottom-0 h-40 w-1 bg-gradient-to-t from-teal-500 to-transparent"></div>
+            <div className="absolute right-0 bottom-0 h-1 w-40 bg-gradient-to-l from-[#00a2ff]]]]] to-transparent"></div>
+            <div className="absolute right-0 bottom-0 h-40 w-1 bg-gradient-to-t from-[#00a2ff]]] to-transparent"></div>
           </div>
 
           {/* Content */}

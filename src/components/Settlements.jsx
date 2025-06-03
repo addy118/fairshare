@@ -175,7 +175,7 @@ export default function Settlements() {
 
                       {/* Amount and actions */}
                       <div className="flex items-center justify-center gap-2 lg:flex lg:justify-between lg:gap-4">
-                        <span className="text-sm font-bold text-teal-400 sm:text-base">
+                        <span className="text-sm font-bold text-[#00bcff] sm:text-base">
                           ₹{settlement.amount.toFixed(2)}
                         </span>
 
@@ -215,7 +215,7 @@ export default function Settlements() {
                           <>
                             <Button
                               size="sm"
-                              className="h-6 bg-teal-500 text-xs hover:bg-teal-600 sm:h-8 sm:text-sm"
+                              className="h-6 rounded-sm bg-[#00bcff] text-xs text-[#111828] hover:bg-[#00a6ff] sm:h-8 sm:text-sm"
                               onClick={() => setOpenModalId(settlement.id)}
                             >
                               Settle
@@ -228,12 +228,12 @@ export default function Settlements() {
                             >
                               <DialogContent className="glass-dark mx-4 max-w-sm border border-gray-700/70 bg-[#111828] sm:max-w-md">
                                 <DialogHeader>
-                                  <DialogTitle className="text-lg text-teal-400 sm:text-xl">
+                                  <DialogTitle className="text-lg text-[#00bcff] sm:text-xl">
                                     Settle Payment
                                   </DialogTitle>
                                   <DialogDescription className="text-sm text-gray-400 sm:text-base">
                                     Pay{" "}
-                                    <span className="font-bold text-teal-400">
+                                    <span className="font-bold text-[#00bcff]">
                                       ₹{settlement.amount.toFixed(2)}
                                     </span>{" "}
                                     to{" "}
@@ -257,7 +257,7 @@ export default function Settlements() {
 
                                   <Button
                                     variant="outline"
-                                    className="w-full border-teal-500 text-sm text-teal-400 hover:bg-teal-600/10 sm:text-base"
+                                    className="w-full border-[#00a2ff] text-sm text-[#00bcff] hover:bg-teal-600/10 sm:text-base"
                                     onClick={() => {
                                       if (
                                         isMobile &&
@@ -286,7 +286,7 @@ export default function Settlements() {
                                     Pay via UPI App
                                   </Button>
                                   <Button
-                                    className="w-full bg-teal-500 text-sm text-white hover:bg-teal-600 sm:text-base"
+                                    className="w-full bg-[#00a2ff] text-sm text-white hover:bg-teal-600 sm:text-base"
                                     onClick={async () => {
                                       await handleSettle(settlement.id);
                                       setOpenModalId(null);
@@ -303,7 +303,7 @@ export default function Settlements() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-6 border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:h-8 sm:text-sm"
+                            className="h-6 border-gray-700 text-xs hover:bg-gray-700/70 hover:text-[#00bcff] sm:h-8 sm:text-sm"
                             onClick={() =>
                               handleRemind(settlement.id, settlement.from.name)
                             }

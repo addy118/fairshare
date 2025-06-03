@@ -72,7 +72,7 @@ export default function UpiForm() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-400 text-white shadow-lg transition-all duration-300 hover:from-teal-400 hover:to-teal-500 hover:shadow-teal-500/25"
+              className="mt-4 w-full bg-gradient-to-r from-[#00a2ff] to-[#00bcff] text-white shadow-lg transition-all duration-300 hover:from-[#00bcff] hover:to-[#00a2ff] hover:shadow-[#00a2ff]/25"
             >
               {isLoading ? (
                 <Loading action="Submitting" item="UPI ID" />

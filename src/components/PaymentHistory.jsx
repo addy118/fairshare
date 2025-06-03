@@ -235,14 +235,14 @@ export default function PaymentHistory() {
             <Button
               variant="outline"
               onClick={toggleAll}
-              className="h-8 flex-1 rounded-sm border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:h-10 sm:flex-auto sm:text-sm md:flex-auto"
+              className="h-8 flex-1 rounded-sm border-gray-700 text-xs hover:bg-gray-700/70 hover:text-[#00bcff] sm:h-10 sm:flex-auto sm:text-sm md:flex-auto"
             >
               Toggle All
             </Button>
             <Button
               variant="outline"
               onClick={handleExport}
-              className="h-8 flex-1 rounded-sm border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:h-10 sm:flex-auto sm:text-sm md:flex-auto"
+              className="h-8 flex-1 rounded-sm border-gray-700 text-xs hover:bg-gray-700/70 hover:text-[#00bcff] sm:h-10 sm:flex-auto sm:text-sm md:flex-auto"
             >
               {isExporting ? (
                 <Loading action="Exporting" item="history" />
@@ -275,13 +275,13 @@ export default function PaymentHistory() {
                     </div>
 
                     <div className="flex items-center">
-                      <span className="mr-2 text-sm font-bold text-teal-400 sm:text-base">
+                      <span className="mr-2 text-sm font-bold text-[#00bcff] sm:text-base">
                         ₹{item.totalAmt?.toFixed(2) || item.amount?.toFixed(2)}
                       </span>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="no-print h-6 w-6 p-0 hover:text-teal-400 sm:h-8 sm:w-8"
+                        className="no-print h-6 w-6 p-0 hover:text-[#00bcff] sm:h-8 sm:w-8"
                         onClick={() => toggleExpand(item.id)}
                       >
                         {expandedItems?.[item.id] ? (
@@ -313,7 +313,7 @@ export default function PaymentHistory() {
                       {item.type == "expense" ? (
                         // type expense
                         <div className="flex-1">
-                          <h4 className="mb-3 text-sm font-medium text-teal-400 sm:text-base">
+                          <h4 className="mb-3 text-sm font-medium text-[#00bcff] sm:text-base">
                             Participants
                           </h4>
                           <div className="space-y-2 sm:space-y-3">
@@ -358,7 +358,7 @@ export default function PaymentHistory() {
                         <div className="flex-1 space-y-4 sm:space-y-6">
                           {/* debitor */}
                           <div>
-                            <h4 className="mb-2 text-sm font-medium text-teal-400 sm:mb-3 sm:text-base">
+                            <h4 className="mb-2 text-sm font-medium text-[#00bcff] sm:mb-3 sm:text-base">
                               Debitor
                             </h4>
                             <div className="flex items-center justify-between text-xs sm:text-sm">
@@ -388,7 +388,7 @@ export default function PaymentHistory() {
 
                           {/* creditor */}
                           <div>
-                            <h4 className="mb-2 text-sm font-medium text-teal-400 sm:mb-3 sm:text-base">
+                            <h4 className="mb-2 text-sm font-medium text-[#00bcff] sm:mb-3 sm:text-base">
                               Creditor
                             </h4>
                             <div className="flex items-center justify-between text-xs sm:text-sm">
@@ -422,7 +422,7 @@ export default function PaymentHistory() {
 
                       {/* balance post pay */}
                       <div className="flex-1">
-                        <h4 className="mb-2 text-sm font-medium text-teal-400 sm:mb-3 sm:text-base">
+                        <h4 className="mb-2 text-sm font-medium text-[#00bcff] sm:mb-3 sm:text-base">
                           Balance After This Transaction
                         </h4>
                         <div className="space-y-2 sm:space-y-3">

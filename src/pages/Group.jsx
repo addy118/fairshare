@@ -55,7 +55,9 @@ export default function GroupPage() {
   });
 
   const [activeTab, setActiveTab] = useState("overview");
-  const [newMembers, setNewMembers] = useState([""]);
+  const [newMembers, setNewMembers] = useState([
+    { id: new Date(), username: "" },
+  ]);
   const [newMemberOpen, setNewMemberOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -67,11 +69,13 @@ export default function GroupPage() {
     try {
       setIsLoading(true);
       await api.delete(`/grp/${groupId}/member/${user.id}`);
-      setIsLoading(false);
       navigate("/groups");
+      toast.success("Group left successfully!");
     } catch (error) {
       console.error("Error leaving group: ", error);
-      toast.success("Error leaving the group ", error);
+      toast.error("Error leaving the group ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -123,7 +127,7 @@ export default function GroupPage() {
             <Button
               variant="outline"
               onClick={() => navigate(`/groups/${groupId}/expense/new`)}
-              className="h-8 flex-1 rounded-sm border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 lg:h-10 lg:flex-none lg:text-base"
+              className="h-8 flex-1 rounded-sm border-gray-700 text-xs hover:bg-gray-700/70 hover:text-[#00bcff] lg:h-10 lg:flex-none lg:text-base"
             >
               <Plus className="h-4 w-4" />
               Expense
@@ -163,19 +167,19 @@ export default function GroupPage() {
         <TabsList className="glass-dark grid w-full grid-cols-3 rounded-sm p-1">
           <TabsTrigger
             value="overview"
-            className="text-white-800 text-xs data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400 sm:text-sm"
+            className="text-white-800 text-xs data-[state=active]:bg-gray-700/70 data-[state=active]:text-[#00bcff] sm:text-sm"
           >
             Overview
           </TabsTrigger>
           <TabsTrigger
             value="settlements"
-            className="text-white-800 text-xs data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400 sm:text-sm"
+            className="text-white-800 text-xs data-[state=active]:bg-gray-700/70 data-[state=active]:text-[#00bcff] sm:text-sm"
           >
             Settle Debts
           </TabsTrigger>
           <TabsTrigger
             value="history"
-            className="text-white-800 text-xs data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400 sm:text-sm"
+            className="text-white-800 text-xs data-[state=active]:bg-gray-700/70 data-[state=active]:text-[#00bcff] sm:text-sm"
           >
             History
           </TabsTrigger>

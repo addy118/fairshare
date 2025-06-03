@@ -105,7 +105,7 @@ export default function FeaturesSection() {
     >
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-teal-500/20 to-transparent"></div>
+        <div className="absolute top-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-[#00a2ff]/20 to-transparent"></div>
         <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-purple-500/20 to-transparent"></div>
       </div>
 
@@ -114,7 +114,7 @@ export default function FeaturesSection() {
           className="mb-10 text-center opacity-0"
           ref={(el) => (cardsRef.current[0] = el)}
         >
-          <div className="mb-3 inline-block rounded-full bg-gradient-to-r from-teal-500/20 to-cyan-500/20 px-3 py-1 text-sm font-medium text-teal-300 backdrop-blur-sm">
+          <div className="mb-3 inline-block rounded-full bg-gradient-to-r from-[#00a2ff]/20 to-cyan-500/20 px-3 py-1 text-sm font-medium text-teal-300 backdrop-blur-sm">
             Powerful Features
           </div>
           <h2 className="gradient-text mb-4 text-3xl font-bold md:text-4xl">
@@ -145,7 +145,7 @@ export default function FeaturesSection() {
               <p className="text-gray-400">{feature.description}</p>
 
               {/* Hover effect */}
-              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-teal-500/0 to-purple-500/0 opacity-0 transition-opacity duration-300 group-hover:opacity-10"></div>
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#00a2ff]/0 to-purple-500/0 opacity-0 transition-opacity duration-300 group-hover:opacity-10"></div>
             </div>
           ))}
         </div>
@@ -181,7 +181,7 @@ export default function FeaturesSection() {
                 ))}
               </ul>
             </div>
-            <div className="relative">
+            <div className="relative hidden md:block">
               <div className="animate-pulse-subtle absolute inset-0 rounded-lg bg-gradient-to-r from-purple-500/10 to-pink-500/10"></div>
               <img
                 src={smartSplit || "/placeholder.svg"}

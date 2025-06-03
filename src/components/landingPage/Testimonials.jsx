@@ -97,7 +97,7 @@ export default function Testimonials() {
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="animate-pulse-subtle absolute -top-10 -right-10 h-40 w-40 rounded-full bg-purple-500/10 blur-3xl filter"></div>
-        <div className="animate-pulse-subtle animation-delay-500 absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-teal-500/10 blur-3xl filter"></div>
+        <div className="animate-pulse-subtle animation-delay-500 absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-[#00a2ff]/10 blur-3xl filter"></div>
 
         {/* Large quote marks */}
         <div className="absolute top-10 left-10 scale-150 transform text-gray-700/20">
@@ -114,7 +114,7 @@ export default function Testimonials() {
         </div>
 
         <h2 className="mb-12 text-3xl font-bold md:text-4xl">
-          <span className="bg-gradient-to-r from-teal-400 to-cyan-300 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#00bcff] to-cyan-300 bg-clip-text text-transparent">
             What our users say
           </span>
         </h2>
@@ -125,7 +125,7 @@ export default function Testimonials() {
             className={`glass-dark rounded-lg border border-gray-800 p-8 shadow-xl transition-opacity duration-500 ${isAnimating ? "opacity-0" : "opacity-100"}`}
           >
             {/* Quote icon */}
-            <div className="absolute top-4 left-4 text-teal-500/30">
+            <div className="absolute top-4 left-4 text-[#00a2ff]/30">
               <Quote size={24} />
             </div>
 
@@ -148,7 +148,7 @@ export default function Testimonials() {
 
             <div className="flex items-center justify-center">
               <div className="text-center">
-                <p className="font-medium text-teal-400">
+                <p className="font-medium text-[#00bcff]">
                   {testimonials[current].author}
                 </p>
                 <p className="text-sm text-gray-400">
@@ -170,7 +170,7 @@ export default function Testimonials() {
                 }}
                 className={`h-2 w-2 rounded-full transition-all duration-300 ${
                   current === index
-                    ? "w-6 bg-teal-400"
+                    ? "w-6 bg-[#00bcff]"
                     : "bg-gray-600 hover:bg-gray-500"
                 }`}
                 aria-label={`Go to testimonial ${index + 1}`}
@@ -184,14 +184,14 @@ export default function Testimonials() {
               className="glass group rounded-full border border-gray-700 p-2 transition-colors duration-300 hover:bg-gray-700/70"
               aria-label="Previous testimonial"
             >
-              <ChevronLeft className="h-5 w-5 transition-colors group-hover:text-teal-400" />
+              <ChevronLeft className="h-5 w-5 transition-colors group-hover:text-[#00bcff]" />
             </button>
             <button
               onClick={next}
               className="glass group rounded-full border border-gray-700 p-2 transition-colors duration-300 hover:bg-gray-700/70"
               aria-label="Next testimonial"
             >
-              <ChevronRight className="h-5 w-5 transition-colors group-hover:text-teal-400" />
+              <ChevronRight className="h-5 w-5 transition-colors group-hover:text-[#00bcff]" />
             </button>
           </div>
         </div>

@@ -19,7 +19,7 @@ if (!PUBLISHABLE_KEY) {
 
 const clerkAppearance = {
   variables: {
-    colorPrimary: "#4cdede", // accent color (buttons, links, etc.)
+    colorPrimary: "#00bcff", // accent color (buttons, links, etc.)
 
     colorTextSecondary: "#b4b4b4",
     colorInputBackground: "#2c313c",
@@ -27,7 +27,7 @@ const clerkAppearance = {
     colorBackground: "#111828", // background for cards/forms
     colorText: "#ffffff", // text color
     colorTextOnPrimaryBackground: "#111828", // text on buttons
-    colorNeutral: "#4cdede", // affects borders and outlines
+    colorNeutral: "#00bcff", // affects borders and outlines
   },
 };
 

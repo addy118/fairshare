@@ -39,7 +39,9 @@ export default function Layout() {
   const { user: clerkUser } = useUser();
   const user = formatUser(clerkUser);
   const [newGroupName, setNewGroupName] = useState("");
-  const [newMembers, setNewMembers] = useState([""]);
+  const [newMembers, setNewMembers] = useState([
+    { id: new Date(), username: "" },
+  ]);
   const [newGroupOpen, setNewGroupOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -58,14 +60,19 @@ export default function Layout() {
     }
 
     if (newMembers.length === 0) {
-      toast.error("Please add at least one member to the group.");
+      toast.error("Add at least one member to the group.");
+      return;
+    }
+
+    if (newMembers.filter((member) => member.id === user.id)) {
+      toast.error("You don't have to add yourself to the group.");
       return;
     }
 
     // add the current member (group creator) to the group
     const updatedUsers = [
       ...newMembers,
-      { id: user.id, username: user.username },
+      { id: new Date(), username: user.username },
     ];
 
     try {
@@ -90,14 +97,16 @@ export default function Layout() {
   };
 
   const addMemberField = () => {
-    const newId = newMembers?.length
-      ? Math.max(...newMembers.map((m) => m.id)) + 1
-      : 1;
-    setNewMembers([...newMembers, { id: newId, username: "" }]);
+    // const newId = newMembers?.length
+    //   ? Math.max(...newMembers.map((m) => m.id)) + 1
+    //   : 1;
+    setNewMembers([...newMembers, { id: new Date(), username: "" }]);
   };
 
   const removeMemberField = (id) => {
-    setNewMembers((prev) => prev.filter((member) => member.id !== id));
+    if (newMembers.length > 1) {
+      setNewMembers((prev) => prev.filter((member) => member.id !== id));
+    }
   };
 
   const updateMemberUsername = (id, value) => {
@@ -142,8 +151,8 @@ export default function Layout() {
                   </Button>
                 </DialogTrigger>
 
-                <DialogContent className="glass-dark mx-4 max-w-md border border-gray-700 sm:max-w-lg">
-                  <DialogHeader className="text-teal-400">
+                <DialogContent className="mx-4 max-w-md border border-gray-700 bg-gray-900 sm:max-w-lg">
+                  <DialogHeader className="text-[#00bcff]">
                     <DialogTitle>Create New Group</DialogTitle>
                     <DialogDescription>
                       Enter a name for your new expense sharing group.
@@ -168,15 +177,14 @@ export default function Layout() {
                       </div>
 
                       <div className="space-y-4">
-                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                          <Label className="text-white">Group members</Label>
-
+                        <div className="flex items-center justify-between">
+                          <Label className="text-gray-300">Group members</Label>
                           <Button
                             type="button"
                             variant="outline"
                             size="sm"
                             onClick={addMemberField}
-                            className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
+                            className="border-gray-700 hover:bg-gray-700/70 hover:text-[#00bcff]"
                           >
                             <Plus className="mr-1 h-4 w-4" /> Add Member
                           </Button>
@@ -185,23 +193,22 @@ export default function Layout() {
                         {newMembers?.map((member) => (
                           <div
                             key={member.id}
-                            className="flex flex-col gap-2 sm:flex-row sm:items-center"
+                            className="flex items-center gap-2"
                           >
                             <div className="flex-1">
                               <Label
+                                className="mb-3 text-gray-300"
                                 htmlFor={`member-${member.id}`}
-                                className="mb-3 text-white"
                               >
                                 Username
                               </Label>
-
                               <Input
                                 id={`member-${member.id}`}
-                                placeholder="Enter the correct username"
+                                placeholder="Enter username"
+                                value={member.username}
                                 onChange={(e) =>
                                   updateMemberUsername(
                                     member.id,
-
                                     e.target.value
                                   )
                                 }
@@ -209,14 +216,13 @@ export default function Layout() {
                                 className="border-gray-700 bg-gray-800/50"
                               />
                             </div>
-
                             <Button
                               type="button"
                               variant="ghost"
                               size="icon"
                               onClick={() => removeMemberField(member.id)}
-                              disabled={newMembers.length === 1}
-                              className="mt-6 hover:text-red-400 sm:mt-6"
+                              disabled={newMembers?.length === 1}
+                              className="mt-6 hover:text-red-400"
                             >
                               <Trash className="h-4 w-4 text-red-500/90" />
                             </Button>
@@ -228,7 +234,7 @@ export default function Layout() {
                     <CardFooter>
                       <Button
                         type="submit"
-                        className="mt-4 w-full border-none bg-gradient-to-r from-teal-500 to-teal-400 text-white hover:from-teal-400 hover:to-teal-500"
+                        className="mt-4 w-full border-none bg-gradient-to-r from-[#00bcff] to-[#00bcff] text-white hover:from-[#00bcff]/90 hover:to-[#00bcff]"
                       >
                         {loading ? (
                           <Loading action="Creating" item="group" />
@@ -246,7 +252,7 @@ export default function Layout() {
               <DropdownMenuTrigger className="cursor-pointer">
                 <Button
                   variant="ghost"
-                  className="gap-1 text-white transition-colors hover:text-teal-400 lg:gap-2"
+                  className="gap-1 text-white transition-colors hover:text-[#00bcff] lg:gap-2"
                 >
                   <User className="h-4 w-4 lg:h-5 lg:w-5" />
                   <span className="text-sm lg:text-base">Account</span>
@@ -257,7 +263,7 @@ export default function Layout() {
                 side="bottom"
                 align="end"
                 sideOffset={8}
-                className="z-50 min-w-[180px] rounded-xl border border-gray-700/50 bg-gray-800/90 p-2 text-white shadow-xl backdrop-blur-md transition-all duration-200"
+                className="z-50 min-w-[180px] rounded-sm border border-gray-700/50 bg-gray-800/90 p-2 text-white shadow-xl backdrop-blur-md transition-all duration-200"
               >
                 <SignedIn>
                   <DropdownMenuLabel className="px-2 py-1 text-sm text-gray-300">
@@ -267,7 +273,7 @@ export default function Layout() {
                   <DropdownMenuSeparator className="my-1 bg-gray-700" />
 
                   <DropdownMenuItem
-                    className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none"
+                    className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-[#00bcff] focus:bg-gray-700/50 focus:text-[#00bcff] focus:outline-none"
                     asChild
                   >
                     <Link to="/profile">Profile</Link>
@@ -279,7 +285,7 @@ export default function Layout() {
                 </SignedIn>
 
                 <SignedOut>
-                  <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-teal-400 focus:bg-gray-700/50 focus:text-teal-400 focus:outline-none">
+                  <DropdownMenuItem className="group flex cursor-pointer items-center rounded-md px-2 py-2 text-sm transition-colors hover:bg-gray-700/50 hover:text-[#00bcff] focus:bg-gray-700/50 focus:text-[#00bcff] focus:outline-none">
                     <Link to="/login">Sign In</Link>
                   </DropdownMenuItem>
                 </SignedOut>
@@ -308,7 +314,7 @@ export default function Layout() {
                 variant="ghost"
                 size="icon"
                 onClick={closeMobileMenu}
-                className="text-white hover:text-teal-400"
+                className="text-white hover:text-[#00bcff]"
               >
                 <X className="h-6 w-6" />
               </Button>
@@ -323,7 +329,7 @@ export default function Layout() {
                       closeMobileMenu();
                     }}
                     variant="ghost"
-                    className="w-full justify-start text-left text-sm text-white hover:text-teal-400"
+                    className="w-full justify-start text-left text-sm text-white hover:text-[#00bcff]"
                   >
                     <Users className="h-3 w-3" />
                     My Groups
@@ -335,7 +341,7 @@ export default function Layout() {
                       closeMobileMenu();
                     }}
                     variant="ghost"
-                    className="mb-2 w-full justify-start text-left text-sm text-white hover:text-teal-400"
+                    className="mb-2 w-full justify-start text-left text-sm text-white hover:text-[#00bcff]"
                   >
                     <PlusCircle className="h-3 w-3" />
                     Create Group
@@ -348,7 +354,7 @@ export default function Layout() {
                         closeMobileMenu();
                       }}
                       variant="ghost"
-                      className="w-full justify-start text-left text-sm text-white hover:text-teal-400"
+                      className="w-full justify-start text-left text-sm text-white hover:text-[#00bcff]"
                     >
                       <User className="h-3 w-3" />
                       Profile
@@ -375,7 +381,7 @@ export default function Layout() {
                       closeMobileMenu();
                     }}
                     variant="ghost"
-                    className="w-full justify-start text-left text-lg text-white hover:text-teal-400"
+                    className="w-full justify-start text-left text-lg text-white hover:text-[#00bcff]"
                   >
                     Sign In
                   </Button>

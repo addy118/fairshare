@@ -35,7 +35,7 @@ export default function Navbar() {
         <div className="flex items-center">
           <div className="flex items-center text-xl font-bold">
             <svg
-              className="mr-2 h-6 w-6 text-teal-400"
+              className="mr-2 h-6 w-6 text-[#00bcff]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -71,10 +71,10 @@ export default function Navbar() {
             <a
               href="#"
               key={item}
-              className="group relative transition-colors duration-300 hover:text-teal-400"
+              className="group relative transition-colors duration-300 hover:text-[#00bcff]"
             >
               {item}
-              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-[#00bcff] transition-all duration-300 group-hover:w-full"></span>
             </a>
           ))}
         </div>
@@ -99,7 +99,7 @@ export default function Navbar() {
               <a
                 href="#"
                 key={item}
-                className="py-2 transition-colors duration-300 hover:text-teal-400"
+                className="py-2 transition-colors duration-300 hover:text-[#00bcff]"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item}

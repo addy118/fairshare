@@ -65,7 +65,7 @@ export default function GrpBalances() {
                     </span>
 
                     {member.id === user?.id && (
-                      <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-teal-400">
+                      <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-[#00bcff]">
                         You
                       </span>
                     )}
@@ -95,7 +95,7 @@ export default function GrpBalances() {
                       </span>
 
                       {isCurrentUser && (
-                        <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-teal-400">
+                        <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-[#00bcff]">
                           You
                         </span>
                       )}

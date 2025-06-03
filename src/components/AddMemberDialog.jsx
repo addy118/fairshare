@@ -15,6 +15,7 @@ import { Input } from "./ui/input";
 import Loading from "./Loading";
 import { toast } from "sonner";
 import api from "@/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 export default function NewGroupDialog({
   newMemberOpen,
@@ -24,6 +25,7 @@ export default function NewGroupDialog({
   groupId,
 }) {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,13 +36,13 @@ export default function NewGroupDialog({
     }
 
     try {
+      setIsLoading(true);
       for (const user of newMembers) {
-        setIsLoading(true);
         await api.post(`/grp/${groupId}/member/new`, {
           username: user.username,
         });
-        setIsLoading(false);
       }
+      setIsLoading(false);
 
       setNewMemberOpen(false);
       setNewMembers([]);
@@ -53,10 +55,7 @@ export default function NewGroupDialog({
   };
 
   const addMemberField = () => {
-    const newId = newMembers?.length
-      ? Math.max(...newMembers.map((m) => m.id)) + 1
-      : 1;
-    setNewMembers([...newMembers, { id: newId, username: "" }]);
+    setNewMembers([...newMembers, { id: new Date(), username: "" }]);
   };
 
   const removeMemberField = (id) => {
@@ -82,7 +81,7 @@ export default function NewGroupDialog({
           New Member
         </Button>
       </DialogTrigger>
-      <DialogContent className="glass-dark border border-gray-700">
+      <DialogContent className="border border-gray-700 bg-gray-900">
         <DialogHeader>
           <DialogTitle className="text-gray-300">
             Add new group members
@@ -101,7 +100,7 @@ export default function NewGroupDialog({
                   variant="outline"
                   size="sm"
                   onClick={addMemberField}
-                  className="border-gray-700 hover:bg-gray-700/70 hover:text-teal-400"
+                  className="border-gray-700 hover:bg-gray-700/70 hover:text-[#00bcff]"
                 >
                   <Plus className="mr-1 h-4 w-4" /> Add Member
                 </Button>
@@ -119,6 +118,7 @@ export default function NewGroupDialog({
                     <Input
                       id={`member-${member.id}`}
                       placeholder="Enter username"
+                      value={member.username}
                       onChange={(e) =>
                         updateMemberUsername(member.id, e.target.value)
                       }
@@ -144,7 +144,7 @@ export default function NewGroupDialog({
           <CardFooter>
             <Button
               type="submit"
-              className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-400 text-white shadow-lg transition-all duration-300 hover:from-teal-400 hover:to-teal-500 hover:shadow-teal-500/25"
+              className="mt-4 w-full bg-gradient-to-r from-[#00a2ff] to-[#00bcff] text-white shadow-lg transition-all duration-300 hover:from-[#00bcff] hover:to-[#00a2ff] hover:shadow-[#00a2ff]/25"
             >
               {isLoading ? (
                 <Loading action="Adding" item="member(s)" />

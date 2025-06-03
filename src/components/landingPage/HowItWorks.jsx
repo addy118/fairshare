@@ -50,8 +50,8 @@ export default function HowItWorks() {
         "Set up a group and easily add your friends, family, or roommates.",
       image: step1,
       alt: "Create a group and invite members",
-      gradient: "from-teal-500 to-cyan-400",
-      bgGradient: "from-teal-500/10 to-cyan-500/10",
+      gradient: "from-[#00a2ff] to-cyan-400",
+      bgGradient: "from-[#00a2ff]/10 to-cyan-500/10",
     },
     {
       number: 2,
@@ -81,11 +81,11 @@ export default function HowItWorks() {
       className="relative overflow-hidden px-6 py-16 md:py-24"
     >
       {/* Connecting line between steps */}
-      <div className="absolute top-32 bottom-32 left-1/2 hidden w-0.5 bg-gradient-to-b from-teal-500/30 via-cyan-500/30 to-purple-500/30 md:block"></div>
+      <div className="absolute top-32 bottom-32 left-1/2 hidden w-0.5 bg-gradient-to-b from-[#00a2ff]/30 via-cyan-500/30 to-purple-500/30 md:block"></div>
 
       {/* Background elements */}
       <div className="absolute top-0 left-0 h-full w-full">
-        <div className="absolute top-1/4 right-1/4 h-64 w-64 rounded-full bg-teal-500/5 blur-3xl filter"></div>
+        <div className="absolute top-1/4 right-1/4 h-64 w-64 rounded-full bg-[#00a2ff]/5 blur-3xl filter"></div>
         <div className="absolute bottom-1/3 left-1/3 h-64 w-64 rounded-full bg-purple-500/5 blur-3xl filter"></div>
       </div>
 
@@ -98,11 +98,11 @@ export default function HowItWorks() {
             Simple Process
           </div>
           <h2 className="mb-4 text-3xl font-bold md:text-4xl">
-            <span className="bg-gradient-to-r from-teal-400 to-cyan-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#00bcff] to-cyan-300 bg-clip-text text-transparent">
               How the App Works
             </span>
           </h2>
-          <p className="mx-auto max-w-2xl text-gray-300">
+          <p className="mx-4 max-w-2xl text-gray-300 md:mx-auto">
             Fairshare makes expense splitting simple with just three easy steps
           </p>
         </div>
@@ -111,14 +111,14 @@ export default function HowItWorks() {
           <div
             key={index}
             ref={(el) => (stepsRef.current[index + 1] = el)}
-            className={`step-item mb-16 grid grid-cols-1 items-center gap-8 opacity-0 md:grid-cols-2 ${
+            className={`step-item mb-16 grid grid-cols-1 items-center gap-8 px-4 opacity-0 md:grid-cols-2 md:px-0 ${
               index % 2 === 1 ? "md:flex-row-reverse" : ""
             }`}
             style={{ animationDelay: `${index * 0.3}s` }}
           >
             <div className={`relative ${index % 2 === 1 ? "md:order-2" : ""}`}>
               {/* Step connector */}
-              <div className="absolute top-1/2 right-full hidden h-0.5 w-8 bg-gradient-to-r from-teal-500/50 to-cyan-500/50 md:block"></div>
+              <div className="absolute top-1/2 right-full hidden h-0.5 w-8 bg-gradient-to-r from-[#00a2ff]/50 to-cyan-500/50 md:block"></div>
 
               <div className="glass-dark group hover-lift overflow-hidden rounded-lg border border-gray-700/50 shadow-xl">
                 <div className="relative flex h-79 items-center justify-center overflow-hidden">
@@ -135,7 +135,7 @@ export default function HowItWorks() {
 
                   {/* Animated corner accents */}
                   <div className="pointer-events-none absolute top-0 left-0 h-16 w-16">
-                    <div className="animate-pulse-subtle absolute top-4 left-4 h-2 w-2 rounded-full bg-gradient-to-r from-teal-400 to-cyan-400"></div>
+                    <div className="animate-pulse-subtle absolute top-4 left-4 h-2 w-2 rounded-full bg-gradient-to-r from-[#00bcff] to-cyan-400"></div>
                   </div>
                   <div className="pointer-events-none absolute right-0 bottom-0 h-16 w-16">
                     <div className="animate-pulse-subtle animation-delay-500 absolute right-4 bottom-4 h-2 w-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400"></div>
@@ -183,7 +183,7 @@ export default function HowItWorks() {
           ref={(el) => (stepsRef.current[steps.length + 1] = el)}
         >
           <Link to="/login">
-            <button className="animate-bounce-subtle rounded-md bg-gradient-to-r from-teal-500 to-cyan-400 px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:from-teal-400 hover:to-cyan-500 hover:shadow-teal-500/25">
+            <button className="animate-bounce-subtle rounded-md bg-gradient-to-r from-[#00a2ff] to-cyan-400 px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:from-[#00bcff] hover:to-cyan-500 hover:shadow-[#00a2ff]/25">
               Get Started Now
             </button>
           </Link>
