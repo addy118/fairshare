@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import heroImage from "../../assets/hero-image.png";
 import { Link } from "react-router-dom";
 
 export default function HeroSection() {
