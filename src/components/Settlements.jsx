@@ -226,7 +226,7 @@ export default function Settlements() {
                               open={openModalId === settlement.id}
                               onOpenChange={() => setOpenModalId(null)}
                             >
-                              <DialogContent className="glass-dark mx-4 max-w-sm border border-gray-700/70 bg-[#111828] sm:max-w-md">
+                              <DialogContent className="mx-4 max-w-sm border border-gray-700/70 bg-gray-900 sm:max-w-md">
                                 <DialogHeader>
                                   <DialogTitle className="text-lg text-[#00bcff] sm:text-xl">
                                     Settle Payment
