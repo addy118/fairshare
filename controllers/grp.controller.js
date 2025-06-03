@@ -37,11 +37,10 @@ exports.postMember = async (req, res) => {
     const { username } = req.body;
 
     const userId = await User.getIdbyUserName(username);
-    console.log(userId);
     await Group.join(userId, Number(groupId));
     res.json({ message: "success" });
   } catch (error) {
-    console.error("Error in postMember()(): ", error.message);
+    console.error("Error in postMember(): ", error.message);
     console.error(error.stack);
     res
       .status(400)
@@ -52,7 +51,7 @@ exports.postMember = async (req, res) => {
 exports.deleteMember = async (req, res) => {
   try {
     const { groupId, memberId } = req.params;
-    await Group.leave(Number(memberId), Number(groupId));
+    await Group.leave(memberId, Number(groupId));
     res.json({ message: "success" });
   } catch (error) {
     console.error("Error in deleteMember(): ", error.message);

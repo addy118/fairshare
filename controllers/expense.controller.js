@@ -109,7 +109,7 @@ exports.remind = async (req, res) => {
     subject: "Payment Reminder",
     html: `<p>Hi <strong>${from.name}</strong>!</p>
     <p>You need to pay <strong>₹${split.amount}</strong> to <strong>${to.name}</strong>.</p>
-    <p>Thanks,<br/>FairShare Team</p>`,
+    <p>Thanks,<br/>Fairshare Team</p>`,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

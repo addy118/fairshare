@@ -160,7 +160,7 @@ class User {
       });
       if (!userId) {
         throw new Error(
-          error.message || "No user found with the given username."
+          "No user found with the given username."
         );
       }
       return userId.id;
