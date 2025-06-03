@@ -108,7 +108,7 @@ export default function Settlements() {
         <div className="mb-20 space-y-3 sm:space-y-4">
           <>
             <Button
-              className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-sm text-white shadow-lg transition-all duration-300 hover:from-purple-500 hover:to-purple-600 hover:shadow-purple-500/30 sm:text-base"
+              className="w-full rounded-sm bg-gradient-to-r from-purple-600 to-purple-500 text-sm text-white shadow-lg transition-all duration-300 hover:from-purple-500 hover:to-purple-600 hover:shadow-purple-500/30 sm:text-base"
               size="sm"
               onClick={handleOptimization}
               style={{ letterSpacing: "0.3em", textTransform: "uppercase" }}
@@ -226,7 +226,7 @@ export default function Settlements() {
                               open={openModalId === settlement.id}
                               onOpenChange={() => setOpenModalId(null)}
                             >
-                              <DialogContent className="mx-4 max-w-sm border border-gray-700/70 bg-[#111828] sm:max-w-md">
+                              <DialogContent className="glass-dark mx-4 max-w-sm border border-gray-700/70 bg-[#111828] sm:max-w-md">
                                 <DialogHeader>
                                   <DialogTitle className="text-lg text-teal-400 sm:text-xl">
                                     Settle Payment
@@ -247,8 +247,9 @@ export default function Settlements() {
                                   {settlement.to.upi && (
                                     <QRCodeSVG
                                       value={`upi://pay?pa=${settlement.to.upi || ""}&pn=${encodeURIComponent(settlement.to.name)}&am=${settlement.amount}&cu=INR&tn=${settlement.name || `Settle debt from Fairshare`}`}
-                                      size={150}
-                                      bgColor="#14b8a6"
+                                      size={200}
+                                      marginSize="1"
+                                      bgColor="#ADCDFF"
                                       fgColor="#111828"
                                       className="sm:size-[200px]"
                                     />

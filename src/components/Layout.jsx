@@ -315,7 +315,7 @@ export default function Layout() {
             </div>
 
             <div className="flex h-full flex-col px-4 pt-20">
-              <div className="space-y-1 rounded-xl bg-[#151e32] px-1 py-4">
+              <div className="space-y-1 rounded-md bg-[#151e32] px-1 py-4">
                 <SignedIn>
                   <Button
                     onClick={() => {
@@ -323,9 +323,9 @@ export default function Layout() {
                       closeMobileMenu();
                     }}
                     variant="ghost"
-                    className="w-full justify-start text-left text-lg text-white hover:text-teal-400"
+                    className="w-full justify-start text-left text-sm text-white hover:text-teal-400"
                   >
-                    <Users className="mr-1 h-5 w-5" />
+                    <Users className="h-3 w-3" />
                     My Groups
                   </Button>
 
@@ -335,9 +335,9 @@ export default function Layout() {
                       closeMobileMenu();
                     }}
                     variant="ghost"
-                    className="mb-2 w-full justify-start text-left text-lg text-white hover:text-teal-400"
+                    className="mb-2 w-full justify-start text-left text-sm text-white hover:text-teal-400"
                   >
-                    <PlusCircle className="mr-1 h-5 w-5" />
+                    <PlusCircle className="h-3 w-3" />
                     Create Group
                   </Button>
 
@@ -348,9 +348,9 @@ export default function Layout() {
                         closeMobileMenu();
                       }}
                       variant="ghost"
-                      className="w-full justify-start text-left text-lg text-white hover:text-teal-400"
+                      className="w-full justify-start text-left text-sm text-white hover:text-teal-400"
                     >
-                      <User className="mr-1 h-5 w-5" />
+                      <User className="h-3 w-3" />
                       Profile
                     </Button>
 
@@ -358,7 +358,7 @@ export default function Layout() {
                       <SignOutButton>
                         <Button
                           variant="ghost"
-                          className="w-full justify-start text-left text-lg text-red-300 hover:text-red-400"
+                          className="w-full justify-start text-left text-sm text-red-300 hover:text-red-400"
                         >
                           Sign Out
                         </Button>

@@ -30,12 +30,12 @@ export default function GrpBalances() {
   );
 
   return (
-    <Card className="glass-dark hover-lift border border-gray-700/50 shadow-lg transition-all duration-300">
+    <Card className="glass-dark hover-lift rounded-sm border border-gray-700/50 shadow-lg transition-all duration-300">
       <CardHeader className="sm:pb-4">
         <CardTitle className="gradient-text text-lg sm:text-xl">
           Group Balances
         </CardTitle>
-        <CardDescription className="text-gray-500 text-sm sm:text-base">
+        <CardDescription className="text-sm text-gray-500 sm:text-base">
           Current balance for each member
         </CardDescription>
       </CardHeader>
@@ -104,9 +104,9 @@ export default function GrpBalances() {
                       className={`text-sm font-medium sm:text-base ${balance > 0 ? "text-green-600" : balance < 0 ? "text-red-500/90" : "text-gray-300"}`}
                     >
                       {balance > 0
-                        ? `+₹${balance.toFixed(2)}`
+                        ? `+ ₹${balance.toFixed(2)}`
                         : balance < 0
-                          ? `-₹${Math.abs(balance).toFixed(2)}`
+                          ? `- ₹${Math.abs(balance).toFixed(2)}`
                           : "₹0.00"}
                     </span>
                   </li>

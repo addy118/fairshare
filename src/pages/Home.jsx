@@ -9,6 +9,16 @@ import formatUser from "@/utils/formatUser";
 import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import {
+  Edit,
+  Edit2,
+  Edit2Icon,
+  Edit3,
+  Edit3Icon,
+  LucideEdit,
+  Pencil,
+  PlusCircleIcon,
+} from "lucide-react";
 
 export default function Home() {
   const { isSignedIn, isLoaded, user: clerkUser } = useUser();
@@ -44,15 +54,19 @@ export default function Home() {
   if (!isLoaded) return <Loading item="user" />;
   if (isLoading) return <Loading item="profile" />;
 
+  // const handleAddUpi = async () => {
+  //   return;
+  // };
+
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-4xl rounded-sm px-4 sm:px-6 lg:px-8">
       {user && (
         <>
-          <Card className="glass-dark mb-6 shadow-lg sm:mb-8">
+          <Card className="glass-dark mb-6 rounded-sm shadow-lg sm:mb-8">
             <CardContent className="p-4 sm:p-6">
-              <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center justify-between gap-4">
                 {/* user details */}
-                <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center">
+                <div className="flex items-center gap-4 sm:items-center">
                   <Avatar className="h-16 w-16 border border-teal-500/30 sm:h-20 sm:w-20">
                     <AvatarImage src={user.pfp || "/placeholder.svg"} />
                     <AvatarFallback className="bg-gray-400 text-lg sm:text-xl">
@@ -65,53 +79,51 @@ export default function Home() {
                     </AvatarFallback>
                   </Avatar>
 
-                  <div className="text-center sm:text-left">
+                  <div className="text-left">
                     <h1 className="gradient-text text-xl font-bold sm:text-2xl">
                       {user.name}
                     </h1>
-                    <p className="text-sm text-white sm:text-base">
-                      {upi || ""}
-                    </p>
+                    <div className="flex items-center gap-2 text-sm text-white sm:text-base">
+                      {(upi && <div className="text-[#d3d3d3]">{upi}</div>) || (
+                        <div
+                          className="flex cursor-pointer items-center justify-between gap-1 text-sm text-gray-300 sm:text-base"
+                          onClick={() => {
+                            navigate("/upi");
+                          }}
+                        >
+                          <PlusCircleIcon size="16" /> UPI ID
+                        </div>
+                      )}{" "}
+                      {upi && (
+                        <Edit
+                          onClick={() => {
+                            navigate("/upi");
+                          }}
+                          size="16"
+                          color="#adadad"
+                          className="cursor-pointer"
+                        />
+                      )}
+                    </div>
+
                     <p className="text-sm text-gray-300 sm:text-base">
                       {user.username}
                     </p>
                   </div>
                 </div>
 
-                {/* QR Code / UPI Button */}
-                <div className="flex flex-col items-center gap-2">
-                  {upi ? (
-                    <>
-                      <QRCodeSVG
-                        value={`upi://pay?pa=${upi}&pn=${encodeURIComponent(user.name)}&cu=INR`}
-                        size={80}
-                        bgColor="#14b8a6"
-                        fgColor="#111828"
-                        className="sm:hidden"
-                      />
-                      <QRCodeSVG
-                        value={`upi://pay?pa=${upi}&pn=${encodeURIComponent(user.name)}&cu=INR`}
-                        size={100}
-                        bgColor="#14b8a6"
-                        fgColor="#111828"
-                        className="hidden sm:block"
-                      />
-                      <p className="text-xs text-gray-400 sm:text-sm">
-                        Scan to pay
-                      </p>
-                    </>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        navigate("/upi");
-                      }}
-                      className="w-full sm:w-auto"
-                    >
-                      Add UPI ID
-                    </Button>
-                  )}
-                </div>
+                {/* QR Code */}
+                {upi && (
+                  <div className="sm:block sm:space-y-2">
+                    <QRCodeSVG
+                      value={`upi://pay?pa=${upi}&pn=${encodeURIComponent(user.name)}&cu=INR`}
+                      size={90}
+                      marginSize="1"
+                      bgColor="#ADCDFF"
+                      fgColor="#111828"
+                    />
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>

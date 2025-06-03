@@ -222,7 +222,7 @@ export default function PaymentHistory() {
 
   return (
     <>
-      <Card className="glass-dark mx-auto mb-20 max-w-6xl border border-gray-700/50 px-3 shadow-lg sm:px-4">
+      <Card className="glass-dark mx-auto mb-20 max-w-6xl rounded-sm border border-gray-700/50 px-3 shadow-lg sm:px-4">
         <CardHeader className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1 sm:space-y-2">
             <CardTitle className="gradient-text text-lg sm:text-xl">
@@ -235,14 +235,14 @@ export default function PaymentHistory() {
             <Button
               variant="outline"
               onClick={toggleAll}
-              className="h-8 flex-1 border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:h-10 sm:flex-auto sm:text-sm md:flex-auto"
+              className="h-8 flex-1 rounded-sm border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:h-10 sm:flex-auto sm:text-sm md:flex-auto"
             >
               Toggle All
             </Button>
             <Button
               variant="outline"
               onClick={handleExport}
-              className="h-8 flex-1 border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:h-10 sm:flex-auto sm:text-sm md:flex-auto"
+              className="h-8 flex-1 rounded-sm border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 sm:h-10 sm:flex-auto sm:text-sm md:flex-auto"
             >
               {isExporting ? (
                 <Loading action="Exporting" item="history" />
@@ -256,12 +256,12 @@ export default function PaymentHistory() {
         <CardContent>
           <div
             ref={pdfRef}
-            className="payment-history-container space-y-3 sm:space-y-4"
+            className="payment-history-container space-y-3 rounded-sm sm:space-y-4"
           >
             {history?.map((item) => (
               <Card
                 key={item.id}
-                className="payment-card glass-dark overflow-hidden border border-gray-700/50"
+                className="payment-card glass-dark overflow-hidden rounded-sm border border-gray-700/50"
               >
                 <CardHeader className="pb-2 sm:pb-3">
                   <div className="flex items-start justify-between">

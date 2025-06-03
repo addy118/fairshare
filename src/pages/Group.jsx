@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Trash } from "lucide-react";
+import { Dot, Plus, Trash } from "lucide-react";
 import Loading from "@/components/Loading";
 import Settlements from "@/components/Settlements";
 import GrpBalances from "@/components/GrpBalances";
@@ -54,7 +54,7 @@ export default function GroupPage() {
     skip: !groupId,
   });
 
-  const [activeTab, setActiveTab] = useState("balances");
+  const [activeTab, setActiveTab] = useState("overview");
   const [newMembers, setNewMembers] = useState([""]);
   const [newMemberOpen, setNewMemberOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -109,19 +109,21 @@ export default function GroupPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-      <div className="glass-dark mb-6 rounded-lg border border-gray-700/50 p-4 shadow-lg sm:mb-8 sm:p-6">
+      <div className="glass-dark mb-6 rounded-sm border border-gray-700/50 p-4 shadow-lg sm:mb-8 sm:p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="text-center lg:text-left">
+          <div className="flex items-center justify-center text-center lg:text-left">
             <h1 className="gradient-text text-xl font-bold sm:text-2xl lg:text-3xl">
               {group.name}
             </h1>
+            <Dot />
+            <p className="text-[#d3d3d3]">{group?.members?.length} Members</p>
           </div>
 
           <div className="flex w-full flex-row gap-2 sm:gap-3 lg:w-auto">
             <Button
               variant="outline"
               onClick={() => navigate(`/groups/${groupId}/expense/new`)}
-              className="h-8 flex-1 border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 lg:h-10 lg:flex-none lg:text-base"
+              className="h-8 flex-1 rounded-sm border-gray-700 text-xs hover:bg-gray-700/70 hover:text-teal-400 lg:h-10 lg:flex-none lg:text-base"
             >
               <Plus className="h-4 w-4" />
               Expense
@@ -140,7 +142,7 @@ export default function GroupPage() {
             <Button
               variant="destructive"
               onClick={handleLeaveGroup}
-              className="h-8 flex-1 text-xs lg:h-10 lg:flex-none lg:text-base"
+              className="h-8 flex-1 rounded-sm text-xs lg:h-10 lg:flex-none lg:text-base"
             >
               <Trash className="h-4 w-4" />
               {isLoading ? (
@@ -153,13 +155,17 @@ export default function GroupPage() {
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="glass-dark grid w-full grid-cols-3 rounded-lg p-1">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="w-full rounded-sm"
+      >
+        <TabsList className="glass-dark grid w-full grid-cols-3 rounded-sm p-1">
           <TabsTrigger
-            value="balances"
+            value="overview"
             className="text-white-800 text-xs data-[state=active]:bg-gray-700/70 data-[state=active]:text-teal-400 sm:text-sm"
           >
-            Balances
+            Overview
           </TabsTrigger>
           <TabsTrigger
             value="settlements"
@@ -175,7 +181,7 @@ export default function GroupPage() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="balances" className="mt-4 sm:mt-6">
+        <TabsContent value="overview" className="mt-4 sm:mt-6">
           <div className="mb-20 grid gap-4 sm:gap-6 lg:grid-cols-2">
             <GrpBalances />
             <GrpSummary />

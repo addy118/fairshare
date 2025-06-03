@@ -28,6 +28,12 @@ export default function UpiForm() {
     e.preventDefault();
 
     try {
+      const upiBroken = upi.split("@");
+      if (!upiBroken[0] || !upiBroken[1]) {
+        toast.error("Please enter a valid UPI ID");
+        return;
+      }
+
       SetIsLoading(true);
       await api.put(`user/${user.id}/upi`, { upi });
       SetIsLoading(false);
@@ -46,7 +52,7 @@ export default function UpiForm() {
       <Card className="glass-dark border border-gray-700/50 shadow-lg">
         <CardHeader>
           <CardDescription className="text-gray-300">
-            Add your UPI ID
+            Enter your UPI ID
           </CardDescription>
         </CardHeader>
 
@@ -54,10 +60,11 @@ export default function UpiForm() {
           <CardContent>
             <Input
               id="upi"
-              placeholder="Enter your UPI ID"
+              placeholder="name@bank"
               type="text"
               value={upi}
               onChange={(e) => setUpi(e.target.value)}
+              required
             />
           </CardContent>
 
@@ -68,9 +75,9 @@ export default function UpiForm() {
               className="mt-4 w-full bg-gradient-to-r from-teal-500 to-teal-400 text-white shadow-lg transition-all duration-300 hover:from-teal-400 hover:to-teal-500 hover:shadow-teal-500/25"
             >
               {isLoading ? (
-                <Loading action="Creating" item="expense" />
+                <Loading action="Submitting" item="UPI ID" />
               ) : (
-                "Add UPI ID"
+                "Submit UPI ID"
               )}
             </Button>
           </CardFooter>

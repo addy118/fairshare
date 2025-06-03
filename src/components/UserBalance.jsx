@@ -17,7 +17,7 @@ export default function UserBalance({ balances, isCreditor }) {
     : "People you need to pay back";
 
   return (
-    <Card className="glass-dark hover-lift border border-gray-700/50 shadow-lg transition-all duration-300">
+    <Card className="glass-dark hover-lift rounded-sm border border-gray-700/50 shadow-lg transition-all duration-300">
       <CardHeader className="pb-3 sm:pb-4">
         <CardTitle
           className={`text-lg sm:text-xl ${isCreditor ? "gradient-text" : "gradient-text-purple"}`}
@@ -67,7 +67,7 @@ export default function UserBalance({ balances, isCreditor }) {
                 <span
                   className={`text-sm font-medium sm:text-base ${isCreditor ? "text-green-600" : "text-red-500/90"}`}
                 >
-                  {isCreditor ? "+" : "-"}₹{balance.amount.toFixed(2)}
+                  {isCreditor ? "+ " : "- "}₹{balance.amount.toFixed(2)}
                 </span>
               </li>
             ))}
@@ -82,7 +82,7 @@ export default function UserBalance({ balances, isCreditor }) {
           <span
             className={`text-sm font-bold sm:text-base ${isCreditor ? "text-green-600" : "text-red-500/90"}`}
           >
-            {isCreditor ? "+" : "-"}₹
+            {isCreditor ? "+ " : "- "}₹
             {list?.reduce((sum, item) => sum + item.amount, 0).toFixed(2)}
           </span>
         </div>

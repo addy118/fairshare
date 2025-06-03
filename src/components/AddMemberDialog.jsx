@@ -76,7 +76,7 @@ export default function NewGroupDialog({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="h-8 w-full text-xs lg:h-10 lg:w-auto lg:text-base"
+          className="h-8 w-full rounded-sm text-xs lg:h-10 lg:w-auto lg:text-base"
         >
           <Plus className="h-4 w-4" />
           New Member
