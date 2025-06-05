@@ -1,11 +1,11 @@
 {
   "name": "fair-share-server",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "build": "prisma generate",
-    "start": "prisma generate && node dist/server.js",
-    "dev": "npx ts-node src/server.ts",
+    "start": "prisma generate && node index.js",
+    "dev": "npx ts-node api/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "prisma generate",
     "ts.check": "tsc --project tsconfig.json"
