@@ -4,7 +4,7 @@
   "main": "server.js",
   "scripts": {
     "build": "rimraf dist && tsc",
-    "start": "node dist/server.js",
+    "start": "prisma generate && node dist/server.js",
     "dev": "npx ts-node src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "prisma generate",
@@ -40,11 +40,11 @@
     "pre-commit": "^1.2.2",
     "rimraf": "^6.0.1",
     "svix": "^1.66.0",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "prisma": "^6.9.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.2",
-    "@types/node": "^22.15.29",
-    "prisma": "^6.9.0"
+    "@types/node": "^22.15.29"
   }
 }
