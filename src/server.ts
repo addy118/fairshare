@@ -1,12 +1,13 @@
 require("dotenv").config();
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const userRouter = require("./routes/user.routes");
-const expRouter = require("./routes/expense.routes");
-const grpRouter = require("./routes/grp.routes");
-const { clerkMiddleware } = require("@clerk/express");
-const clerkRouter = require("./routes/clerk.routes");
+import express, { NextFunction, Request, Response } from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import userRouter from "./routes/user.routes";
+import expRouter from "./routes/expense.routes";
+import grpRouter from "./routes/grp.routes";
+import { clerkMiddleware } from "@clerk/express";
+import clerkRouter from "./routes/clerk.routes";
+
 const app = express();
 app.use(clerkMiddleware());
 app.use(express.urlencoded({ extended: true }));
@@ -36,11 +37,11 @@ app.use("/user", userRouter);
 app.use("/grp", grpRouter);
 app.use("/exp", expRouter);
 
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.json("Welcome to our app Fairshare! You are an unauthenticated user!");
 });
 
-app.use((error, req, res, next) => {
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(error.message);
   console.error(error.stack);
   res.send("Something broke in server!");

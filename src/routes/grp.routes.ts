@@ -1,6 +1,6 @@
-const { Router } = require("express");
-const { requireAuth } = require("@clerk/express");
-const {
+import { NextFunction, Request, Response, Router } from "express";
+import { requireAuth } from "@clerk/express";
+import {
   getAllExpenses,
   getMinSplits,
   getGrpBalance,
@@ -11,8 +11,8 @@ const {
   postMember,
   deleteMember,
   getGrpInfo,
-} = require("../controllers/grp.controller");
-const grpRouter = new Router();
+} from "../controllers/grp.controller";
+const grpRouter = Router();
 
 grpRouter.use(requireAuth());
 
@@ -29,10 +29,12 @@ grpRouter.post("/:groupId/member/new", postMember);
 grpRouter.delete("/:groupId/member/:memberId", deleteMember);
 grpRouter.delete("/:groupId/delete", postDelGrp);
 
-grpRouter.use((error, req, res, next) => {
-  console.error(error.message);
-  console.error(error.stack);
-  res.send("Something broke in group routes");
-});
+grpRouter.use(
+  (error: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(error.message);
+    console.error(error.stack);
+    res.send("Something broke in group routes");
+  }
+);
 
-module.exports = grpRouter;
+export default grpRouter;

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    /* Base Options: */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "target": "esnext",
+    "moduleResolution": "nodenext",
+    "module": "nodenext",
+    "baseUrl": "./",
+    "outDir": "dist/",
+    "rootDir": "src/",
+    "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+
+    /* If transpiling with TypeScript: */
+    "sourceMap": true,
+
+    "useUnknownInCatchVariables": true,
+    "typeRoots": ["./node_modules/@types", "src/types"]
+  },
+  "include": ["src/**/*", "src/types/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

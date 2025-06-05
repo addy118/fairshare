@@ -1,11 +1,12 @@
-const Group = require("../prisma/queries/Group");
-const User = require("../prisma/queries/User");
-const {
+import Split from "../queries/Split";
+import Group from "../queries/Group";
+import User from "../queries/User";
+import {
   getSplitBalance,
   mergeChrono,
   getGroupBalance,
   calculateSplits,
-} = require("./util");
+} from "./util";
 
 (async () => {
   // get the current group balance for optimizing purpose

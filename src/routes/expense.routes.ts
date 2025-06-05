@@ -1,13 +1,13 @@
-const { Router } = require("express");
-const { requireAuth } = require("@clerk/express");
-const {
+import { NextFunction, Request, Response, Router } from "express";
+import { requireAuth } from "@clerk/express";
+import {
   postExp,
   getExp,
   settleSplit,
   confirmSplit,
   notConfirmSplit,
   remind,
-} = require("../controllers/expense.controller");
+} from "../controllers/expense.controller";
 const expRouter = Router();
 
 expRouter.use(requireAuth());
@@ -21,10 +21,12 @@ expRouter.put("/:splitId/settle", settleSplit);
 expRouter.put("/:splitId/confirm", confirmSplit);
 expRouter.put("/:splitId/not-confirm", notConfirmSplit);
 
-expRouter.use((error, req, res, next) => {
-  console.error(error.message);
-  console.error(error.stack);
-  res.send("Something broke in expense routes");
-});
+expRouter.use(
+  (error: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(error.message);
+    console.error(error.stack);
+    res.send("Something broke in expense routes");
+  }
+);
 
-module.exports = expRouter;
+export default expRouter;

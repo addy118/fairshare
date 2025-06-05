@@ -1,13 +1,13 @@
-const { Router } = require("express");
-const { requireAuth } = require("@clerk/express");
-const {
+import { NextFunction, Request, Response, Router } from "express";
+import { requireAuth } from "@clerk/express";
+import {
   getUser,
   getUserBal,
   getUserInfo,
   getUserGroups,
   putUserUpi,
   getUserUpi,
-} = require("../controllers/user.controller");
+} from "../controllers/user.controller";
 const userRouter = Router();
 
 userRouter.get("/:userId", getUser);
@@ -27,10 +27,12 @@ userRouter.put("/:userId/upi", putUserUpi);
 // userRouter.post("/:userId/upi", postUserUpi);
 userRouter.post("/:userId/groups", getUserGroups);
 
-userRouter.use((error, req, res, next) => {
-  console.error(error.message);
-  console.error(error.stack);
-  res.send("Something broke in user routes!");
-});
+userRouter.use(
+  (error: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(error.message);
+    console.error(error.stack);
+    res.send("Something broke in user routes!");
+  }
+);
 
-module.exports = userRouter;
+export default userRouter;

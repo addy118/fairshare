@@ -1,7 +1,17 @@
-const Group = require("../prisma/queries/Group");
+import Group from "../queries/Group";
+import {
+  AdjList,
+  CompleteExpense,
+  ExpenseEntry,
+  HistoryEntry,
+  Participant,
+  RawExpense,
+  SplitEntry,
+  SplitHistory,
+} from "../types";
 
-function createBalance(expense) {
-  const balance = {};
+function createBalance(expense: RawExpense) {
+  const balance: any = {};
   const share = Math.floor(expense.totalAmt / expense.payers.length);
 
   const balanceArr = expense.payers.map((payer) => ({
@@ -14,15 +24,23 @@ function createBalance(expense) {
       balance[split.payerId] = split.amount;
     }
   });
+
   return balance;
 }
 
-async function getGroupBalance(groupId, isOptimizing = false) {
+async function getGroupBalance(
+  groupId: number,
+  isOptimizing: boolean = false
+): Promise<any> {
   // get all the group members
-  const members = await Group.members(Number(groupId));
+  const members = await Group.members(groupId);
+  if (!members) throw new Error("Members not found.");
 
   // get all the group expenses and splits
-  const { expenses, splits } = await Group.expenses(Number(groupId));
+
+  const groupTrans = await Group.expenses(Number(groupId));
+  if (!groupTrans) throw new Error("Unable to retrieve group transactions.");
+  const { expenses, splits } = groupTrans;
 
   // filter the splits that needs to be optimized
   // consider the settled splits also as done as they might have been really sent by the user
@@ -37,7 +55,7 @@ async function getGroupBalance(groupId, isOptimizing = false) {
 
   // console.log("Settle Splits: ", settledSplits);
 
-  let balance = {};
+  let balance: any = {};
   members.forEach((mem) => (balance[mem.member.id] = 0));
 
   // processing expenses
@@ -69,8 +87,9 @@ async function getGroupBalance(groupId, isOptimizing = false) {
   return balance;
 }
 
-function getSplitBalance(splits) {
-  const balance = {};
+// deprecated: not used anymore in the code base
+function getSplitBalance(splits: SplitHistory[]): any {
+  const balance: any = {};
 
   splits.forEach((split) => {
     if (!balance[split.debtor.id]) balance[split.debtor.id] = 0;
@@ -83,10 +102,10 @@ function getSplitBalance(splits) {
   return balance;
 }
 
-function calculateSplits(balance) {
-  // step 1: Separate positive (creditors) and negative (debtors) balances
-  const creditors = [];
-  const debtors = [];
+function calculateSplits(balance: Record<string, number>): AdjList {
+  // step 1: separate positive (creditors) and negative (debtors) balances
+  const creditors: Participant[] = [];
+  const debtors: Participant[] = [];
 
   for (const [person, amount] of Object.entries(balance)) {
     // Handle floating point precision8999
@@ -103,7 +122,7 @@ function calculateSplits(balance) {
   creditors.sort((a, b) => b.amount - a.amount);
   debtors.sort((a, b) => b.amount - a.amount);
 
-  const splits = [];
+  const splits: AdjList = [];
 
   // Greedy approach: match largest debtor with largest creditor first
   let i = 0; // Pointer for debtors
@@ -112,6 +131,8 @@ function calculateSplits(balance) {
   while (i < debtors.length && j < creditors.length) {
     const debtor = debtors[i];
     const creditor = creditors[j];
+
+    if (!debtor || !creditor) throw new Error("Undefined debtor or creditor.");
 
     // Calculate the minimum of what is owed and what is to be received
     const transferAmount = Math.min(debtor.amount, creditor.amount);
@@ -134,25 +155,30 @@ function calculateSplits(balance) {
   return splits;
 }
 
-function mergeChrono(expenses, splits) {
-  const expEntries = expenses.map((expense) => ({
+function mergeChrono(
+  expenses: CompleteExpense[],
+  splits: SplitHistory[]
+): HistoryEntry[] {
+  const expEntries: ExpenseEntry[] = expenses.map((expense) => ({
     type: "expense",
     timestamp: expense.createdAt,
     ...expense,
   }));
 
-  const splitEntries = splits.map((split) => ({
+  const splitEntries: SplitEntry[] = splits.map((split) => ({
     type: "split",
     timestamp: split.updatedAt,
     ...split,
   }));
 
-  return [...expEntries, ...splitEntries].sort(
-    (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
-  );
+  return [...expEntries, ...splitEntries].sort((a, b) => {
+    if (a.timestamp && b.timestamp)
+      return a.timestamp.getTime() - b.timestamp.getTime();
+    return 0;
+  });
 }
 
-module.exports = {
+export {
   createBalance,
   calculateSplits,
   getGroupBalance,
