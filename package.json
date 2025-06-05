@@ -4,12 +4,12 @@
   "main": "server.js",
   "scripts": {
     "build": "tsc --project tsconfig.json",
-    "start": "prisma generate && node dist/server.js",
+    "start": "prisma generate && node public/server.js",
     "dev": "npx ts-node src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "prisma generate",
     "ts.check": "tsc --project tsconfig.json",
-    "add-build": "git add dist"
+    "add-build": "git add public"
   },
   "pre-commit": [
     "ts.check",
