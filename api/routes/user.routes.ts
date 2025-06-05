@@ -7,7 +7,7 @@ import {
   getUserGroups,
   putUserUpi,
   getUserUpi,
-} from "../controllers/user.controller";
+} from "../../controllers/user.controller";
 const userRouter = Router();
 
 userRouter.get("/:userId", getUser);

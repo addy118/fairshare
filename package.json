@@ -8,14 +8,8 @@
     "dev": "npx ts-node src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "prisma generate",
-    "ts.check": "tsc --project tsconfig.json",
-    "add-build": "git add dist"
+    "ts.check": "tsc --project tsconfig.json"
   },
-  "pre-commit": [
-    "ts.check",
-    "build",
-    "add-build"
-  ],
   "keywords": [],
   "author": "",
   "license": "ISC",

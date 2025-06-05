@@ -7,7 +7,7 @@ import {
   confirmSplit,
   notConfirmSplit,
   remind,
-} from "../controllers/expense.controller";
+} from "../../controllers/expense.controller";
 const expRouter = Router();
 
 expRouter.use(requireAuth());

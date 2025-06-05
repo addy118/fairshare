@@ -11,7 +11,7 @@ import {
   postMember,
   deleteMember,
   getGrpInfo,
-} from "../controllers/grp.controller";
+} from "../../controllers/grp.controller";
 const grpRouter = Router();
 
 grpRouter.use(requireAuth());
