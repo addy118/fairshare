@@ -64,7 +64,7 @@ export default function Layout() {
       return;
     }
 
-    if (newMembers.filter((member) => member.id === user.id)) {
+    if (newMembers.some((member) => member.id === user.id)) {
       toast.error("You don't have to add yourself to the group.");
       return;
     }
