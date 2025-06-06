@@ -3,12 +3,12 @@
 > Only the **landing page** is live at the moment.  
 > Full functionality (expense splitting, groups, smart splits) will be restored soon. Stay tuned!
 
-# 💸 FairShare – Expense Splitting Reimagined
+# 💸 Fairshare – Expense Splitting Reimagined
 
 **Not your ordinary expense splitter.**  
-FairShare goes beyond just dividing the bill equally — it handles real-world scenarios like **partial payments by 2 out of 8 members**, supports **custom ratios like 1:4**, and intelligently **minimizes total transactions** using a graph algorithm.
+Fairshare goes beyond just dividing the bill equally — it handles real-world scenarios like **partial payments by 2 out of 8 members**, supports **custom ratios like 1:4**, and intelligently **minimizes total transactions** using a graph algorithm.
 
-Whether you're **roommates sharing rent and utilities**, **friends on a vacation**, or **tired of tracking money in spreadsheets or WhatsApp chats**, FairShare makes your group expenses **fair, optimized, and frictionless**.
+Whether you're **roommates sharing rent and utilities**, **friends on a vacation**, or **tired of tracking money in spreadsheets or WhatsApp chats**, Fairshare makes your group expenses **fair, optimized, and frictionless**.
 
 ## 🔑 Features
 
@@ -50,7 +50,7 @@ Our **graph algorithm** minimizes the number of transactions required to settle 
 - Everyone stays updated with the transactions.
 
 3. **Simplify Settlements with Smart Splits**  
-   FairShare’s algorithm calculates the most efficient way to settle up.
+   Fairshare’s algorithm calculates the most efficient way to settle up.
 
 4. **Two-way payment confirmation**
    Payment is marked as done in the group for all only after both the end users acknowledge it.
