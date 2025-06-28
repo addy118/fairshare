@@ -1,8 +1,3 @@
-> [!WARNING]
-> The backend server is currently **offline for maintenance**.  
-> Only the **landing page** is live at the moment.  
-> Full functionality (expense splitting, groups, smart splits) will be restored soon. Stay tuned!
-
 # 💸 Fairshare – Expense Splitting Reimagined
 
 **Not your ordinary expense splitter.**  
