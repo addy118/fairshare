@@ -16,6 +16,8 @@ import Loading from "./Loading";
 import { toast } from "sonner";
 import api from "@/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "@clerk/clerk-react";
+import formatUser from "@/utils/formatUser";
 
 export default function NewGroupDialog({
   newMemberOpen,
@@ -24,6 +26,8 @@ export default function NewGroupDialog({
   setNewMembers,
   groupId,
 }) {
+  const { user: clerkUser } = useUser();
+  const currUser = formatUser(clerkUser);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -32,6 +36,12 @@ export default function NewGroupDialog({
 
     if (newMembers.length === 0) {
       toast.success("Please add at least one member to the group.");
+      return;
+    }
+
+    if (newMembers.find(newUser => newUser.username === currUser.username)) {
+      console.log( )
+      toast.error("You don't need to add yourself.");
       return;
     }
 

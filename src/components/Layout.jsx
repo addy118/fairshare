@@ -64,7 +64,7 @@ export default function Layout() {
       return;
     }
 
-    if (newMembers.some((member) => member.id === user.id)) {
+    if (newMembers.some((member) => member.username === user.username)) {
       toast.error("You don't have to add yourself to the group.");
       return;
     }
@@ -79,11 +79,12 @@ export default function Layout() {
       setLoading(true);
       const groupRes = await api.post(`/grp/new`, { name: newGroupName });
 
-      for (const user of updatedUsers) {
-        await api.post(`/grp/${groupRes.data.group.id}/member/new`, {
-          username: user.username,
-        });
-      }
+      console.log("api route hit");
+      // for (const user of updatedUsers) {
+      //   await api.post(`/grp/${groupRes.data.group.id}/member/new`, {
+      //     username: user.username,
+      //   });
+      // }
 
       setNewGroupOpen(false);
       setNewGroupName("");
