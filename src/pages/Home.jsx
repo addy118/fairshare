@@ -64,7 +64,7 @@ export default function Home() {
         <>
           <Card className="glass-dark mb-6 rounded-sm shadow-lg sm:mb-8">
             <CardContent className="p-4 sm:p-6">
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center flex-wrap justify-between gap-4">
                 {/* user details */}
                 <div className="flex items-center gap-4 sm:items-center">
                   <Avatar className="h-16 w-16 border border-[#00a2ff]/30 sm:h-20 sm:w-20">
@@ -79,12 +79,14 @@ export default function Home() {
                     </AvatarFallback>
                   </Avatar>
 
+                  {/* user info */}
                   <div className="text-left">
                     <h1 className="gradient-text text-xl font-bold sm:text-2xl">
                       {user.name}
                     </h1>
+
                     <div className="flex items-center gap-2 text-sm text-white sm:text-base">
-                      {(upi && <div className="text-[#d3d3d3]">{upi}</div>) || (
+                      {(upi && <div className="text-gray-400">{upi}</div>) || (
                         <div
                           className="flex cursor-pointer items-center justify-between gap-1 text-sm text-gray-300 sm:text-base"
                           onClick={() => {
@@ -99,7 +101,7 @@ export default function Home() {
                           onClick={() => {
                             navigate("/upi");
                           }}
-                          size="16"
+                          size="14"
                           color="#adadad"
                           className="cursor-pointer"
                         />
@@ -107,14 +109,14 @@ export default function Home() {
                     </div>
 
                     <p className="text-sm text-gray-300 sm:text-base">
-                      {user.username}
+                      <span className=" text-gray-400">@</span>{user.username}
                     </p>
                   </div>
                 </div>
 
                 {/* QR Code */}
                 {upi && (
-                  <div className="sm:block sm:space-y-2">
+                  <div className="hidden sm:block sm:space-y-2">
                     <QRCodeSVG
                       value={`upi://pay?pa=${upi}&pn=${encodeURIComponent(user.name)}&cu=INR`}
                       size={90}
