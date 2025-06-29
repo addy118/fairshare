@@ -18,8 +18,8 @@ import {
   useGetGroupSettlementsQuery,
   useGetGroupHistoryQuery,
 } from "@/store/api";
-import NewGroupDialog from "@/components/AddMemberDialog";
 import { toast } from "sonner";
+import NewMemberDialog from "@/components/AddMemberDialog";
 
 export default function GroupPage() {
   const navigate = useNavigate();
@@ -134,7 +134,7 @@ export default function GroupPage() {
             </Button>
 
             <div className="flex-1 lg:flex-none">
-              <NewGroupDialog
+              <NewMemberDialog
                 newMemberOpen={newMemberOpen}
                 setNewMemberOpen={setNewMemberOpen}
                 newMembers={newMembers}
@@ -152,7 +152,7 @@ export default function GroupPage() {
               {isLoading ? (
                 <Loading action="Leaving" item="group" />
               ) : (
-                "Leave Group"
+                "Leave"
               )}
             </Button>
           </div>

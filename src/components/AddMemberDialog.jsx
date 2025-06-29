@@ -19,12 +19,13 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import formatUser from "@/utils/formatUser";
 
-export default function NewGroupDialog({
+export default function NewMemberDialog({
   newMemberOpen,
   setNewMemberOpen,
   newMembers,
   setNewMembers,
   groupId,
+  label = "Member"
 }) {
   const { user: clerkUser } = useUser();
   const currUser = formatUser(clerkUser);
@@ -88,7 +89,7 @@ export default function NewGroupDialog({
           className="h-8 w-full rounded-sm text-xs lg:h-10 lg:w-auto lg:text-base"
         >
           <Plus className="h-4 w-4" />
-          New Member
+          {label}
         </Button>
       </DialogTrigger>
       <DialogContent className="border border-gray-700 bg-gray-900">
