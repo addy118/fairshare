@@ -127,9 +127,9 @@ export default function GroupPage() {
             <Button
               variant="outline"
               onClick={() => navigate(`/groups/${groupId}/expense/new`)}
-              className="h-8 flex-1 rounded-sm border-gray-700 text-xs hover:bg-gray-700/70 hover:text-[#00bcff] lg:h-10 lg:flex-none lg:text-base"
+              className="flex h-8 flex-1 items-center gap-1 rounded-sm border-gray-700 text-xs hover:bg-gray-700/70 hover:text-[#00bcff] lg:h-10 lg:flex-none lg:text-base"
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-3 w-3" />
               Expense
             </Button>
 
@@ -146,14 +146,10 @@ export default function GroupPage() {
             <Button
               variant="destructive"
               onClick={handleLeaveGroup}
-              className="h-8 flex-1 rounded-sm text-xs lg:h-10 lg:flex-none lg:text-base"
+              className="flex h-8 flex-1 items-center gap-1 rounded-sm text-xs lg:h-10 lg:flex-none lg:text-base"
             >
-              <Trash className="h-4 w-4" />
-              {isLoading ? (
-                <Loading action="Leaving" item="group" />
-              ) : (
-                "Leave"
-              )}
+              <Trash className="h-3 w-3" />
+              {isLoading ? <Loading action="Leaving" item="" /> : "Leave"}
             </Button>
           </div>
         </div>
