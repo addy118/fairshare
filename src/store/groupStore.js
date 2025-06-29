@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fsApi } from "../api/apiSlice";
+import { fsApi } from "./api";
 
 const initialState = {
   currentGroup: null,

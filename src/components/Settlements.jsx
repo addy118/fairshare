@@ -12,7 +12,7 @@ import {
   useSettlePaymentMutation,
   useConfirmSettlementMutation,
   useRemindSettlementMutation,
-} from "@/store/api/apiSlice";
+} from "@/store/api";
 import {
   Dialog,
   DialogContent,
@@ -22,7 +22,7 @@ import {
 } from "./ui/dialog";
 import { isMobile } from "react-device-detect";
 import { QRCodeSVG } from "qrcode.react";
-import { selectCurrentGroup } from "@/store/slices/groupSlice";
+import { selectCurrentGroup } from "@/store/groupStore";
 
 export default function Settlements() {
   const { user: clerkUser } = useUser();

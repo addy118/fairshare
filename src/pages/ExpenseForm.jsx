@@ -22,7 +22,7 @@ import Loading from "@/components/Loading";
 import {
   useGetGroupInfoQuery,
   useCreateExpenseMutation,
-} from "@/store/api/apiSlice";
+} from "@/store/api";
 import { toast } from "sonner";
 
 export default function ExpenseForm() {

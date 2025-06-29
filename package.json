@@ -10,7 +10,8 @@
     "lint:fix": "eslint --fix",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "svg": "npx prettier --write 'file/path' --parser html",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ngrok": "ngrok http --hostname=uncommon-nationally-antelope.ngrok-free.app 3000"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.31.8",

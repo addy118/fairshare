@@ -79,12 +79,12 @@ export default function Layout() {
       setLoading(true);
       const groupRes = await api.post(`/grp/new`, { name: newGroupName });
 
-      console.log("api route hit");
-      // for (const user of updatedUsers) {
-      //   await api.post(`/grp/${groupRes.data.group.id}/member/new`, {
-      //     username: user.username,
-      //   });
-      // }
+      // console.log("api route hit");
+      for (const user of updatedUsers) {
+        await api.post(`/grp/${groupRes.data.group.id}/member/new`, {
+          username: user.username,
+        });
+      }
 
       setNewGroupOpen(false);
       setNewGroupName("");

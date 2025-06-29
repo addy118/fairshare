@@ -15,8 +15,8 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
-import { selectCurrentGroup } from "@/store/slices/groupSlice";
-import { useGetGroupHistoryQuery } from "@/store/api/apiSlice";
+import { selectCurrentGroup } from "@/store/groupStore";
+import { useGetGroupHistoryQuery } from "@/store/api";
 import { useParams } from "react-router-dom";
 
 export default function PaymentHistory() {

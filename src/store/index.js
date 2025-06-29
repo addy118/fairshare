@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { fsApi } from "./api/apiSlice";
-import groupReducer from "./slices/groupSlice";
+import { fsApi } from "./api";
+import groupReducer from "./groupStore";
 
 export const store = configureStore({
   reducer: {

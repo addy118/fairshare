@@ -17,7 +17,7 @@ import {
   useGetGroupExpensesQuery,
   useGetGroupSettlementsQuery,
   useGetGroupHistoryQuery,
-} from "@/store/api/apiSlice";
+} from "@/store/api";
 import NewGroupDialog from "@/components/AddMemberDialog";
 import { toast } from "sonner";
 

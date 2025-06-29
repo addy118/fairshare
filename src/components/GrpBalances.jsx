@@ -8,8 +8,8 @@ import {
 } from "./ui/card";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { useSelector } from "react-redux";
-import { selectCurrentGroup } from "@/store/slices/groupSlice";
-import { useGetGroupBalancesQuery } from "@/store/api/apiSlice";
+import { selectCurrentGroup } from "@/store/groupStore";
+import { useGetGroupBalancesQuery } from "@/store/api";
 import { useParams } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import formatUser from "@/utils/formatUser";
