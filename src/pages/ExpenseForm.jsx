@@ -222,7 +222,7 @@ export default function ExpenseForm() {
                     onClick={addAll}
                     className="w-full flex-1 text-xs sm:w-auto sm:flex-none sm:text-sm"
                   >
-                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Add All
+                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> All
                     Members
                   </Button>
 
@@ -233,8 +233,7 @@ export default function ExpenseForm() {
                     onClick={addPayer}
                     className="w-full flex-1 text-xs sm:w-auto sm:flex-none sm:text-sm"
                   >
-                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Add
-                    Participant
+                    <Plus className="mr-1 h-3 w-3 sm:h-4 sm:w-4" /> Participant
                   </Button>
                 </div>
               </div>
@@ -245,7 +244,7 @@ export default function ExpenseForm() {
                   className="flex items-end gap-2 sm:items-end sm:gap-2"
                 >
                   {/* participant */}
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0 flex-3/4">
                     <Label
                       className="mb-2 block text-sm text-white sm:text-base"
                       htmlFor={`payer-${payer.id}`}
@@ -283,7 +282,7 @@ export default function ExpenseForm() {
                   </div>
 
                   {/* amount */}
-                  <div className="w-24 sm:flex-1">
+                  <div className="min-w-12  flex-1/4">
                     <Label
                       className="mb-2 block text-sm text-white sm:text-base"
                       htmlFor={`amount-${payer.id}`}
