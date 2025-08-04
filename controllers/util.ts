@@ -108,25 +108,25 @@ function calculateSplits(balance: Record<string, number>): AdjList {
   const debtors: Participant[] = [];
 
   for (const [person, amount] of Object.entries(balance)) {
-    // Handle floating point precision8999
+    // handle floating point precision8999
     const roundedAmount = Math.round(amount * 100) / 100;
 
     if (amount > 0) {
       creditors.push({ name: person, amount: roundedAmount });
     } else if (amount < 0) {
-      debtors.push({ name: person, amount: -roundedAmount }); // Convert to positive for ease of calculation
+      debtors.push({ name: person, amount: -roundedAmount }); // convert to positive for ease of calculation
     }
   }
 
-  // step 2: Sort both arrays by amount in descending order
+  // step 2: sort both arrays by amount in descending order
   creditors.sort((a, b) => b.amount - a.amount);
   debtors.sort((a, b) => b.amount - a.amount);
 
   const splits: AdjList = [];
 
-  // Greedy approach: match largest debtor with largest creditor first
-  let i = 0; // Pointer for debtors
-  let j = 0; // Pointer for creditors
+  // greedy approach: match largest debtor with largest creditor first
+  let i = 0; // pointer for debtors
+  let j = 0; // pointer for creditors
 
   while (i < debtors.length && j < creditors.length) {
     const debtor = debtors[i];
@@ -134,21 +134,21 @@ function calculateSplits(balance: Record<string, number>): AdjList {
 
     if (!debtor || !creditor) throw new Error("Undefined debtor or creditor.");
 
-    // Calculate the minimum of what is owed and what is to be received
+    // calculate the minimum of what is owed and what is to be received
     const transferAmount = Math.min(debtor.amount, creditor.amount);
 
-    // Create a transaction
+    // create a transaction
     if (transferAmount > 0) {
       const roundedTransfer = Math.round(transferAmount * 100) / 100;
       splits.push([debtor.name, creditor.name, roundedTransfer]);
     }
 
-    // Update remaining balances
+    // update remaining balances
     debtor.amount -= transferAmount;
     creditor.amount -= transferAmount;
 
-    // Move to next person if balance is settled
-    if (debtor.amount < 0.01) i++; // Using small threshold for floating point comparison
+    // move to next person if balance is settled
+    if (debtor.amount < 0.01) i++; // using small threshold for floating point comparison
     if (creditor.amount < 0.01) j++;
   }
 
