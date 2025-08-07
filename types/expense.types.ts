@@ -5,6 +5,7 @@ export interface RawExpense {
   groupId: number;
   totalAmt: number;
   payers: RawPayer[];
+  balance?: Record<string, number>;
 }
 
 export interface RawPayer {

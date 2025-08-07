@@ -2,7 +2,7 @@ import { RawExpense } from "types";
 
 export const expenses: RawExpense[] = [
   {
-    name: "Vacation Booking",
+    name: "Expense 1: Vacation Booking",
     groupId: 1,
     totalAmt: 600,
     payers: [
@@ -12,9 +12,10 @@ export const expenses: RawExpense[] = [
       { name: "D", payerId: "D", amount: 0 },
       { name: "E", payerId: "E", amount: 0 },
     ],
+    balance: { A: 180, B: 130, C: -70, D: -120, E: -120 },
   },
   {
-    name: "Project Supplies",
+    name: "Expense 2: Project Supplies",
     groupId: 1,
     totalAmt: 400,
     payers: [
@@ -23,9 +24,10 @@ export const expenses: RawExpense[] = [
       { name: "B", payerId: "B", amount: 0 },
       { name: "E", payerId: "E", amount: 0 },
     ],
+    balance: { C: 100, D: 100, B: -100, E: -100 },
   },
   {
-    name: "Weekend Trip",
+    name: "Expense 3: Weekend Trip",
     groupId: 1,
     totalAmt: 500,
     payers: [
@@ -34,27 +36,18 @@ export const expenses: RawExpense[] = [
       { name: "B", payerId: "B", amount: 0 },
       { name: "C", payerId: "C", amount: 0 },
     ],
+    balance: { E: 275, A: -25, B: -125, C: -125 },
   },
   {
-    name: "Quick Lunch",
+    name: "Expense 4: Breakfast",
     groupId: 1,
     totalAmt: 30,
     payers: [
       { name: "B", payerId: "B", amount: 30 },
       { name: "C", payerId: "C", amount: 0 },
     ],
+    balance: { B: 15, C: -15 },
   },
-];
-
-const balances = [
-  // exp 1
-  { A: 180, B: 130, C: -70, D: -120, E: -120 },
-  // exp 2
-  { C: 100, D: 100, B: -100, E: -100 },
-  // exp 3
-  { E: 275, A: -25, B: -125, C: -125 },
-  // exp 4
-  { B: 15, C: -15 },
 ];
 
 // total = 10
