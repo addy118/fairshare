@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  fs-server:
+    volumes:
+      - ./fair-share-server:/app
+      - /app/node_modules
+    command: npm run dev
+    env_file:
+      - ./.env.dev
+
+  fs-client:
+    volumes:
+      - ./fair-share-client:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    build:
+      context: ./fair-share-client
+      args: []
+    env_file:
+      - ./.env.dev
+
+  fs-db:
+    env_file:
+      - ./.env.dev

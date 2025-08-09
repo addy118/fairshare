@@ -1,23 +1,33 @@
 services:
-  server:
-    build: ./server
+  fs-server:
+    build: ./fair-share-server
     ports:
       - "3000:3000"
     environment:
+      - PORT=${PORT}
       - DATABASE_URL=${DATABASE_URL}
+      - CLERK_PUBLISHABLE_KEY=${CLERK_PUBLISHABLE_KEY}
+      - CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
+      - CLERK_WEBHOOK_SIGNING_SECRET=${CLERK_WEBHOOK_SIGNING_SECRET}
+      - APP_PASSWORD=${APP_PASSWORD}
     depends_on:
-      - db
+      fs-db:
+        condition: service_healthy
+    restart: unless-stopped
 
-  client:
-    build: ./client
+  fs-client:
+    build:
+      context: ./fair-share-client
+      args:
+        - VITE_BASE_URL=${VITE_BASE_URL}
+        - VITE_CLERK_PUBLISHABLE_KEY=${VITE_CLERK_PUBLISHABLE_KEY}
+        - CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
     ports:
       - 8080:80
-    environment:
-      - VITE_API_URL=http://localhost:3000
     depends_on:
-      - server
+      - fs-server
 
-  db:
+  fs-db:
     image: postgres:17-alpine
     restart: always
     environment:
@@ -25,7 +35,12 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - fs-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  db-data:
+  fs-data:
