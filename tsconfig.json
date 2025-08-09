@@ -12,6 +12,7 @@
     "module": "nodenext",
     "baseUrl": "./",
     "rootDir": "./",
+    "outDir": "./dist",
     "removeComments": true,
     "forceConsistentCasingInFileNames": true,
 
