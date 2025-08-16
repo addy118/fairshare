@@ -103,9 +103,9 @@ First, let's get the backend server running.
 
 1.  Navigate to the server directory:
     ```bash
-    cd fair-share-server
+    cd server
     ```
-2.  Create a new file named `.env` in the `fair-share-server` directory.
+2.  Create a new file named `.env` in the `server` directory.
 3.  Copy the following content into the `.env` file and replace the placeholders with your actual credentials.
 
     ```env
@@ -147,9 +147,9 @@ Now, let's get the frontend client running.
 
 1.  In a new terminal, navigate to the client directory:
     ```bash
-    cd /fair-share-client
+    cd /client
     ```
-2.  Create a new file named `.env` in the `fair-share-client` directory.
+2.  Create a new file named `.env` in the `client` directory.
 3.  Copy the following content into the file. The Vite publishable key is safe to expose on the client-side.
 
     ```env

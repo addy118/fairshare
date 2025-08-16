@@ -1,6 +1,6 @@
 services:
   fs-server:
-    build: ./fair-share-server
+    build: ./server
     ports:
       - "3000:3000"
     environment:
@@ -17,7 +17,7 @@ services:
 
   fs-client:
     build:
-      context: ./fair-share-client
+      context: ./client
       args:
         - VITE_BASE_URL=${VITE_BASE_URL}
         - VITE_CLERK_PUBLISHABLE_KEY=${VITE_CLERK_PUBLISHABLE_KEY}

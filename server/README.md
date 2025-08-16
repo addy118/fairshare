@@ -6,9 +6,9 @@ This template provides a ready-to-use authentication system with Prisma and Node
 
 1.  Navigate to the server directory:
     ```bash
-    cd fair-share-server
+    cd server
     ```
-2.  Create a new file named `.env` in the `fair-share-server` directory.
+2.  Create a new file named `.env` in the `server` directory.
 3.  Copy the following content into the `.env` file and replace the placeholders with your actual credentials.
 
     ```env
