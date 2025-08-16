@@ -2,45 +2,43 @@
 
 This template provides a ready-to-use authentication system with Prisma and Node.js.
 
-## 🚀 Installation
+## Environment Variables
 
-1. Clone the repository:
+1.  Navigate to the server directory:
+    ```bash
+    cd fair-share-server
+    ```
+2.  Create a new file named `.env` in the `fair-share-server` directory.
+3.  Copy the following content into the `.env` file and replace the placeholders with your actual credentials.
 
-   ```sh
-   git clone <repo-url>
-   cd <repo-folder>
-   ```
+    ```env
+    # Clerk Authentication - Get these from your Clerk Dashboard
+    CLERK_PUBLISHABLE_KEY=pk_test_your_new_clerk_publishable_key
+    CLERK_SECRET_KEY=sk_test_your_new_clerk_secret_key
+    CLERK_WEBHOOK_SIGNING_SECRET=whsec_your_new_webhook_signing_secret
 
-2. **Update the package name**:
+    # PostgreSQL Database Connection
+    # Make sure your username, password, and database name are correct
+    DATABASE_URL="postgresql://addy:lumosaddy@localhost:5432/fairshare"
 
-   - Open `package.json` and `package-lock.json`.
-   - Change the `"name"` field to your actual project name.
+    # Application Port
+    PORT=3000
 
-3. Install dependencies:
+    # A custom secret password for your mail service (google)
+    APP_PASSWORD=your_app_specific_password
+    ```
 
-   ```sh
-   npm i
-   ```
+## Installation and Running
 
-4. Create a `.env` file in the root directory and add the following variables:
-
-   ```env
-   PORT=<server port address>
-
-   DATABASE_URL="postgresql://<psql-username>:<password>@<host>:<port>/<db-name>?schema=public"
-
-   ACCESS_TOKEN=<your access token secret>
-   REFRESH_TOKEN=<your refresh token secret>
-   ```
-
-5. Modify database if needed then apply the migrations:
-   ```sh
-   npx prisma migrate dev --name basic_auth_init
-   ```
-6. Start the server:
-   ```sh
-   nodemon server.js
-   ```
+1.  Install the required dependencies:
+    ```bash
+    npm install
+    ```
+2.  Start the development server:
+    ```bash
+    npm run dev
+    ```
+    The server should now be running on `http://localhost:3000`.
 
 ## 🛠️ Testing Authentication
 
