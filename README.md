@@ -83,16 +83,6 @@ Follow these instructions to get a local copy of the project up and running for 
 - **Docker** (Optional)
 - **Clerk** account for authentication keys.
 
-### Installation
-
-Follow these instructions to get a local copy of the project up and running for development and testing purposes.
-
-### Prerequisites
-
-- **Node.js** (v16 or newer)
-- **npm** or **Yarn**
-- **PostgreSQL** database running locally.
-
 ---
 
 ### 1. Server Setup
