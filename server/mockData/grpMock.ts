@@ -1,0 +1,210 @@
+const group = {
+  expenses: [
+    {
+      id: 1,
+      name: "exp1",
+      totalAmt: 250,
+      payers: [
+        { payer: { id: 4, name: "Dumbledore" }, paidAmt: 50 },
+        { payer: { id: 3, name: "Hagrid" }, paidAmt: 0 },
+        { payer: { id: 2, name: "Hermione" }, paidAmt: 200 },
+      ],
+      createdAt: "2025-04-08T03:31:34.395Z",
+    },
+    {
+      id: 2,
+      name: "exp2",
+      totalAmt: 50,
+      payers: [
+        { payer: { id: 3, name: "Hagrid" }, paidAmt: 50 },
+        { payer: { id: 2, name: "Hermione" }, paidAmt: 0 },
+      ],
+      createdAt: "2025-04-08T03:31:51.221Z",
+    },
+    {
+      id: 3,
+      name: "exp3",
+      totalAmt: 290,
+      payers: [
+        { payer: { id: 1, name: "Harry" }, paidAmt: 60 },
+        { payer: { id: 5, name: "Voldemort" }, paidAmt: 100 },
+        { payer: { id: 4, name: "Dumbledore" }, paidAmt: 80 },
+        { payer: { id: 3, name: "Hagrid" }, paidAmt: 40 },
+        { payer: { id: 2, name: "Hermione" }, paidAmt: 10 },
+      ],
+      createdAt: "2025-04-08T03:32:55.848Z",
+    },
+    {
+      id: 4,
+      name: "exp4",
+      totalAmt: 60,
+      payers: [
+        { payer: { id: 1, name: "Harry" }, paidAmt: 10 },
+        { payer: { id: 4, name: "Dumbledore" }, paidAmt: 20 },
+        { payer: { id: 3, name: "Hagrid" }, paidAmt: 30 },
+      ],
+      createdAt: "2025-04-08T03:33:11.284Z",
+    },
+  ],
+  splits: [
+    {
+      id: 21,
+      mainGroup: { id: 1, name: "Hogwarts" },
+      debtor: { id: 3, name: "Hagrid" },
+      creditor: { id: 2, name: "Hermione" },
+      amount: 43,
+      settled: false,
+      createdAt: "2025-04-09T07:35:37.985Z",
+      updatedAt: "2025-04-09T07:35:37.985Z",
+    },
+    {
+      id: 22,
+      mainGroup: { id: 1, name: "Hogwarts" },
+      debtor: { id: 3, name: "Hagrid" },
+      creditor: { id: 5, name: "Voldemort" },
+      amount: 23,
+      settled: false,
+      createdAt: "2025-04-09T07:35:37.985Z",
+      updatedAt: "2025-04-09T07:35:37.985Z",
+    },
+    {
+      id: 23,
+      mainGroup: { id: 1, name: "Hogwarts" },
+      debtor: { id: 4, name: "Dumbledore" },
+      creditor: { id: 5, name: "Voldemort" },
+      amount: 11,
+      settled: false,
+      createdAt: "2025-04-09T07:35:37.985Z",
+      updatedAt: "2025-04-09T07:35:37.985Z",
+    },
+    {
+      id: 24,
+      mainGroup: { id: 1, name: "Hogwarts" },
+      debtor: { id: 1, name: "Harry" },
+      creditor: { id: 5, name: "Voldemort" },
+      amount: 8,
+      settled: false,
+      createdAt: "2025-04-09T07:35:37.985Z",
+      updatedAt: "2025-04-09T07:35:37.985Z",
+    },
+  ],
+};
+
+const balance = [
+  { user: { id: 1, name: "Harry" }, amount: -8 },
+  { user: { id: 2, name: "Hermione" }, amount: 43 },
+  { user: { id: 3, name: "Hagrid" }, amount: -66 },
+  { user: { id: 4, name: "Dumbledore" }, amount: -11 },
+  { user: { id: 5, name: "Voldemort" }, amount: 42 },
+];
+
+const history = [
+  {
+    type: "expense",
+    timestamp: "2025-04-08T03:31:34.395Z",
+    id: 1,
+    name: "exp1",
+    totalAmt: 250,
+    createdAt: "2025-04-08T03:31:34.395Z",
+    payers: [
+      { payer: { id: 4, name: "Dumbledore" }, paidAmt: 50 },
+      { payer: { id: 3, name: "Hagrid" }, paidAmt: 0 },
+      { payer: { id: 2, name: "Hermione" }, paidAmt: 200 },
+    ],
+    balance: [
+      { user: { id: 1, name: "Harry" }, amount: 0 },
+      { user: { id: 2, name: "Hermione" }, amount: 117 },
+      { user: { id: 3, name: "Hagrid" }, amount: -83 },
+      { user: { id: 4, name: "Dumbledore" }, amount: -33 },
+      { user: { id: 5, name: "Voldemort" }, amount: 0 },
+    ],
+  },
+  {
+    type: "expense",
+    timestamp: "2025-04-08T03:31:51.221Z",
+    id: 2,
+    name: "exp2",
+    totalAmt: 50,
+    createdAt: "2025-04-08T03:31:51.221Z",
+    payers: [
+      { payer: { id: 3, name: "Hagrid" }, paidAmt: 50 },
+      { payer: { id: 2, name: "Hermione" }, paidAmt: 0 },
+    ],
+    balance: [
+      { user: { id: 1, name: "Harry" }, amount: 0 },
+      { user: { id: 2, name: "Hermione" }, amount: 92 },
+      { user: { id: 3, name: "Hagrid" }, amount: -58 },
+      { user: { id: 4, name: "Dumbledore" }, amount: -33 },
+      { user: { id: 5, name: "Voldemort" }, amount: 0 },
+    ],
+  },
+  {
+    type: "expense",
+    timestamp: "2025-04-08T03:32:55.848Z",
+    id: 3,
+    name: "exp3",
+    totalAmt: 290,
+    createdAt: "2025-04-08T03:32:55.848Z",
+    payers: [
+      { payer: { id: 1, name: "Harry" }, paidAmt: 60 },
+      { payer: { id: 5, name: "Voldemort" }, paidAmt: 100 },
+      { payer: { id: 4, name: "Dumbledore" }, paidAmt: 80 },
+      { payer: { id: 3, name: "Hagrid" }, paidAmt: 40 },
+      { payer: { id: 2, name: "Hermione" }, paidAmt: 10 },
+    ],
+    balance: [
+      { user: { id: 1, name: "Harry" }, amount: 2 },
+      { user: { id: 2, name: "Hermione" }, amount: 44 },
+      { user: { id: 3, name: "Hagrid" }, amount: -76 },
+      { user: { id: 4, name: "Dumbledore" }, amount: -11 },
+      { user: { id: 5, name: "Voldemort" }, amount: 42 },
+    ],
+  },
+  {
+    type: "expense",
+    timestamp: "2025-04-08T03:33:11.284Z",
+    id: 4,
+    name: "exp4",
+    totalAmt: 60,
+    createdAt: "2025-04-08T03:33:11.284Z",
+    payers: [
+      { payer: { id: 1, name: "Harry" }, paidAmt: 10 },
+      { payer: { id: 4, name: "Dumbledore" }, paidAmt: 20 },
+      { payer: { id: 3, name: "Hagrid" }, paidAmt: 30 },
+    ],
+    balance: [
+      { user: { id: 1, name: "Harry" }, amount: -8 },
+      { user: { id: 2, name: "Hermione" }, amount: 44 },
+      { user: { id: 3, name: "Hagrid" }, amount: -66 },
+      { user: { id: 4, name: "Dumbledore" }, amount: -11 },
+      { user: { id: 5, name: "Voldemort" }, amount: 42 },
+    ],
+  },
+];
+
+const splits = [
+  {
+    id: 21,
+    debtor: { id: 3, name: "Hagrid" },
+    creditor: { id: 2, name: "Hermione" },
+    amount: 43,
+  },
+  {
+    id: 22,
+    debtor: { id: 3, name: "Hagrid" },
+    creditor: { id: 5, name: "Voldemort" },
+    amount: 23,
+  },
+  {
+    id: 23,
+    debtor: { id: 4, name: "Dumbledore" },
+    creditor: { id: 5, name: "Voldemort" },
+    amount: 11,
+  },
+  {
+    id: 24,
+    debtor: { id: 1, name: "Harry" },
+    creditor: { id: 5, name: "Voldemort" },
+    amount: 8,
+  },
+];

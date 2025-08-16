@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id
+  name      String?  @db.VarChar(255)
+  username  String?  @unique @db.VarChar(255)
+  email     String?
+  upi       String?
+  pfp       String?
+  createdAt DateTime
+  updatedAt DateTime
+  groups    Member[]
+  debtor    Split[]  @relation(name: "Debt")
+  creditor  Split[]  @relation(name: "Credit")
+  expenses  Payer[]
+}
+
+model Member {
+  member   User     @relation(fields: [memberId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  memberId String
+  group    Group    @relation(fields: [groupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  groupId  Int
+  joinedAt DateTime @default(now())
+
+  @@id([groupId, memberId])
+}
+
+model Payer {
+  payer     User    @relation(fields: [payerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  payerId   String
+  expense   Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  expenseId Int
+  paidAmt   Int
+
+  @@id([expenseId, payerId])
+}
+
+model Group {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  members   Member[]
+  expenses  Expense[]
+  splits    Split[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Expense {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  mainGroup Group    @relation(fields: [groupId], references: [id])
+  groupId   Int
+  payers    Payer[]
+  totalAmt  Int
+  splits    Split[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Split {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(255)
+  mainGroup  Group    @relation(fields: [groupId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  groupId    Int
+  expense    Expense? @relation(fields: [expenseId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  expenseId  Int?
+  debtor     User     @relation(name: "Debt", fields: [debtorId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  debtorId   String
+  creditor   User     @relation(name: "Credit", fields: [creditorId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  creditorId String
+  amount     Int
+  settled    Boolean  @default(false)
+  confirmed  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
