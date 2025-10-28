@@ -27,12 +27,4 @@ userRouter.put("/:userId/upi", putUserUpi);
 // userRouter.post("/:userId/upi", postUserUpi);
 userRouter.post("/:userId/groups", getUserGroups);
 
-userRouter.use(
-  (error: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error(error.message);
-    console.error(error.stack);
-    res.send("Something broke in user routes!");
-  }
-);
-
 export default userRouter;

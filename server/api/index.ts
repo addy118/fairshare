@@ -8,6 +8,7 @@ import expRouter from "./routes/expense.routes";
 import grpRouter from "./routes/grp.routes";
 import { clerkMiddleware } from "@clerk/express";
 import clerkRouter from "./routes/clerk.routes";
+import { globalHandler } from "../middleware/errorHandler";
 
 const app = express();
 const { PORT } = process.env;
@@ -45,6 +46,8 @@ app.use("/exp", expRouter);
 app.get("/", (req: Request, res: Response) => {
   res.json("Welcome to our app Fairshare! You are an unauthenticated user!");
 });
+
+app.use(globalHandler);
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(error.message);

@@ -31,12 +31,4 @@ grpRouter.post("/:groupId/history/export", postExportGrpHistory);
 grpRouter.delete("/:groupId/member/:memberId", deleteMember);
 grpRouter.delete("/:groupId/delete", postDelGrp);
 
-grpRouter.use(
-  (error: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error(error.message);
-    console.error(error.stack);
-    res.send("Something broke in group routes");
-  }
-);
-
 export default grpRouter;

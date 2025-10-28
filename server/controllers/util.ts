@@ -176,43 +176,6 @@ function mergeChrono(
   });
 }
 
-// export const getExp = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     cb();
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       console.error("Error in getExp(): ", error.message);
-//       console.error(error.stack);
-//       res
-//         .status(400)
-//         .json({ message: error.message || "Failed to retrieve expense" });
-//     }
-//   }
-// };
-
-type Controller = (req: Request, res: Response) => Promise<void>;
-
-function catchController(cb: Controller) {
-  return async (req: Request, res: Response): Promise<void> => {
-    try {
-      await cb(req, res);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.log(`Error in ${cb.name}(): `, error.message);
-        console.log(error.stack);
-        res
-          .status(500)
-          .json({ message: error.message || "Failed to retrieve expense" });
-      } else {
-        console.log(`Unknown error caught in ${cb.name}: `, error);
-        res
-          .status(500)
-          .json({ message: "An unknown and unexpected server error occured" });
-      }
-    }
-  };
-}
-
 export {
   createBalance,
   calculateSplits,

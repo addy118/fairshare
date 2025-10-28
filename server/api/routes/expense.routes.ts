@@ -21,12 +21,4 @@ expRouter.put("/:splitId/settle", settleSplit);
 expRouter.put("/:splitId/confirm", confirmSplit);
 expRouter.put("/:splitId/not-confirm", notConfirmSplit);
 
-expRouter.use(
-  (error: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error(error.message);
-    console.error(error.stack);
-    res.send("Something broke in expense routes");
-  }
-);
-
 export default expRouter;
