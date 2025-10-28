@@ -30,7 +30,7 @@ export default function Loading({
 
   return (
     <div
-      className={`flex h-full items-center justify-center gap-2 bg-[#111828] text-[#4cdede] ${className}`}
+      className={`flex h-full items-center justify-center gap-2 text-[#4cdede] ${className}`}
     >
       <span className="text-gray-300">
         {action} {item}

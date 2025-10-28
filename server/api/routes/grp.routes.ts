@@ -11,6 +11,7 @@ import {
   postMember,
   deleteMember,
   getGrpInfo,
+  postExportGrpHistory,
 } from "../../controllers/grp.controller";
 const grpRouter = Router();
 
@@ -25,6 +26,7 @@ grpRouter.get("/:groupId/history", getGrpHistory);
 
 grpRouter.post("/new", postGrp);
 grpRouter.post("/:groupId/member/new", postMember);
+grpRouter.post("/:groupId/history/export", postExportGrpHistory);
 
 grpRouter.delete("/:groupId/member/:memberId", deleteMember);
 grpRouter.delete("/:groupId/delete", postDelGrp);

@@ -4,6 +4,85 @@ import Split from "../queries/Split";
 import User from "../queries/User";
 import { calculateSplits, mergeChrono, getGroupBalance } from "./util";
 import { SplitStd } from "../types";
+import puppeteer from "puppeteer";
+
+export const postExportGrpHistory = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { groupId, html, css } = req.body;
+
+    if (!html || !css) {
+      res.status(400).json({ message: "Missing HTML or CSS content" });
+      return;
+    }
+
+    let browser;
+    browser = await puppeteer.launch({
+      headless: true,
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+      ],
+    });
+
+    const page = await browser.newPage();
+    const fullHtml = `
+    <!DOCTYPE html>
+      <html lang="en" class="dark">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            ${css}
+            div, p, section {
+              page-break-inside: auto !important;
+            }
+
+            h1, h2, h3 {
+              page-break-after: avoid;
+            }
+          </style>
+        </head>
+        <body style="background: #09090b; padding: 1.5rem; min-height: 100vh; box-sizing: border-box;">
+          ${html}
+        </body>
+      </html>
+    `;
+    await page.setContent(fullHtml, { waitUntil: "networkidle0" });
+
+    await page.emulateMediaType("print");
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true, // important for your background colors
+      // margin: {
+      //   top: "20px",
+      //   bottom: "20px",
+      //   right: "20px",
+      //   left: "20px",
+      // },
+    });
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${groupId}-payment-history.pdf"`
+    );
+
+    res.status(200).end(pdfBuffer);
+    await browser.close();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error in postExportGrpHistory(): ", error.message);
+      console.error(error.stack);
+      res
+        .status(400)
+        .json({ message: error.message || "Failed to export history" });
+    }
+  }
+};
 
 export const postGrp = async (req: Request, res: Response): Promise<void> => {
   try {

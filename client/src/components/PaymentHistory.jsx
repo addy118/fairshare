@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentGroup } from "@/redux/groupSlice";
 import { useGetGroupHistoryQuery } from "@/redux/api";
 import { useParams } from "react-router-dom";
+import api from "@/axiosInstance";
 
 export default function PaymentHistory() {
   const { id: groupId } = useParams();
@@ -51,159 +52,105 @@ export default function PaymentHistory() {
 
   const handleExport = async () => {
     let originalExpandedState;
+    setIsExporting(true);
 
+    // Save the current expanded state to restore later
+    originalExpandedState = { ...expandedItems };
+
+    // Expand all items
+    setExpandedItems(
+      history.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
+    );
+
+    // Wait for state update and DOM rendering
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    if (!pdfRef.current) {
+      console.error("PDF container reference is null");
+      throw new Error("PDF container reference is null");
+    }
+
+    const htmlContent = pdfRef.current.innerHTML;
+
+    // const cssResponse = await fetch("/index.css");
+    // const cssContent = await cssResponse.text();
+    // 4. (NEW) Dynamically get all CSS
+    let cssContent = "";
     try {
-      setIsExporting(true);
-
-      // Save the current expanded state to restore later
-      originalExpandedState = { ...expandedItems };
-
-      // Expand all items
-      setExpandedItems(
-        history.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
+      // 4a. Get all <link rel="stylesheet"> tags
+      const stylesheets = Array.from(
+        document.querySelectorAll('link[rel="stylesheet"]')
       );
 
-      // Wait for state update and DOM rendering
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // 4b. Filter for local stylesheets (ignore external ones like Google Fonts)
+      const localStylesheets = stylesheets.filter(
+        (link) => link.href && !link.href.startsWith("http")
+      );
 
-      if (!pdfRef.current) {
-        console.error("PDF container reference is null");
-        throw new Error("PDF container reference is null");
-      }
+      // 4c. Fetch the text content of each local stylesheet
+      const cssPromises = localStylesheets.map((link) =>
+        fetch(link.href).then((res) => res.text())
+      );
 
-      // Add a temporary class to use basic colors instead of oklch
-      document.body.classList.add("pdf-export-mode");
+      // 4d. Wait for all fetches and join them
+      const cssStrings = await Promise.all(cssPromises);
+      cssContent = cssStrings.join("\n\n");
+    } catch (error) {
+      console.error("Could not fetch CSS:", error);
+    }
 
-      // Wait for styles to apply
-      await new Promise((resolve) => setTimeout(resolve, 100));
+    // 5. (NEW) Get all <style> tag content (for CSS-in-JS like Styled-Components)
+    const styleTags = Array.from(document.querySelectorAll("style"));
+    const styleContent = styleTags.map((style) => style.innerHTML).join("\n\n");
 
-      try {
-        // Create PDF with a specific page size and margins
-        const pdf = new jsPDF({
-          orientation: "portrait",
-          unit: "mm",
-          format: "a4",
-          putOnlyUsedFonts: true,
-          floatPrecision: 16,
-        });
+    // 6. Combine all CSS
+    const combinedCss = cssContent + "\n\n" + styleContent;
 
-        // Add a colored background to the entire PDF page (including margins)
-        pdf.setFillColor(17, 24, 39); // RGB values for #111827
-        pdf.rect(
-          0,
-          0,
-          pdf.internal.pageSize.getWidth(),
-          pdf.internal.pageSize.getHeight(),
-          "F"
-        );
-
-        const container = pdfRef.current;
-
-        // Generate canvas with simplified options
-        const canvas = await html2canvas(container, {
-          scale: 1.5,
-          useCORS: true,
-          backgroundColor: "#111827", // Dark background matching the UI
-          logging: false,
-          ignoreElements: (element) => {
-            return element.classList.contains("no-print");
-          },
-          onclone: (clonedDoc) => {
-            // Additional fixes for the cloned document
-            const clonedBody = clonedDoc.body;
-            clonedBody.classList.add("pdf-export-mode");
-
-            // Apply consistent styling to payment cards
-            const cards = clonedBody.querySelectorAll(".payment-card");
-            cards.forEach((card) => {
-              card.style.backgroundColor = "rgba(17, 24, 39, 0.8)";
-              card.style.borderColor = "rgba(55, 65, 81, 0.5)";
-              card.style.color = "#d1d5db";
-            });
-
-            // Remove any remaining problematic CSS properties
-            const elements = clonedBody.querySelectorAll("*");
-            elements.forEach((el) => {
-              const style = window.getComputedStyle(el);
-              Object.keys(style).forEach((key) => {
-                if (style[key] && style[key].includes("oklch")) {
-                  el.style[key] = "inherit";
-                }
-              });
-            });
-          },
-        });
-
-        // Get dimensions with margins
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-
-        // Define margins (in mm)
-        const margin = {
-          top: 15,
-          right: 15,
-          bottom: -15,
-          left: 15,
-        };
-
-        const contentWidth = pageWidth - margin.left - margin.right;
-        const contentHeight = pageHeight - margin.top - margin.bottom;
-
-        const imgWidth = contentWidth;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-        // Add image to PDF with margins
-        pdf.addImage(
-          canvas.toDataURL("image/png"),
-          "PNG",
-          margin.left,
-          margin.top,
-          imgWidth,
-          imgHeight
-        );
-
-        // If content is too tall, add more pages with proper margins
-        let heightLeft = imgHeight;
-        let position = 0;
-        heightLeft -= contentHeight;
-
-        while (heightLeft > 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
-          // Add background color to the new page too
-          pdf.setFillColor(17, 24, 39); // RGB values for #111827
-          pdf.rect(
-            0,
-            0,
-            pdf.internal.pageSize.getWidth(),
-            pdf.internal.pageSize.getHeight(),
-            "F"
-          );
-          pdf.addImage(
-            canvas.toDataURL("image/png"),
-            "PNG",
-            margin.left,
-            margin.top + position,
-            imgWidth,
-            imgHeight
-          );
-          heightLeft -= contentHeight;
+    try {
+      const response = await api.post(
+        `/grp/${groupId}/history/export`,
+        {
+          groupId,
+          html: htmlContent,
+          css: combinedCss,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+          responseType: "blob",
         }
+      );
 
-        // Save the PDF
-        pdf.save(`${group.name}_payment_history.pdf`);
-        toast.success("PDF export completed successfully");
-      } catch (innerError) {
-        console.error("Inner error during PDF generation:", innerError);
-        toast.error(`Failed to generate PDF: ${innerError.message}`);
-        throw innerError;
+      console.log(`Sent req to /grp/${groupId}/history/export`);
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "payment-history.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Error exporting PDF: ", err);
+
+      if (err.response && err.response.data.toString() === "[object Blob]") {
+        // the error response is a blob, let's read it as text
+        const errorData = await err.response.data.text();
+        try {
+          const errorJson = JSON.parse(errorData);
+          console.error("Server-side error message:", errorJson.message);
+          // here you can set an error toast: toast.error(errorJson.message)
+        } catch (e) {
+          console.error("Could not parse error blob:", errorData);
+        }
+      } else if (err.response) {
+        // it's a regular json error
+        console.error("Server-side error message:", err.response.data.message);
+      } else {
+        // this is the "Network Error"
+        console.error("Network Error, check server or CORS:", err.message);
       }
-    } catch (outerError) {
-      console.error("Outer error exporting PDF:", outerError);
-      toast.error(`Failed to export PDF: ${outerError.message}`);
     } finally {
-      document.body.classList.remove("pdf-export-mode");
-      setExpandedItems(originalExpandedState || {});
       setIsExporting(false);
     }
   };
