@@ -1,12 +1,6 @@
 import Split from "../queries/Split";
 import Group from "../queries/Group";
-import User from "../queries/User";
-import {
-  getSplitBalance,
-  mergeChrono,
-  getGroupBalance,
-  calculateSplits,
-} from "./util";
+import { getGroupBalance, calculateSplits } from "./util";
 
 (async () => {
   // get the current group balance for optimizing purpose

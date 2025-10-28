@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import Group from "../queries/Group";
 import {
   AdjList,
@@ -11,7 +10,7 @@ import {
   SplitHistory,
 } from "../types";
 
-function createBalance(expense: RawExpense) {
+export const createBalance = (expense: RawExpense) => {
   const balance: any = {};
   const share = Math.floor(expense.totalAmt / expense.payers.length);
 
@@ -27,12 +26,12 @@ function createBalance(expense: RawExpense) {
   });
 
   return balance;
-}
+};
 
-async function getGroupBalance(
+export const getGroupBalance = async (
   groupId: number,
   isOptimizing: boolean = false
-): Promise<any> {
+): Promise<any> => {
   // get all the group members
   const members = await Group.members(groupId);
   if (!members) throw new Error("Members not found.");
@@ -83,10 +82,10 @@ async function getGroupBalance(
   });
 
   return balance;
-}
+};
 
 // deprecated: not used anymore in the code base
-function getSplitBalance(splits: SplitHistory[]): any {
+export const getSplitBalance = (splits: SplitHistory[]): any => {
   const balance: any = {};
 
   splits.forEach((split) => {
@@ -98,9 +97,9 @@ function getSplitBalance(splits: SplitHistory[]): any {
   });
 
   return balance;
-}
+};
 
-function calculateSplits(balance: Record<string, number>): AdjList {
+export const calculateSplits = (balance: Record<string, number>): AdjList => {
   // step 1: separate positive (creditors) and negative (debtors) balances
   const creditors: Participant[] = [];
   const debtors: Participant[] = [];
@@ -151,12 +150,12 @@ function calculateSplits(balance: Record<string, number>): AdjList {
   }
 
   return splits;
-}
+};
 
-function mergeChrono(
+export const mergeChrono = (
   expenses: CompleteExpense[],
   splits: SplitHistory[]
-): HistoryEntry[] {
+): HistoryEntry[] => {
   const expEntries: ExpenseEntry[] = expenses.map((expense) => ({
     type: "expense",
     timestamp: expense.createdAt,
@@ -174,12 +173,4 @@ function mergeChrono(
       return a.timestamp.getTime() - b.timestamp.getTime();
     return 0;
   });
-}
-
-export {
-  createBalance,
-  calculateSplits,
-  getGroupBalance,
-  getSplitBalance,
-  mergeChrono,
 };
