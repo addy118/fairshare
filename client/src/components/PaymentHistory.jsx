@@ -11,9 +11,6 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import formatDate from "@/utils/formatDate";
 import Loading from "./Loading";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import { selectCurrentGroup } from "@/redux/groupSlice";
 import { useGetGroupHistoryQuery } from "@/redux/api";
@@ -54,15 +51,15 @@ export default function PaymentHistory() {
     let originalExpandedState;
     setIsExporting(true);
 
-    // Save the current expanded state to restore later
+    // save the current expanded state to restore later
     originalExpandedState = { ...expandedItems };
 
-    // Expand all items
+    // expand all items
     setExpandedItems(
       history.reduce((acc, entry) => ({ ...acc, [entry.id]: true }), {})
     );
 
-    // Wait for state update and DOM rendering
+    // wait for state update and DOM rendering
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     if (!pdfRef.current) {
@@ -72,38 +69,36 @@ export default function PaymentHistory() {
 
     const htmlContent = pdfRef.current.innerHTML;
 
-    // const cssResponse = await fetch("/index.css");
-    // const cssContent = await cssResponse.text();
-    // 4. (NEW) Dynamically get all CSS
+    // dynamically get all CSS
     let cssContent = "";
     try {
-      // 4a. Get all <link rel="stylesheet"> tags
+      // a - get all <link rel="stylesheet"> tags
       const stylesheets = Array.from(
         document.querySelectorAll('link[rel="stylesheet"]')
       );
 
-      // 4b. Filter for local stylesheets (ignore external ones like Google Fonts)
+      // b - filter for local stylesheets (ignore external ones like Google Fonts)
       const localStylesheets = stylesheets.filter(
         (link) => link.href && !link.href.startsWith("http")
       );
 
-      // 4c. Fetch the text content of each local stylesheet
+      // c - fetch the text content of each local stylesheet
       const cssPromises = localStylesheets.map((link) =>
         fetch(link.href).then((res) => res.text())
       );
 
-      // 4d. Wait for all fetches and join them
+      // d - wait for all fetches and join them
       const cssStrings = await Promise.all(cssPromises);
       cssContent = cssStrings.join("\n\n");
     } catch (error) {
       console.error("Could not fetch CSS:", error);
     }
 
-    // 5. (NEW) Get all <style> tag content (for CSS-in-JS like Styled-Components)
+    // get all <style> tag content (for CSS-in-JS like Styled-Components)
     const styleTags = Array.from(document.querySelectorAll("style"));
     const styleContent = styleTags.map((style) => style.innerHTML).join("\n\n");
 
-    // 6. Combine all CSS
+    // combine all CSS
     const combinedCss = cssContent + "\n\n" + styleContent;
 
     try {
@@ -122,34 +117,19 @@ export default function PaymentHistory() {
 
       console.log(`Sent req to /grp/${groupId}/history/export`);
       const blob = new Blob([response.data], { type: "application/pdf" });
+
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
+
       link.href = url;
       link.download = "payment-history.pdf";
       document.body.appendChild(link);
       link.click();
+
       link.remove();
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error("Error exporting PDF: ", err);
-
-      if (err.response && err.response.data.toString() === "[object Blob]") {
-        // the error response is a blob, let's read it as text
-        const errorData = await err.response.data.text();
-        try {
-          const errorJson = JSON.parse(errorData);
-          console.error("Server-side error message:", errorJson.message);
-          // here you can set an error toast: toast.error(errorJson.message)
-        } catch (e) {
-          console.error("Could not parse error blob:", errorData);
-        }
-      } else if (err.response) {
-        // it's a regular json error
-        console.error("Server-side error message:", err.response.data.message);
-      } else {
-        // this is the "Network Error"
-        console.error("Network Error, check server or CORS:", err.message);
-      }
     } finally {
       setIsExporting(false);
     }

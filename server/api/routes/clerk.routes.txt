@@ -1,9 +1,0 @@
-curl -X POST {{baseUrl}}/clerk/user \
-  -H "Content-Type: application/json" \
-  -d '{
-    "id": "user_123",
-    "name": "John Doe",
-    "email": "john@example.com",
-    "username": "johndoe",
-    "pfp": "https://example.com/avatar.png"
-  }'

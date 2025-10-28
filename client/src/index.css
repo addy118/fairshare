@@ -169,35 +169,6 @@
   }
 }
 
-/* PDF export mode - use basic colors instead of oklch */
-.pdf-export-mode {
-  --background: #ffffff;
-  --foreground: #000000;
-  --card: #ffffff;
-  --card-foreground: #000000;
-  --popover: #ffffff;
-  --popover-foreground: #000000;
-  --primary: #000000;
-  --primary-foreground: #ffffff;
-  --secondary: #f5f5f5;
-  --secondary-foreground: #000000;
-  --muted: #f5f5f5;
-  --muted-foreground: #6b7280;
-  --accent: #f5f5f5;
-  --accent-foreground: #000000;
-  --destructive: #ef4444;
-  --destructive-foreground: #ef4444;
-  --border: #e5e7eb;
-  --input: #e5e7eb;
-  --ring: #a1a1aa;
-  --teal-400: #00bcff !important;
-  --gray-300: #d1d5db !important;
-  --gray-400: #9ca3af !important;
-  --gray-700: rgba(55, 65, 81, 0.5) !important;
-  --red-500: #ef4444 !important;
-  --green-600: #16a34a !important;
-}
-
 /* landing page animations */
 @keyframes fadeIn {
   from {
@@ -402,7 +373,9 @@
 }
 
 .hover-lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .hover-lift:hover {
@@ -411,7 +384,10 @@
 }
 
 .bg-grid-pattern {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px
+    ),
     linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 20px 20px;
 }
@@ -424,52 +400,4 @@
 
 input {
   color: #d1d5db;
-}
-
-/* Additional styles for PDF export */
-.pdf-export-mode {
-  /* Replace oklch colors with hex/rgb equivalents */
-  --teal-400: #00bcff !important;
-  --gray-300: #d1d5db !important;
-  --gray-400: #9ca3af !important;
-  --gray-700: rgba(55, 65, 81, 0.5) !important;
-  --red-500: #ef4444 !important;
-  --green-600: #16a34a !important;
-}
-
-/* Override specific classes that use oklch colors */
-.pdf-export-mode .gradient-text {
-  background: linear-gradient(to right, #00bcff, #3b82f6) !important;
-  background-clip: text !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-}
-
-.pdf-export-mode .glass-dark {
-  background: rgba(31, 41, 55, 0.8) !important;
-  border-color: rgba(55, 65, 81, 0.5) !important;
-}
-
-.pdf-export-mode .text-teal-400 {
-  color: #00bcff !important;
-}
-
-.pdf-export-mode .text-gray-300 {
-  color: #d1d5db !important;
-}
-
-.pdf-export-mode .text-gray-400 {
-  color: #9ca3af !important;
-}
-
-.pdf-export-mode .text-red-500\/90 {
-  color: rgba(239, 68, 68, 0.9) !important;
-}
-
-.pdf-export-mode .text-green-600 {
-  color: #16a34a !important;
-}
-
-.pdf-export-mode .border-gray-700\/50 {
-  border-color: rgba(55, 65, 81, 0.5) !important;
 }
