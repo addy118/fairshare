@@ -7,8 +7,8 @@ import {
   CardTitle,
 } from "./ui/card";
 import { useSelector } from "react-redux";
-import { selectCurrentGroup } from "@/store/groupStore";
-import { useGetGroupBalancesQuery } from "@/store/api";
+import { selectCurrentGroup } from "@/redux/groupSlice";
+import { useGetGroupBalancesQuery } from "@/redux/api";
 
 export default function GrpSummary() {
   const group = useSelector(selectCurrentGroup);

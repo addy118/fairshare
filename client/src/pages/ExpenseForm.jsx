@@ -22,7 +22,7 @@ import Loading from "@/components/Loading";
 import {
   useGetGroupInfoQuery,
   useCreateExpenseMutation,
-} from "@/store/api";
+} from "@/redux/api";
 import { toast } from "sonner";
 
 export default function ExpenseForm() {

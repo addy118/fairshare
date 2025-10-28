@@ -17,7 +17,7 @@ import {
   useGetGroupExpensesQuery,
   useGetGroupSettlementsQuery,
   useGetGroupHistoryQuery,
-} from "@/store/api";
+} from "@/redux/api";
 import { toast } from "sonner";
 import NewMemberDialog from "@/components/AddMemberDialog";
 

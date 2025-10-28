@@ -9,7 +9,7 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import AxiosInterceptor from "./AxiosInterceptor";
 import Loading from "./components/Loading";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import { store } from "./redux/store";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 

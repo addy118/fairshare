@@ -12,7 +12,7 @@ A smart expense splitter for groups having multiple payers with optimized debt s
 - [Key Features](#key-features)
 - [Tech Stack](#tech-stack)
 - [Architecture & Core Concepts](#architecture--core-concepts)
-  - [High-Level Architecture](#high-level-architecture)
+  - [High-Level Workflow](#high-level-workflow)
   - [Database Schema](#database-schema)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -53,7 +53,7 @@ Fairshare simplifies group expenses and debt tracking using a smart algorithm an
 
 The application is built on a robust architecture designed for scalability and efficiency. Below are some of the core diagrams illustrating the system's design.
 
-### High-Level Architecture
+### High-Level Workflow
 
 This diagram provides an overview of the system's components and their interactions.
 ![High Level Architecture](https://cdn.jsdelivr.net/gh/addy118/portfolio@master/public/seq-diagrams/fairshare/fs-high-arch.svg)

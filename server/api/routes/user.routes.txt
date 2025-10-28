@@ -1,0 +1,25 @@
+curl -X GET {{baseUrl}}/user/:userId \
+  -H "Authorization: Bearer jwt_token"
+
+curl -X GET {{baseUrl}}/user/:userId/balance \
+  -H "Authorization: Bearer jwt_token"
+
+curl -X GET {{baseUrl}}/user/:userId/upi \
+  -H "Authorization: Bearer jwt_token"
+
+curl -X GET {{baseUrl}}/user/:userId/info \
+  -H "Authorization: Bearer jwt_token"
+
+curl -X PUT {{baseUrl}}/user/:userId/upi \
+  -H "Authorization: Bearer jwt_token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "upiId": "user@upi"
+  }'
+
+curl -X POST {{baseUrl}}/user/:userId/groups \
+  -H "Authorization: Bearer jwt_token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "groupIds": [1, 2, 3]
+  }'

@@ -7,7 +7,9 @@ const axiosBaseQuery = () => async (args) => {
     if (typeof args === "string") {
       // treat string as a GET request URL
       result = await api.get(args);
-    } else {
+    } 
+    
+    else {  // request URL would be an obj for POST/PUT/DELETE
       const { url, method = "GET", data, params } = args;
       result = await api({
         url,
