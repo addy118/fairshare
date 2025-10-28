@@ -8,8 +8,7 @@ import {
   SplitHistory,
 } from "../types";
 import db from "../config/prismaClient";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import AppError from "utils/AppError";
+import AppError from "../utils/AppError";
 
 class Group {
   static async create(name: string): Promise<GroupBaseDB | undefined> {

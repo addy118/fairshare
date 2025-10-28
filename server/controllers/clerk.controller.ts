@@ -1,7 +1,7 @@
 import { verifyWebhook } from "@clerk/express/webhooks";
 import User from "../queries/User";
 import { ClerkEvent, Controller } from "../types";
-import { catchAsync } from "middleware/catchAsync";
+import { catchAsync } from "../middleware/catchAsync";
 
 export const postClerkUser: Controller = catchAsync(async (req, res) => {
   const evt = (await verifyWebhook(req)) as ClerkEvent;

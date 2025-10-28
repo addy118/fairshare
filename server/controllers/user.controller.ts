@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import User from "../queries/User";
 import { Controller } from "../types";
-import { catchAsync } from "middleware/catchAsync";
+import { catchAsync } from "../middleware/catchAsync";
 
 export const test = catchAsync(async (req: Request, res: Response) => {
   const { data } = req.body;
